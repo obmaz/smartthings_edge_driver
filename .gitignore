@@ -12,5 +12,3 @@
 *.out
 /.idea/
 *.iml
-/lua_libs-api_v0/
-/docs/
