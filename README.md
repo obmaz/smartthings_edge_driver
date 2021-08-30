@@ -13,6 +13,7 @@ smartthings edge:drivers:package [PROJECTDIRECTORY]
 smartthings edge:channels:create  
 smartthings edge:channels:enroll  
 smartthings edge:drivers:publish  
+smartthings edge:drivers:delete  
 smartthings edge:drivers:install  
 smartthings edge:drivers:uninstall  
 smartthings channels:invitations:create
