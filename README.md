@@ -2,7 +2,7 @@
 Smartthings Edge Driver
 
 ## Invitation URL
-https://api.smartthings.com/invitation-web/accept?id=75464224-a698-42ef-9f76-037703857a11
+https://api.smartthings.com/invitation-web/accept?id=bcb6cafd-cfb3-4dec-8937-688d5bceca32  
 
 ## Uploading Driver to SmartThings
 It is only for the developer.  
@@ -16,7 +16,7 @@ smartthings edge:drivers:publish
 smartthings edge:drivers:delete  
 smartthings edge:drivers:install  
 smartthings edge:drivers:uninstall  
-smartthings channels:invitations:create
+smartthings edge:channels:invitations:create
 ```
 
 ## License
