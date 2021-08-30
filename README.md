@@ -1,2 +1,2 @@
-# smartthings_edge_driver
+# Smartthings Edge Driver
 Smartthings Edge Driver
