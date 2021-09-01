@@ -3,6 +3,7 @@ zigbeeManufacturer:
     deviceLabel: Tuya 4 Button
     manufacturer: _TZ3000_ufhtxr59
     model: TS0044
+    deviceProfileName: tuya-button
   - id: tuya-button-2
     deviceLabel: Tuya 4 Button
     manufacturer: _TZ3000_xabckq1v
