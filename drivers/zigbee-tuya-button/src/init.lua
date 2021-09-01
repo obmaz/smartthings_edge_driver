@@ -16,7 +16,7 @@ local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
-local clusters = require "st.zigbee.zcl.clusters"
+local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local comp = {"button1", "button2", "button3", "button4"}
 
@@ -48,10 +48,10 @@ local device_added = function(driver, device)
   end
 end
 
-local do_configure = function(self, device)
+local configure_device = function(self, device)
   device:configure()
   device:send(device_management.build_bind_request(device, 0xFC00, device.driver.environment_info.hub_zigbee_eui))
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
 local tuya_button_driver_template = {
@@ -59,19 +59,29 @@ local tuya_button_driver_template = {
     capabilities.button,
     capabilities.battery,
   },
-  zigbee_handlers = {
-    cluster = {
-      [0xFC00] = {
-        [0x00] = button_handler
-      }
-    },
+  global = {},
+  cluster = {},
+  attr = {
+    [zcl_clusters.OnOffCluster] = {
+      [zcl_clusters.OnOffCluster.attributes.OnOff] = switch_defaults.on_off_attr_handler
+    }
   },
+  --zigbee_handlers = {
+  --  cluster = {
+  --    [0xFC00] = {
+  --      [0x00] = button_handler
+  --    }
+  --  },
+  --},
   lifecycle_handlers = {
     added = device_added,
-    doConfigure = do_configure
+    doConfigure = configure_device
   }
 }
 
 defaults.register_for_default_handlers(tuya_button_driver_template, tuya_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("tuya-button", tuya_button_driver_template)
 zigbee_driver:run()
+
+-- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -78, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x76, ZCLCommandId: 0xFD >, GenericBody:  00 > >
+-- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x04, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -60, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x78, ZCLCommandId: 0xFD >, GenericBody:  00 > >
