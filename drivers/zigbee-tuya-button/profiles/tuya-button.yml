@@ -24,7 +24,7 @@ components:
       version: 1
     categories:
     - name: RemoteController
-  metadata:
+metadata:
     vid: a96e92a0-b276-38e7-be91-b499a29bc896
     mnmn: SmartThingsCommunity
     ocfDeviceType: x.com.st.d.remotecontroller
