@@ -59,20 +59,18 @@ local tuya_button_driver_template = {
     capabilities.button,
     capabilities.battery,
   },
-  global = {},
-  cluster = {},
-  attr = {
-    [zcl_clusters.OnOffCluster] = {
-      [zcl_clusters.OnOffCluster.attributes.OnOff] = switch_defaults.on_off_attr_handler
-    }
-  },
-  --zigbee_handlers = {
-  --  cluster = {
-  --    [0xFC00] = {
-  --      [0x00] = button_handler
-  --    }
-  --  },
+  --attr = {
+  --  [zcl_clusters.OnOffCluster] = {
+  --    [zcl_clusters.OnOffCluster.attributes.OnOff] = switch_defaults.on_off_attr_handler
+  --  }
   --},
+  zigbee_handlers = {
+    cluster = {
+      [0x0006] = {
+        [0x00] = button_handler
+      }
+    },
+  },
   lifecycle_handlers = {
     added = device_added,
     doConfigure = configure_device
