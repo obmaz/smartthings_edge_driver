@@ -9,13 +9,15 @@ It is only for the developer.
 See : https://community.smartthings.com/t/tutorial-creating-drivers-for-zigbee-devices-with-smartthings-edge/229502
 
 ```Bash
-smartthings edge:drivers:package [PROJECTDIRECTORY]  
 smartthings edge:channels:create  
 smartthings edge:channels:enroll  
+
+smartthings edge:drivers:package [PROJECTDIRECTORY]
 smartthings edge:drivers:publish  
 smartthings edge:drivers:delete  
 smartthings edge:drivers:install  
 smartthings edge:drivers:uninstall  
+
 smartthings edge:channels:invitations:create
 ```
 

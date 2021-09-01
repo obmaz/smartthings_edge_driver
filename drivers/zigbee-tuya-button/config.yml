@@ -1,0 +1,4 @@
+name: 'Tuya 4 Button'
+packageKey: 'zigbee-tuya-button'
+permissions:
+  zigbee: {}
