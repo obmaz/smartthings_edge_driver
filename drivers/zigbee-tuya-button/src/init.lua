@@ -26,18 +26,24 @@ local button_handler = function(driver, device, zb_rx)
   local buttonState = string.byte(rx:sub(5,5))
   --local buttonHoldTime = string.byte(rx:sub(7,7))
 
-  -- 1 is double
-  if buttonState == 0 then
-    local ev = capabilities.button.button.pushed()
-    ev.state_change = true
-    device.profile.components[comp[button]]:emit_event(ev)
-    device:emit_event(ev)
-  elseif buttonState == 2 then
-    local ev = capabilities.button.button.held()
-    ev.state_change = true
-    device.profile.components[comp[button]]:emit_event(ev)
-    device:emit_event(ev)
-  end
+  ---- 1 is double
+  --if buttonState == 0 then
+  --  local ev = capabilities.button.button.pushed()
+  --  ev.state_change = true
+  --  device.profile.components[comp[button]]:emit_event(ev)
+  --  device:emit_event(ev)
+  --elseif buttonState == 2 then
+  --  local ev = capabilities.button.button.held()
+  --  ev.state_change = true
+  --  device.profile.components[comp[button]]:emit_event(ev)
+  --  device:emit_event(ev)
+  --end
+
+  local ev = capabilities.button.button.pushed()
+  ev.state_change = true
+  device.profile.components[comp[button]]:emit_event(ev)
+  device:emit_event(ev)
+
 end
 
 local device_added = function(driver, device)
@@ -51,20 +57,15 @@ end
 
 local configure_device = function(self, device)
   device:configure()
-  device:send(device_management.build_bind_request(device, 0xFC00, device.driver.environment_info.hub_zigbee_eui))
+  device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
-
+-- 0xFC00
 local tuya_button_driver_template = {
   supported_capabilities = {
     capabilities.button,
     capabilities.battery,
   },
-  --attr = {
-  --  [zcl_clusters.OnOffCluster] = {
-  --    [zcl_clusters.OnOffCluster.attributes.OnOff] = switch_defaults.on_off_attr_handler
-  --  }
-  --},
   zigbee_handlers = {
     cluster = {
       [0x0006] = {
