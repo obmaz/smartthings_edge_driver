@@ -26,12 +26,13 @@ local button_handler = function(driver, device, zb_rx)
   local buttonState = string.byte(rx:sub(5,5))
   --local buttonHoldTime = string.byte(rx:sub(7,7))
 
-  if buttonState == 2 then
+  -- 1 is double
+  if buttonState == 0 then
     local ev = capabilities.button.button.pushed()
     ev.state_change = true
     device.profile.components[comp[button]]:emit_event(ev)
     device:emit_event(ev)
-  elseif buttonState == 3 then
+  elseif buttonState == 2 then
     local ev = capabilities.button.button.held()
     ev.state_change = true
     device.profile.components[comp[button]]:emit_event(ev)
