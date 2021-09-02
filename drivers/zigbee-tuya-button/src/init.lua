@@ -12,6 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+local log = require "log"
 local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
@@ -21,9 +22,17 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 local comp = { "button1", "button2", "button3", "button4" }
 
 local button_handler = function(driver, device, zb_rx)
+    log.info("button_handler : ")
+
     local rx = zb_rx.body.zcl_body.body_bytes
     local button = string.byte(rx:sub(1, 1))
     local buttonState = string.byte(rx:sub(5, 5))
+
+    log.info("button_handler rx : " + buttonState)
+    log.info("button_handler button : " + buttonState)
+    log.info("button_handler buttonState : " + buttonState)
+
+
     --local buttonHoldTime = string.byte(rx:sub(7,7))
 
     ---- 1 is double
@@ -40,18 +49,22 @@ local button_handler = function(driver, device, zb_rx)
     --end
 
     local ev = capabilities.button.button.pushed()
+    --local ev = capabilities.button.button.pushed_2x()
+
     ev.state_change = true
-    device.profile.components[comp[button]]:emit_event(ev)
+    --device.profile.components[comp[button]]:emit_event(ev)
+    device.profile.components[comp[1]]:emit_event(ev)
     device:emit_event(ev)
 
 end
 
 local device_added = function(driver, device)
-    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "held" }))
-    device:emit_event(capabilities.button.button.pushed())
+    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
+    --device:emit_event(capabilities.button.button.pushed())
+
     for i, v in ipairs(comp) do
         device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "held" }))
-        device.profile.components[v]:emit_event(capabilities.button.button.pushed())
+        --device.profile.components[v]:emit_event(capabilities.button.button.pushed())
     end
 end
 
@@ -60,11 +73,29 @@ local configure_device = function(self, device)
     --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
--- 0xFC00
+
+function refresh_handle(driver, device, command)
+    log.info("refresh_handle")
+    device:emit_event(capabilities.refresh.refresh())
+
+    device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+    ev.state_change = true
+    --device.profile.components[comp[button]]:emit_event(ev)
+    device.profile.components[comp[1]]:emit_event(ev)
+    device:emit_event(ev)
+    -- emit_event 는 ui 상태만 업데이트 하는듯...
+end
+
 local tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
         capabilities.battery,
+        capabilities.refresh
+    },
+    capability_handlers = {
+        [capabilities.refresh.ID] = {
+            [capabilities.refresh.commands.refresh.NAME] = refresh_handle
+        }
     },
     zigbee_handlers = {
         cluster = {
