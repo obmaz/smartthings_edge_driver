@@ -24,66 +24,68 @@ local comp = { "button1", "button2", "button3", "button4" }
 local button_handler = function(driver, device, zb_rx)
     log.info("button_handler : ")
 
-    local rx = zb_rx.body.zcl_body.body_bytes
-    local button = string.byte(rx:sub(1, 1))
-    local buttonState = string.byte(rx:sub(5, 5))
-
-    log.info("button_handler rx : " + buttonState)
-    log.info("button_handler button : " + buttonState)
-    log.info("button_handler buttonState : " + buttonState)
-
-
-    --local buttonHoldTime = string.byte(rx:sub(7,7))
-
-    ---- 1 is double
-    --if buttonState == 0 then
-    --  local ev = capabilities.button.button.pushed()
-    --  ev.state_change = true
-    --  device.profile.components[comp[button]]:emit_event(ev)
-    --  device:emit_event(ev)
-    --elseif buttonState == 2 then
-    --  local ev = capabilities.button.button.held()
-    --  ev.state_change = true
-    --  device.profile.components[comp[button]]:emit_event(ev)
-    --  device:emit_event(ev)
-    --end
-
     local ev = capabilities.button.button.pushed()
-    --local ev = capabilities.button.button.pushed_2x()
-
     ev.state_change = true
-    --device.profile.components[comp[button]]:emit_event(ev)
-    device.profile.components[comp[1]]:emit_event(ev)
+    device.profile.components["button1"]:emit_event(ev)
     device:emit_event(ev)
 
+    ----local rx = zb_rx.body.zcl_body.body_bytes
+    ----local button = string.byte(rx:sub(1, 1))
+    ----local buttonState = string.byte(rx:sub(5, 5))
+    --
+    --log.info("button_handler rx : " + buttonState)
+    --log.info("button_handler button : " + buttonState)
+    --log.info("button_handler buttonState : " + buttonState)
+    --
+    --
+    ----local buttonHoldTime = string.byte(rx:sub(7,7))
+    --
+    ------ 1 is double
+    ----if buttonState == 0 then
+    ----  local ev = capabilities.button.button.pushed()
+    ----  ev.state_change = true
+    ----  device.profile.components[comp[button]]:emit_event(ev)
+    ----  device:emit_event(ev)
+    ----elseif buttonState == 2 then
+    ----  local ev = capabilities.button.button.held()
+    ----  ev.state_change = true
+    ----  device.profile.components[comp[button]]:emit_event(ev)
+    ----  device:emit_event(ev)
+    ----end
 end
 
 local device_added = function(driver, device)
-    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
+    --device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
     --device:emit_event(capabilities.button.button.pushed())
-
-    for i, v in ipairs(comp) do
-        device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "held" }))
-        --device.profile.components[v]:emit_event(capabilities.button.button.pushed())
-    end
+    --
+    --for i, v in ipairs(comp) do
+    --    device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
+    --    device.profile.components[v]:emit_event(capabilities.button.button.pushed())
+    --end
 end
 
 local configure_device = function(self, device)
+    device:refresh()
     device:configure()
-    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
+--    device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
+    device:send(device_management.build_bind_request(device, 0x0006, self.environment_info.hub_zigbee_eui))
+
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
-function refresh_handle(driver, device, command)
-    log.info("refresh_handle")
-    device:emit_event(capabilities.refresh.refresh())
-
-    device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+local function refresh_handler(driver, device, command)
+    log.info("refresh_handler : refresh_handlerrefresh_handlerrefresh_handlerrefresh_handlerrefresh_handler")
+    local ev = capabilities.button.button.pushed()
     ev.state_change = true
-    --device.profile.components[comp[button]]:emit_event(ev)
-    device.profile.components[comp[1]]:emit_event(ev)
+    device.profile.components["button3"]:emit_event(ev)
     device:emit_event(ev)
-    -- emit_event 는 ui 상태만 업데이트 하는듯...
+    --device:send(clusters.Level.attributes.CurrentLevel:read(device))
+    --device:send(clusters.OnOff.attributes.OnOff:read(device))
+    --device:send(clusters.TemperatureMeasurement.attributes.MeasuredValue:read(device))
+    --device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+    --
+    --local pressure_read = cluster_base.read_manufacturer_specific_attribute(device, clusters.PressureMeasurement.ID, KEEN_PRESSURE_ATTRIBUTE, KEEN_MFG_CODE)
+    --device:send(pressure_read)
 end
 
 local tuya_button_driver_template = {
@@ -92,24 +94,26 @@ local tuya_button_driver_template = {
         capabilities.battery,
         capabilities.refresh
     },
-    capability_handlers = {
-        [capabilities.refresh.ID] = {
-            [capabilities.refresh.commands.refresh.NAME] = refresh_handle
-        }
-    },
+    -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
             [0x0006] = {
                 [0x00] = button_handler,
                 [0x01] = button_handler,
-                [0x02] = button_handler,
-                [0x04] = button_handler
-            }
+                [0x02] = button_handler
+            },
         },
     },
+    -- UI로 들어오는 신호 = 화면 터치 할때
+    capability_handlers = {
+        [capabilities.refresh.ID] = {
+            [capabilities.refresh.commands.refresh.NAME] = refresh_handler
+        }
+    },
     lifecycle_handlers = {
-        added = device_added,
-        doConfigure = configure_device
+        init = device_init,
+        doConfigure = configure_device,
+        added = device_added
     }
 }
 
@@ -119,3 +123,23 @@ zigbee_driver:run()
 
 -- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -78, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x76, ZCLCommandId: 0xFD >, GenericBody:  00 > >
 -- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x04, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -60, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x78, ZCLCommandId: 0xFD >, GenericBody:  00 > >
+
+
+
+--local function component_to_endpoint(device, component_id)
+--    if component_id == "main" then
+--        return device.fingerprinted_endpoint_id
+--    else
+--        local ep_num = component_id:match("switch(%d)")
+--        return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
+--    end
+--end
+--
+--local function endpoint_to_component(device, ep)
+--    if ep == device.fingerprinted_endpoint_id then
+--        return "main"
+--    else
+--        return string.format("switch%d", ep)
+--    end
+--end
+
