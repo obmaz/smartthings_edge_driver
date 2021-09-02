@@ -18,65 +18,65 @@ local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local comp = {"button1", "button2", "button3", "button4"}
+local comp = { "button1", "button2", "button3", "button4" }
 
 local button_handler = function(driver, device, zb_rx)
-  local rx = zb_rx.body.zcl_body.body_bytes
-  local button = string.byte(rx:sub(1,1))
-  local buttonState = string.byte(rx:sub(5,5))
-  --local buttonHoldTime = string.byte(rx:sub(7,7))
+    local rx = zb_rx.body.zcl_body.body_bytes
+    local button = string.byte(rx:sub(1, 1))
+    local buttonState = string.byte(rx:sub(5, 5))
+    --local buttonHoldTime = string.byte(rx:sub(7,7))
 
-  ---- 1 is double
-  --if buttonState == 0 then
-  --  local ev = capabilities.button.button.pushed()
-  --  ev.state_change = true
-  --  device.profile.components[comp[button]]:emit_event(ev)
-  --  device:emit_event(ev)
-  --elseif buttonState == 2 then
-  --  local ev = capabilities.button.button.held()
-  --  ev.state_change = true
-  --  device.profile.components[comp[button]]:emit_event(ev)
-  --  device:emit_event(ev)
-  --end
+    ---- 1 is double
+    --if buttonState == 0 then
+    --  local ev = capabilities.button.button.pushed()
+    --  ev.state_change = true
+    --  device.profile.components[comp[button]]:emit_event(ev)
+    --  device:emit_event(ev)
+    --elseif buttonState == 2 then
+    --  local ev = capabilities.button.button.held()
+    --  ev.state_change = true
+    --  device.profile.components[comp[button]]:emit_event(ev)
+    --  device:emit_event(ev)
+    --end
 
-  local ev = capabilities.button.button.pushed()
-  ev.state_change = true
-  device.profile.components[comp[button]]:emit_event(ev)
-  device:emit_event(ev)
+    local ev = capabilities.button.button.pushed()
+    ev.state_change = true
+    device.profile.components[comp[button]]:emit_event(ev)
+    device:emit_event(ev)
 
 end
 
 local device_added = function(driver, device)
-  device:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
-  device:emit_event(capabilities.button.button.pushed())
-  for i,v in ipairs(comp) do
-    device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
-    device.profile.components[v]:emit_event(capabilities.button.button.pushed())
-  end
+    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "held" }))
+    device:emit_event(capabilities.button.button.pushed())
+    for i, v in ipairs(comp) do
+        device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "held" }))
+        device.profile.components[v]:emit_event(capabilities.button.button.pushed())
+    end
 end
 
 local configure_device = function(self, device)
-  device:configure()
-  device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
-  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+    device:configure()
+    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
+    device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 -- 0xFC00
 local tuya_button_driver_template = {
-  supported_capabilities = {
-    capabilities.button,
-    capabilities.battery,
-  },
-  zigbee_handlers = {
-    cluster = {
-      [0x0006] = {
-        [0x00] = button_handler
-      }
+    supported_capabilities = {
+        capabilities.button,
+        capabilities.battery,
     },
-  },
-  lifecycle_handlers = {
-    added = device_added,
-    doConfigure = configure_device
-  }
+    zigbee_handlers = {
+        cluster = {
+            [0x0006] = {
+                [0x00] = button_handler
+            }
+        },
+    },
+    lifecycle_handlers = {
+        added = device_added,
+        doConfigure = configure_device
+    }
 }
 
 defaults.register_for_default_handlers(tuya_button_driver_template, tuya_button_driver_template.supported_capabilities)
