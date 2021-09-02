@@ -28,3 +28,49 @@ metadata:
     vid: a96e92a0-b276-38e7-be91-b499a29bc896
     mnmn: SmartThingsCommunity
     ocfDeviceType: x.com.st.d.remotecontroller
+#See : https://developer-preview.smartthings.com/docs/devices/preferences/preferences
+preferences:
+  - name: remapButton1
+    title: Remap Button 1
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        one: 1
+        two: 2
+        three: 3
+        four: 4
+      default: one
+  - name: remapButton2
+    title: Remap Button 2
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        one: 1
+        two: 2
+        three: 3
+        four: 4
+      default: two
+  - name: remapButton3
+    title: Remap Button 3
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        one: 1
+        two: 2
+        three: 3
+        four: 4
+      default: three
+  - name: remapButton4
+    title: Remap Button 4
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        one: 1
+        two: 2
+        three: 3
+        four: 4
+      default: four

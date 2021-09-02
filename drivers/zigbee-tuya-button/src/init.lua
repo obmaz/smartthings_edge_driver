@@ -69,7 +69,10 @@ local tuya_button_driver_template = {
     zigbee_handlers = {
         cluster = {
             [0x0006] = {
-                [0x00] = button_handler
+                [0x00] = button_handler,
+                [0x01] = button_handler,
+                [0x02] = button_handler,
+                [0x04] = button_handler
             }
         },
     },
