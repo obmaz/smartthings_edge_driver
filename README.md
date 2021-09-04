@@ -2,7 +2,7 @@
 Smartthings Edge Driver
 
 ## Invitation URL
-https://api.smartthings.com/invitation-web/accept?id=3006ea8f-db70-4c2f-8aa1-f0363437ebd2  
+https://api.smartthings.com/invitation-web/accept?id=360bee66-61e0-47cd-8bc0-67a0ed3aadf6  
 
 ## Uploading Driver to SmartThings
 It is only for the developer.  
