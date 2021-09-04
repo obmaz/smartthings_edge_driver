@@ -1,4 +1,4 @@
--- Tuya Button
+-- Zigbee Tuya Button
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -24,10 +24,16 @@ local comp = { "button1", "button2", "button3", "button4" }
 local button_handler = function(driver, device, zb_rx)
     log.info("button_handler : ")
 
-    local ev = capabilities.button.button.pushed()
-    ev.state_change = true
-    device.profile.components["button1"]:emit_event(ev)
-    device:emit_event(ev)
+    --local ev = capabilities.button.button.pushed()
+    --ev.state_change = true
+    device.profile.components["button1"]:emit_event(capabilities.button.button.pushed())
+    device:emit_event(capabilities.button.button.pushed())
+
+    device.profile.components[button2]:emit_event(capabilities.button.button.pushed())
+    device:emit_event(capabilities.button.button.pushed())
+
+    device.profile.components[comp[3]]:emit_event(capabilities.button.button.pushed())
+    device:emit_event(capabilities.button.button.pushed())
 
     ----local rx = zb_rx.body.zcl_body.body_bytes
     ----local button = string.byte(rx:sub(1, 1))
@@ -54,18 +60,18 @@ local button_handler = function(driver, device, zb_rx)
     ----end
 end
 
+
 local device_added = function(driver, device)
-    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
+    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
     device:emit_event(capabilities.button.button.pushed())
 
     for i, v in ipairs(comp) do
-        device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "pushed_2x", "held" }))
+        device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
         device.profile.components[v]:emit_event(capabilities.button.button.pushed())
     end
 end
 
 local configure_device = function(self, device)
-    device:refresh()
     device:configure()
     device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
@@ -75,19 +81,19 @@ local tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
         capabilities.battery
+        --capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
-            [0x0006] =button_handler
-            --[0x0006] = {
-            --    [0x00] = button_handler,
-            --    [0x01] = button_handler,
-            --    [0x02] = button_handler
-            --},
+            [0x0006] = {
+                [0x00] = button_handler, -- pushed
+                [0x01] = button_handler, -- doulbe
+                [0x02] = button_handler  -- held
+            },
         },
     },
-    ---- UI로 들어오는 신호 = 화면 터치 할때
+    ------ UI로 들어오는 신호 = 화면 터치 할때
     --capability_handlers = {
     --    [capabilities.refresh.ID] = {
     --        [capabilities.refresh.commands.refresh.NAME] = refresh_handler
@@ -100,11 +106,12 @@ local tuya_button_driver_template = {
 }
 
 defaults.register_for_default_handlers(tuya_button_driver_template, tuya_button_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", tuya_button_driver_template)
+local zigbee_driver = ZigbeeDriver("uya-button", tuya_button_driver_template)
 zigbee_driver:run()
 
 -- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -78, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x76, ZCLCommandId: 0xFD >, GenericBody:  00 > >
 -- <ZigbeeDevice: 2db7ce5e-40f1-4363-88e3-f8105e69cf9f [0x9ECE] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x9ECE, src_endpoint: 0x04, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -60, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x78, ZCLCommandId: 0xFD >, GenericBody:  00 > >
+-- <ZigbeeDevice: e3642d4f-f9cd-444f-b8a3-db8aca4195a5 [0x7A94] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x7A94, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -42, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x17, ZCLCommandId: 0xFD >, GenericBody:  02 > >
 
 
 
@@ -124,4 +131,3 @@ zigbee_driver:run()
 --        return string.format("switch%d", ep)
 --    end
 --end
-

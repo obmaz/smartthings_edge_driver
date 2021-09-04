@@ -1,4 +1,4 @@
 name: 'Tuya 4 Button'
-packageKey: 'zigbee-tuya-button'
+packageKey: 'tuya-button'
 permissions:
   zigbee: {}
