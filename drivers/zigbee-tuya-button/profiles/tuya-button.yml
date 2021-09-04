@@ -25,7 +25,7 @@ components:
   categories:
   - name: RemoteController
 metadata:
-    vid: a96e92a0-b276-38e7-be91-b499a29bc896
+#    vid: a96e92a0-b276-38e7-be91-b499a29bc896
     mnmn: SmartThingsCommunity
     ocfDeviceType: x.com.st.d.remotecontroller
 #See : https://developer-preview.smartthings.com/docs/devices/preferences/preferences
@@ -36,10 +36,10 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        one: 1
-        two: 2
-        three: 3
-        four: 4
+        one: 11
+        two: 22
+        three: 33
+        four: 44
       default: one
   - name: remapButton2
     title: Remap Button 2
@@ -47,11 +47,11 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        one: 1
-        two: 2
-        three: 3
-        four: 4
-      default: two
+        one: 111
+        two: 222
+        three: 333
+        four: 444
+      default: one
   - name: remapButton3
     title: Remap Button 3
     required: true
