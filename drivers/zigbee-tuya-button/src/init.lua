@@ -23,6 +23,7 @@ local comp = { "button1", "button2", "button3", "button4" }
 
 local button_handler = function(driver, device, zb_rx)
     log.info("button_handler : ")
+    device:emit_event(capabilities.button.button.pushed())
 
     --local ev = capabilities.button.button.pushed()
     --ev.state_change = true
