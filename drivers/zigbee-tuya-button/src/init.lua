@@ -89,7 +89,7 @@ local tuya_button_driver_template = {
         cluster = {
             [0x0006] = {
                 [0x00] = button_handler, -- pushed
-                [0x01] = button_handler, -- doulbe
+                [0x01] = button_handler, -- doulbe or button1
                 [0x02] = button_handler  -- held
             },
         },
