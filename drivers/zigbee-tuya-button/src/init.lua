@@ -21,6 +21,17 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local comp = { "button1", "button2", "button3", "button4" }
 
+local attr_handler = function(driver, device, attr_val, zb_rx)
+    log.info("--------- Moon --------->> button_handler")
+
+    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+    device:emit_event(capabilities.button.button.pushed())
+
+    device:emit_event_for_endpoint(
+            zb_rx.address_header.src_endpoint.value,
+            capabilities.button.button.pushed())
+end
+
 local button_handler = function(driver, device, zb_rx)
     log.info("--------- Moon --------->> button_handler")
 
@@ -84,7 +95,7 @@ local device_added = function(driver, device)
     device:emit_event(capabilities.button.button.pushed())
 
     for i, v in ipairs(comp) do
-        log.info("device_added ",i, v)
+        log.info("device_added ", i, v)
 
         device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
         device.profile.components[v]:emit_event(capabilities.button.button.pushed())
@@ -95,7 +106,7 @@ local configure_device = function(self, device)
     log.info("--------- Moon --------->> configure_device")
 
     device:configure()
-    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
+    device:send(device_management.build_bind_request(device, zcl_clusters.OnOff.ID, device.driver.environment_info.hub_zigbee_eui))
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
@@ -117,7 +128,8 @@ local function endpoint_to_component(device, ep)
         return "main"
     else
         log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id != ep", ep)
-        return string.format("buntton%d", ep)
+        --return string.format("buntton%d", ep)
+        return "main"
     end
 end
 
@@ -133,15 +145,23 @@ local tuya_button_driver_template = {
         capabilities.battery
         --capabilities.refresh
     },
+    -- https://developer-preview.smartthings.com/edge-device-drivers/zigbee/zigbee_message_handlers.html
+    attr = {
+        [0x0006] = {
+            [0x0000] = on_off_attr_handler
+        }
+    },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
+    -- local OnOffCluster = (require "st.zigbee.zcl.clusters").OnOffCluster
     zigbee_handlers = {
         cluster = {
-            -- Tuya 4 Button  Tuya 4 Button 1 thread encountered error: [string "st.device"]:116: attempt to index a nil value (local 'component')
-            [0x0006] = {
-                [0x00] = button_handler, -- pushed
-                [0x01] = button_handler, -- doulbe or button1
-                [0x02] = button_handler  -- held
-            },
+            [zcl_clusters.OnOff.ID] = {
+                [0x00] = button_handler, -- off == [0x00]
+                [0x01] = button_handler, -- on
+                [0x02] = button_handler,  -- toggle
+                [0x04] = button_handler,  -- toggle
+                [0x0104] = button_handler,  -- toggle
+            }
         },
     },
     ------ UI로 들어오는 신호 = 화면 터치 할때
@@ -152,9 +172,9 @@ local tuya_button_driver_template = {
     --},
     lifecycle_handlers = {
         -- https://developer-preview.smartthings.com/edge-device-drivers/driver.html
+        added = device_added,
+        --doConfigure = configure_device,
         init = device_init,
-        doConfigure = configure_device,
-        added = device_added
     }
 }
 
@@ -170,3 +190,4 @@ zigbee_driver:run()
 --<ZigbeeDevice: d3fd8cb5-868d-466c-9900-0f6057f89b59 [0xDE05] (Tuya 4 Button 1)> sending Zigbee message: < ZigbeeMessageTx || Uint16: 0x0000, < AddressHeader || src_addr: 0x0000, s
 --rc_endpoint: 0x01, dest_addr: 0xDE05, dest_endpoint: 0x01, profile: 0x0000, cluster: 0x0021 >, < ZDOMessageBody || < ZDOHeader || seqno: 0x00 >, < BindRequest || src_address: CC86ECFFFE1177FE, src_endpoint: 0x04, cluster: PowerConfigur
 --ation, dest_addr_mode: 0x03, dest_address: D052A89101610001, dest_endpoint: 0x01 > > >
+-- <ZigbeeDevice: 90e780e1-b32f-478f-b81f-8ebd1327f263 [0x3235] (Tuya 4 Button 1)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x3235, src_endpoint: 0x04, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -66, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x30, ZCLCommandId: 0xFD >, GenericBody: 00 > >

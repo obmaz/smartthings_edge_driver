@@ -12,26 +12,35 @@ components:
   capabilities:
   - id: button
     version: 1
+    categories:
+      - name: Button
 - id: button2
   capabilities:
   - id: button
     version: 1
+    categories:
+      - name: Button
 - id: button3
   capabilities:
   - id: button
     version: 1
+    categories:
+      - name: Button
 - id: button4
   capabilities:
   - id: button
     version: 1
+    categories:
+      - name: Button
 metadata:
 #    vid: a96e92a0-b276-38e7-be91-b499a29bc896
   mnmn: SmartThingsCommunity
   ocfDeviceType: x.com.st.d.remotecontroller
 #See : https://developer-preview.smartthings.com/docs/devices/preferences/preferences
 preferences:
-  - name: remapButton1
-    title: Remap Button 1
+  - title: Remap Button 1
+    description: "description"
+    name: remapButton1
     required: true
     preferenceType: enumeration
     definition:
@@ -41,8 +50,8 @@ preferences:
         three: 33
         four: 44
       default: one
-  - name: remapButton2
-    title: Remap Button 2
+  - title: Remap Button 2
+    name: remapButton2
     required: true
     preferenceType: enumeration
     definition:
@@ -52,8 +61,8 @@ preferences:
         three: 333
         four: 444
       default: one
-  - name: remapButton3
-    title: Remap Button 3
+  - title: Remap Button 3
+    name: remapButton3
     required: true
     preferenceType: enumeration
     definition:
@@ -63,8 +72,8 @@ preferences:
         three: 3
         four: 4
       default: three
-  - name: remapButton4
-    title: Remap Button 4
+  - title: Remap Button 4
+    name: remapButton4
     required: true
     preferenceType: enumeration
     definition:
