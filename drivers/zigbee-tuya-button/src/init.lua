@@ -36,21 +36,21 @@ local button_handler = function(driver, device, zb_rx)
 
     device:emit_event(capabilities.button.button.pushed())
 
-    device:emit_event_for_endpoint(0x00, capabilities.button.button.pushed())
-    device:emit_event_for_endpoint(0x01, capabilities.button.button.pushed())
-    device:emit_event_for_endpoint(0x02, capabilities.button.button.pushed())
-    device:emit_event_for_endpoint(0x03, capabilities.button.button.pushed())
+    --device:emit_event_for_endpoint(0x00, capabilities.button.button.pushed())
+    --device:emit_event_for_endpoint(0x01, capabilities.button.button.pushed())
+    --device:emit_event_for_endpoint(0x02, capabilities.button.button.pushed())
+    --device:emit_event_for_endpoint(0x03, capabilities.button.button.pushed())
 
     --local ev = capabilities.button.button.pushed()
     --ev.state_change = true
-    device.profile.components["button1"]:emit_event(capabilities.button.button.pushed())
-    device:emit_event(capabilities.button.button.pushed())
+    --device.profile.components["button1"]:emit_event(capabilities.button.button.pushed())
+    --device:emit_event(capabilities.button.button.pushed())
 
-    device.profile.components[button2]:emit_event(capabilities.button.button.pushed())
-    device:emit_event(capabilities.button.button.pushed())
+    --device.profile.components[button2]:emit_event(capabilities.button.button.pushed())
+    --device:emit_event(capabilities.button.button.pushed())
 
-    device.profile.components[comp[3]]:emit_event(capabilities.button.button.pushed())
-    device:emit_event(capabilities.button.button.pushed())
+    --device.profile.components[comp[3]]:emit_event(capabilities.button.button.pushed())
+    --device:emit_event(capabilities.button.button.pushed())
 
     ----local rx = zb_rx.body.zcl_body.body_bytes
     ----local button = string.byte(rx:sub(1, 1))
@@ -112,7 +112,6 @@ end
 
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component")
-
     if ep == device.fingerprinted_endpoint_id then
         log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id -= ep", ep)
         return "main"
@@ -124,7 +123,6 @@ end
 
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
-
     device:set_component_to_endpoint_fn(component_to_endpoint)
     device:set_endpoint_to_component_fn(endpoint_to_component)
 end
@@ -136,22 +134,16 @@ local tuya_button_driver_template = {
         --capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
-    --zigbee_handlers = {
-    --    attr = {
-    --        [0x0006] = {
-    --            [0x00] = button_handler, -- pushed
-    --            [0x01] = button_handler, -- doulbe or button1
-    --            [0x02] = button_handler  -- held
-    --        },
-    --    },
-    --    cluster = {
-    --        [0x0006] = {
-    --            [0x00] = button_handler, -- pushed
-    --            [0x01] = button_handler, -- doulbe or button1
-    --            [0x02] = button_handler  -- held
-    --        },
-    --    },
-    --},
+    zigbee_handlers = {
+        cluster = {
+            -- Tuya 4 Button  Tuya 4 Button 1 thread encountered error: [string "st.device"]:116: attempt to index a nil value (local 'component')
+            [0x0006] = {
+                [0x00] = button_handler, -- pushed
+                [0x01] = button_handler, -- doulbe or button1
+                [0x02] = button_handler  -- held
+            },
+        },
+    },
     ------ UI로 들어오는 신호 = 화면 터치 할때
     --capability_handlers = {
     --    [capabilities.refresh.ID] = {
