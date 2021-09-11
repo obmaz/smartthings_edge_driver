@@ -42,9 +42,15 @@ local function handle_off(driver, device, command)
 end
 
 local function component_to_endpoint(device, component_id)
-    local ep_num = component_id:match("switch(%d)")
-    log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
-    return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
+    log.info("--------- Moon --------->> component_to_endpoint component_id : ", component_id)
+
+    if component_id == "switch1" then
+        return 0x01
+    else
+        local ep_num = component_id:match("switch(%d)")
+        log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
+        return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
+    end
 end
 
 local function endpoint_to_component(device, ep)
