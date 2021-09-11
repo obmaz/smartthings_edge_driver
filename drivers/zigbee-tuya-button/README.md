@@ -2,7 +2,7 @@
 Tuya Button Edge Driver
 
 ## Desciription
-In Progress.
+Please see the fingerprint before install.
 
 ## License
 It is released under the Apache 2.0 License.
