@@ -16,13 +16,15 @@ local log = require "log"
 local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
-local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
+
+local comp = { "button1", "button2", "button3", "button4" }
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
     -- 최초 실행 안하면 ui에서 안나옴
     device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
     device.profile.components["switch1"]:emit_event(capabilities.switch.switch.on())
     device.profile.components["switch2"]:emit_event(capabilities.switch.switch.on())
 end
@@ -30,45 +32,30 @@ end
 local function handle_on(driver, device, command)
     local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
     log.info("Send off command to device : handle_on endpoint", endpoint)
+
+    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
     device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(endpoint))
-    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,on())
+    device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.on())
 end
 
 local function handle_off(driver, device, command)
     local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
     log.info("Send off command to device : handle_off endpoint", endpoint)
+
+    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
     device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,off())
+    device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
 end
 
 local function component_to_endpoint(device, component_id)
-    log.info("--------- Moon --------->> component_to_endpoint component_id : ", component_id)
-
-    if component_id == "switch1" then
-        return 0x01
-    else
-        local ep_num = component_id:match("switch(%d)")
-        log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
-        return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
-    end
+    local ep_num = component_id:match("switch(%d)")
+    log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
+    return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
 end
 
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
-    --if ep == device.fingerprinted_endpoint_id then
-    --    log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id == ep", ep)
-    --    return "main"
-    --end
-
-    if ep == 1 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 1", ep)
-        return "switch1"
-    end
-
-    if ep == 2 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 2", ep)
-        return "switch2"
-    end
+    return string.format("switch%d", ep)
 end
 
 local device_init = function(self, device)
@@ -97,5 +84,5 @@ local zigbee_tuya_switch_driver_template = {
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
+local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch-temp", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()

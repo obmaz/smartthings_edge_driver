@@ -1,0 +1,67 @@
+#smartthings presentation:device-config:create --yaml --input deviceConfig.yaml
+dashboard:
+  states:
+    - component: switch1
+      capability: switch
+      version: 1
+      values: []
+  actions:
+    - component: switch1
+      capability: switch
+      version: 1
+detailView:
+  - component: main
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+  - component: switch1
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+  - component: switch2
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+automation:
+  conditions:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+    - component: switch1
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+    - component: switch2
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+  actions:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+    - component: switch1
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+    - component: switch2
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+type: dth

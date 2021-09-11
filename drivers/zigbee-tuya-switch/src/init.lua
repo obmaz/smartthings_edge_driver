@@ -31,14 +31,14 @@ local function handle_on(driver, device, command)
     local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
     log.info("Send off command to device : handle_on endpoint", endpoint)
     device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(endpoint))
-    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,on())
+    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.on())
 end
 
 local function handle_off(driver, device, command)
     local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
     log.info("Send off command to device : handle_off endpoint", endpoint)
     device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,off())
+    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.off())
 end
 
 local function component_to_endpoint(device, component_id)
@@ -49,20 +49,12 @@ end
 
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
+    return string.format("switch%d", ep)
+
     --if ep == device.fingerprinted_endpoint_id then
     --    log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id == ep", ep)
     --    return "main"
     --end
-
-    if ep == 1 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 1", ep)
-        return "switch1"
-    end
-
-    if ep == 2 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 2", ep)
-        return "switch2"
-    end
 end
 
 local device_init = function(self, device)
