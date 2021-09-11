@@ -33,11 +33,6 @@ local device_added = function(driver, device)
     end
 end
 
-local function custom_on_off_attr_handler(driver, device, value, zb_rx)
-    log.info("custom_on_off_attr_handler")
-    device:emit_event(value.value and capabilities.switch.switch.On() or capabilities.switch.switch.Off())
-end
-
 local function handle_on(driver, device, command)
     log.info("Send on command to device : handle_on")
     device:send(zcl_clusters.OnOff.server.commands.On(device))
@@ -54,7 +49,6 @@ local function handle_off(driver, device, command)
     device:emit_event(capabilities.switch.switch.off())
 end
 
-
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint component_id : ", component_id)
 
@@ -69,10 +63,17 @@ end
 
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
-    if ep == device.fingerprinted_endpoint_id then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id == ep", ep)
-        return "main"
-    else
+    --if ep == device.fingerprinted_endpoint_id then
+    --    log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id == ep", ep)
+    --    return "main"
+    --end
+
+    if ep == 1 then
+        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id != ep", ep)
+        return "switch1"
+    end
+
+    if ep == 2 then
         log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id != ep", ep)
         return "switch2"
     end
@@ -90,19 +91,12 @@ local zigbee_tuya_switch_driver_template = {
         capabilities.refresh
     },
     capability_handlers = {
-        [capabilities.switch.ID] =
-        {
+        [capabilities.switch.ID] = {
             [capabilities.switch.commands.on.NAME] = handle_on,
             [capabilities.switch.commands.off.NAME] = handle_off
         }
     },
-    attr = {
-        [zcl_clusters.OnOff.ID] = {
-            [zcl_clusters.OnOff.attributes.OnOff.ID] = custom_on_off_attr_handler
-        }
-    },
     lifecycle_handlers = {
-        -- https://developer-preview.smartthings.com/edge-device-drivers/driver.html
         added = device_added,
         --doConfigure = configure_device,
         init = device_init,
