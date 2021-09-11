@@ -21,39 +21,34 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
-
-    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-    device:emit_event(capabilities.button.button.pushed())
-
-    for i, v in ipairs(comp) do
-        log.info("device_added ", i, v)
-
-        device.profile.components[v]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-        device.profile.components[v]:emit_event(capabilities.button.button.pushed())
-    end
+    -- 최초 실행 안하면 ui에서 안나옴
+    device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+    device.profile.components["switch1"]:emit_event(capabilities.switch.switch.on())
+    device.profile.components["switch2"]:emit_event(capabilities.switch.switch.on())
 end
 
 local function handle_on(driver, device, command)
-    log.info("Send on command to device : handle_on")
-    device:send(zcl_clusters.OnOff.server.commands.On(device))
-    --device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(0x01))
-    --device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(0x02))
-    device:emit_event(capabilities.switch.switch.on())
+    local endpoint = device:get_endpoint_for_component_id(command.component)
+    log.info("Send off command to device : handle_on endpoint", endpoint)
+    device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(endpoint))
+    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,on())
+    --device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.on())
 end
 
+-- UI를 누를떄 호출
 local function handle_off(driver, device, command)
-    log.info("Send off command to device : handle_off")
-    device:send(zcl_clusters.OnOff.server.commands.Off(device))
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(0x01))
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(0x02))
-    device:emit_event(capabilities.switch.switch.off())
+    local endpoint = device:get_endpoint_for_component_id(command.component)
+    log.info("Send off command to device : handle_off endpoint", endpoint)
+    device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.attr,off())
+    --device:emit_event_for_endpoint(endpoint,capabilities.switch.switch.off())
 end
 
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint component_id : ", component_id)
 
-    if component_id == "main" then
-        return device.fingerprinted_endpoint_id
+    if component_id == "switch1" then
+        return 0x01
     else
         local ep_num = component_id:match("switch(%d)")
         log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
@@ -61,6 +56,7 @@ local function component_to_endpoint(device, component_id)
     end
 end
 
+-- 물리 버튼을 누를때 호출, 해당 컴포넌트로로 상태 전달
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
     --if ep == device.fingerprinted_endpoint_id then
@@ -69,12 +65,12 @@ local function endpoint_to_component(device, ep)
     --end
 
     if ep == 1 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id != ep", ep)
+        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 1", ep)
         return "switch1"
     end
 
     if ep == 2 then
-        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id != ep", ep)
+        log.info("--------- Moon --------->> endpoint_to_component : device.fingerprinted_endpoint_id = 2", ep)
         return "switch2"
     end
 end
