@@ -30,21 +30,18 @@ local device_added = function(driver, device)
 end
 
 local function handle_on(driver, device, command)
-    local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
-    log.info("Send off command to device : handle_on endpoint", endpoint)
-
-    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
-    device:send(zcl_clusters.OnOff.server.commands.On(device):to_endpoint(endpoint))
+    log.info("handle_on component : ", command.component)
     device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.on())
+    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
 local function handle_off(driver, device, command)
-    local endpoint = device:get_endpoint_for_component_id(command.component) -- nit 에서 등록한 component_to_endpoint 가 호출됨
-    log.info("Send off command to device : handle_off endpoint", endpoint)
-
-    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
-    device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    log.info("handle_off component : ", command.component)
     device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
+    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
+    -- Note : "send_to_component" 는 아래의 코드를 수행하는것 같음
+    -- local endpoint = device:get_endpoint_for_component_id(command.component)
+    -- device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
 end
 
 local function component_to_endpoint(device, component_id)
