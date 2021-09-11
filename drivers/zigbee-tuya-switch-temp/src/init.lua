@@ -18,52 +18,54 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local comp = { "button1", "button2", "button3", "button4" }
-
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
     -- 최초 실행 안하면 ui에서 안나옴
-    device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    device.profile.components["switch1"]:emit_event(capabilities.switch.switch.on())
-    device.profile.components["switch2"]:emit_event(capabilities.switch.switch.on())
+    for key,value in pairs(device.profile.components) do
+        log.info("--------- Moon --------->> device_added - component : ", key)
+        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+    end
 end
 
 local function handle_on(driver, device, command)
-    log.info("handle_on component : ", command.component)
-    local endpoint = device:get_endpoint_for_component_id(command.component)
-    log.info("handle_on endpoint : ", endpoint)
-
-    device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.on())
+    log.info("--------- Moon --------->> handle_on - component : ", command.component)
+    device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
 local function handle_off(driver, device, command)
-    log.info("handle_off component : ", command.component)
-    local endpoint = device:get_endpoint_for_component_id(command.component)
-    log.info("handle_off endpoint : ", endpoint)
-
-    device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-    device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
-    -- 사용법 확인 해 볼것
+    log.info("--------- Moon --------->> handle_off - component : ", command.component)
+    --아래와 같이 endpoint를 구해서 호출도 가능, endpoint 값 조작이 필요할 경우 사용
+    --local endpoint = device:get_endpoint_for_component_id(command.component)
+    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
+    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
+    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
 local function component_to_endpoint(device, component_id)
+    log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
+    if component_id == "main" then
+        return device.fingerprinted_endpoint_id
+    end
+
     local ep_num = component_id:match("switch(%d)")
-    log.info("--------- Moon --------->> component_to_endpoint ep_num : ", ep_num)
     return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
 end
 
 local function endpoint_to_component(device, ep)
-    -- ui제어시 ep 에서 nil이 올라옴
-    log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
-    return string.format("switch%d", ep) -- 에러 확인
+    log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
+
+    if ep == 1 then
+        return "main"
+    end
+
+    return string.format("switch%d", ep)
 end
 
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
-    device:set_component_to_endpoint_fn(component_to_endpoint) -- ??? get_endpoint_for_component_id 하면 component_to_endpoint 가 호출 됨
+    device:set_component_to_endpoint_fn(component_to_endpoint) -- ??? get_endpoint_for_component_id 하면 component_to_endpoint 가 호출 됨 ???
     device:set_endpoint_to_component_fn(endpoint_to_component) -- 물리 버튼에서 신호가 오면 component_to_endpoint 가 호출 됨
 end
 
@@ -81,7 +83,6 @@ local zigbee_tuya_switch_driver_template = {
     },
     lifecycle_handlers = {
         added = device_added,
-        --doConfigure = configure_device,
         init = device_init,
     }
 }

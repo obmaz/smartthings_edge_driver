@@ -1,4 +1,4 @@
-name: zigbee-tuya-switch-2
+name: zigbee-tuya-switch-3
 components:
   - id: main
     capabilities:
@@ -7,6 +7,12 @@ components:
         categories:
           - name: switch
   - id: switch2
+    capabilities:
+      - id: switch
+        version: 1
+        categories:
+          - name: switch
+  - id: switch3
     capabilities:
       - id: switch
         version: 1
