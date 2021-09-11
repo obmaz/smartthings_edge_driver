@@ -31,17 +31,22 @@ end
 
 local function handle_on(driver, device, command)
     log.info("handle_on component : ", command.component)
+    local endpoint = device:get_endpoint_for_component_id(command.component)
+    log.info("handle_on endpoint : ", endpoint)
+
     device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.on())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
 local function handle_off(driver, device, command)
     log.info("handle_off component : ", command.component)
+    local endpoint = device:get_endpoint_for_component_id(command.component)
+    log.info("handle_off endpoint : ", endpoint)
+
     device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
-    -- Note : "send_to_component" 는 아래의 코드를 수행하는것 같음
-    -- local endpoint = device:get_endpoint_for_component_id(command.component)
-    -- device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    --device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
+    -- 사용법 확인 해 볼것
 end
 
 local function component_to_endpoint(device, component_id)
@@ -51,13 +56,14 @@ local function component_to_endpoint(device, component_id)
 end
 
 local function endpoint_to_component(device, ep)
+    -- ui제어시 ep 에서 nil이 올라옴
     log.info("--------- Moon --------->> endpoint_to_component : ", device.fingerprinted_endpoint_id)
-    return string.format("switch%d", ep)
+    return string.format("switch%d", ep) -- 에러 확인
 end
 
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
-    device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id 하면 component_to_endpoint 가 호출 됨
+    device:set_component_to_endpoint_fn(component_to_endpoint) -- ??? get_endpoint_for_component_id 하면 component_to_endpoint 가 호출 됨
     device:set_endpoint_to_component_fn(endpoint_to_component) -- 물리 버튼에서 신호가 오면 component_to_endpoint 가 호출 됨
 end
 
