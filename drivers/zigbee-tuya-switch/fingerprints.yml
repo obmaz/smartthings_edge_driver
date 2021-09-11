@@ -1,0 +1,11 @@
+zigbeeManufacturer:
+  - id: zigbee-tuya-switch1
+    deviceLabel: Tuya 2 Switch
+    manufacturer: _TZ3000_7hp93xpr
+    model: TS0002
+    deviceProfileName: zigbee-tuya-switch
+  - id: zigbee-tuya-switch2
+    deviceLabel: Tuya 1 switch
+    manufacturer: _TZ3000_oysiif07
+    model: TS0001
+    deviceProfileName: zigbee-tuya-switch

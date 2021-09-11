@@ -1,0 +1,4 @@
+name: 'Tuya Wall Switch'
+packageKey: 'zigbee-tuya-switch'
+permissions:
+  zigbee: {}
