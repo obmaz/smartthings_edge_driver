@@ -47,20 +47,19 @@ local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
     if component_id == "main" then
         return device.fingerprinted_endpoint_id
+    else
+        local ep_num = component_id:match("switch(%d)")
+        return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
     end
-
-    local ep_num = component_id:match("switch(%d)")
-    return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
 end
 
 local function endpoint_to_component(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
-
-    if ep == 1 then
+    if ep == device.fingerprinted_endpoint_id then
         return "main"
+    else
+        return string.format("switch%d", ep)
     end
-
-    return string.format("switch%d", ep)
 end
 
 local device_init = function(self, device)
