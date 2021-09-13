@@ -95,24 +95,23 @@ local zigbee_tuya_button_driver_template = {
         capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
-    -- local OnOffCluster = (require "st.zigbee.zcl.clusters").OnOffCluster
-    --zigbee_handlers = {
-    --    cluster = {
-    --        [zcl_clusters.OnOff.ID] = {
-    --            [0x00] = handle_pushed, -- off == [0x00]
-    --            [0x01] = handle_pushed, -- on
-    --            [0x02] = handle_pushed,  -- toggle
-    --            [0x04] = handle_pushed,  -- toggle
-    --            [0x0104] = handle_pushed,  -- toggle
-    --        }
-    --    },
-    --},
-    capability_handlers = {
-        [capabilities.button.ID] = {
-            [capabilities.switch.commands.on.NAME] = handle_on,
-            [capabilities.switch.commands.off.NAME] = handle_off
-        }
+    zigbee_handlers = {
+        cluster = {
+            [zcl_clusters.OnOff.ID] = {
+                [0x00] = handle_on, -- off == [0x00]
+                [0x01] = handle_on, -- on
+                [0x02] = handle_on,  -- toggle
+                [0x04] = handle_pushed,  -- toggle
+                [0x0104] = handle_pushed,  -- toggle
+            }
+        },
     },
+    --capability_handlers = {
+    --    [capabilities.button.ID] = {
+    --        [capabilities.switch.commands.on.NAME] = handle_on,
+    --        [capabilities.switch.commands.off.NAME] = handle_off
+    --    }
+    --},
     lifecycle_handlers = {
         added = device_added,
         --doConfigure = configure_device,
