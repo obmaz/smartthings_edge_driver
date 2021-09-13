@@ -1,4 +1,4 @@
-name: tuya-button
+name: zigbee-tuya-button-4
 components:
 - id: main
   capabilities:

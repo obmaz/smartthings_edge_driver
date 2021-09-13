@@ -71,7 +71,7 @@ local device_init = function(self, device)
     device:set_endpoint_to_component_fn(endpoint_to_component)
 end
 
-local tuya_button_driver_template = {
+local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
         capabilities.battery,
@@ -97,6 +97,6 @@ local tuya_button_driver_template = {
     }
 }
 
-defaults.register_for_default_handlers(tuya_button_driver_template, tuya_button_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("tuya-button", tuya_button_driver_template)
+defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
+local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
