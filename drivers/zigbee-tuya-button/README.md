@@ -1,7 +1,6 @@
 # Tuya Button Edge Driver
-Tuya Button Edge Driver
-
-## Desciription
+It is the SmartThings Edge Driver for Tuya Button.  
+It supports 1,2,3 and 4 buttons.  
 Please see the fingerprint before install.
 
 ## License
