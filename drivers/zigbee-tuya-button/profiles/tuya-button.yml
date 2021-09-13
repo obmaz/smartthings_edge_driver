@@ -27,7 +27,6 @@ components:
     categories:
       - name: Button
 metadata:
-#    vid: a96e92a0-b276-38e7-be91-b499a29bc896
   mnmn: SmartThingsCommunity
   ocfDeviceType: x.com.st.d.remotecontroller
 #See : https://developer-preview.smartthings.com/docs/devices/preferences/preferences

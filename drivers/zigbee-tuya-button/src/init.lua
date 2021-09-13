@@ -19,16 +19,13 @@ local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local comp = { "button1", "button2", "button3", "button4" }
-
-local button_handler = function(driver, device, zb_rx)
+local handle_pushed = function(driver, device, zb_rx)
     log.info("--------- Moon --------->> button_handler")
 
-    device:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-    device:emit_event(capabilities.button.button.pushed())
-
-    device:emit_event(capabilities.button.button.pushed())
-
+    device.profile.components["main"]:emit_event(capabilities.button.button.pushed())
+    device.profile.components["button2"]:emit_event(capabilities.button.button.pushed())
+    device.profile.components["button3"]:emit_event(capabilities.button.button.pushed())
+    device.profile.components["button4"]:emit_event(capabilities.button.button.pushed())
 end
 
 local device_added = function(driver, device)
@@ -85,20 +82,14 @@ local tuya_button_driver_template = {
     zigbee_handlers = {
         cluster = {
             [zcl_clusters.OnOff.ID] = {
-                [0x00] = button_handler, -- off == [0x00]
-                [0x01] = button_handler, -- on
-                [0x02] = button_handler,  -- toggle
-                [0x04] = button_handler,  -- toggle
-                [0x0104] = button_handler,  -- toggle
+                [0x00] = handle_pushed, -- off == [0x00]
+                [0x01] = handle_pushed, -- on
+                [0x02] = handle_pushed,  -- toggle
+                [0x04] = handle_pushed,  -- toggle
+                [0x0104] = handle_pushed,  -- toggle
             }
         },
     },
-    ------ UI로 들어오는 신호 = 화면 터치 할때
-    --capability_handlers = {
-    --    [capabilities.refresh.ID] = {
-    --        [capabilities.refresh.commands.refresh.NAME] = refresh_handler
-    --    }
-    --},
     lifecycle_handlers = {
         added = device_added,
         --doConfigure = configure_device,
