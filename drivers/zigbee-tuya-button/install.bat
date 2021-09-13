@@ -8,12 +8,12 @@
 # smartthings edge:drivers:installed
 # smartthings edge:drivers:uninstall
 
-$driverId=d915dd32-c84d-4a0b-8ed1-3443be2b8479
-$channel=15b67bc8-e6ae-4856-a72d-c4ef00815db0
-$hub=37d997a3-7579-47f2-8ae9-804fce729f7b
-$hub-address=192.168.0.119
+set driverId=5bbfa147-9fc5-4fd3-85b3-b053937a4341
+set channel=15b67bc8-e6ae-4856-a72d-c4ef00815db0
+set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
+set hub-address=192.168.0.119
 
-# package : tuya-button
+# package : zigee-tuya-button
 smartthings edge:drivers:uninstall %driverId% --hub %hub%
 smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%
