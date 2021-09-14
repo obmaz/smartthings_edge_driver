@@ -1,4 +1,4 @@
-name: 'Tuya Wall Switch temp'
+name: 'zigbee-tuya-switch-temp'
 packageKey: 'zigbee-tuya-switch-temp'
 permissions:
   zigbee: {}

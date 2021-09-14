@@ -1,14 +1,19 @@
 # Smartthings Edge Driver
 It is the SmartThings Edge Drivers.  
 
-## Invitation URL
-https://api.smartthings.com/invitation-web/accept?id=360bee66-61e0-47cd-8bc0-67a0ed3aadf6  
+## Install
+### End-User
+You can enroll the channel and install edge drivers by using invitation url   
+https://api.smartthings.com/invitation-web/accept?id=30b2223a-3325-476f-9b1b-d5f35f52a54b  
+ 
+Note : ST Edge Driver is in Beta stage, so it can be removed without any notice.  
 
-## Uploading Driver to SmartThings
-
-See : https://community.smartthings.com/t/tutorial-creating-drivers-for-zigbee-devices-with-smartthings-edge/229502
+### Developer
+The source code required for installation can be found in each directory.  
+If necessary, you can manually install it by adding a fingerprinter.  
 
 ## Note
+### Child Device(DTH) vs Multi Components(Edge Driver)
 Unlike the DTH(Device Type Handler), the Edge Driver uses the "Component", not the "Child Device".  
 A child device is recognized as a independent thing, while a component shows several buttons in one thing.
 
