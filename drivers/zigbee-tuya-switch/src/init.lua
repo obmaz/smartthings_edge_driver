@@ -90,6 +90,9 @@ defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbe
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()
 
---<ZigbeeDevice: 133b2345-22c2-493b-aac6-536ffeb2f121 [0x3029] (Tuya Wall Switch 2 Gang)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0
---x3029, src_endpoint: 0x02, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -62, body_length: 0x0005, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x08, seqno: 0x3F, ZCLCommandId: 0x0B >, <
---DefaultResponse || cmd: 0x00, ZclStatus: SUCCESS > > >
+--  onOff: {ID: 0, type: DataType.boolean},
+--  tuyaBacklightMode: {ID: 0x8001, type: DataType.enum8}, ?????
+--        <ZigbeeDevice: fb5ec176-64fc-400e-b8fa-6fd0abec0f4f [0xD261] (Tuya Wall Switch 2 Gang)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_add
+--r: 0xD261, src_endpoint: 0x00, dest_addr: 0x0000, dest_endpoint: 0x00, profile: 0x0000, cluster: 0x8001 >, lqi: 0xFF, rssi: -63, body_length: 0x000C, < ZDOMessageBody || < ZDOHeader || seqno: 0x14 >, GenericBody:  00 FE 77 11 FE FF E
+--C 86 CC 89 A1 > >
+

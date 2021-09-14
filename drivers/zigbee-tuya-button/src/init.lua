@@ -48,6 +48,17 @@ end
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
 
+    --Add the manufacturer-specific attributes to generate their configure reporting and bind requests
+    --for capability_id, configs in pairs(common.get_cluster_configurations(device:get_manufacturer())) do
+    --    if device:supports_capability_by_id(capability_id) then
+    --        for _, config in pairs(configs) do
+    --            device:add_configured_attribute(config)
+    --            device:add_monitored_attribute(config)
+    --            log.info("--------- Moon --------->> device_added config", config)
+    --        end
+    --    end
+    --end
+
     for key, value in pairs(device.profile.components) do
         log.info("--------- Moon --------->> device_added - component : ", key)
         device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
@@ -55,10 +66,16 @@ local device_added = function(driver, device)
     end
 end
 
+local foo
+
 local configure_device = function(self, device)
-    log.info("--------- Moon --------->> configure_device")
+    --foo ="0x"..device.device_network_id
+    foo = tonumber(device.device_network_id)
+    log.info("--------- Moon --------->> configure_device", device.device_network_id)
 
     device:configure()
+    --    ["zdo mgmt-bind 0x${device.deviceNetworkId} 0","delay 200"]
+    --device:send(device_management.build_bind_request(device, foo, device.driver.environment_info.hub_zigbee_eui))
     device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
@@ -96,6 +113,11 @@ local zigbee_tuya_button_driver_template = {
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
+            [0x0008] = { -- zcl_clusters.OnOff.ID
+                [0x00] = handle_on,
+                [0x01] = handle_on
+                --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
+            },
             [0x0006] = { -- zcl_clusters.OnOff.ID
                 [0x00] = handle_on,
                 [0x01] = handle_on
@@ -120,6 +142,8 @@ defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbe
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
 
+-- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy
+--01 0104 0000 01 03 0000 0001 0006 02 0019 000A
 --<ZigbeeDevice: bfb32008-2365-4292-bcfc-20a81ec34301 [0x5595] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x5595,
 --src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -64, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x5A, ZCLCommandId: 0xFD >,
 -- GenericBody:  00 > >
