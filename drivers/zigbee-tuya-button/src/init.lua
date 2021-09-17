@@ -58,13 +58,13 @@ local device_added = function(driver, device)
     --        end
     --    end
     --end
-
+    device:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
+    device:emit_event(capabilities.button.button.pushed())
     for key, value in pairs(device.profile.components) do
         log.info("--------- Moon --------->> device_added - component : ", key)
         device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
         device.profile.components[key]:emit_event(capabilities.button.button.pushed())
-        device.profile.components[key]:send_event(capabilities.button.button.pushed())
-        --device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
 end
 
@@ -85,7 +85,7 @@ end
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
     if component_id == "main" then
-        return device.fingerprinted_endpoint_id
+        --return device.fingerprinted_endpoint_id
     else
         local ep_num = component_id:match("button(%d)")
         return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
@@ -111,22 +111,11 @@ local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
         capabilities.battery,
+        capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
-        attr = {
-            [0x0006] = { -- zcl_clusters.OnOff.ID
-                [0x00] = handle_on,
-                [0x01] = handle_on
-                --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
-            }
-        },
         cluster = {
-            [0x0008] = { -- zcl_clusters.OnOff.ID
-                [0x00] = handle_on,
-                [0x01] = handle_on
-                --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
-            },
             [0x0006] = { -- zcl_clusters.OnOff.ID
                 [0x00] = handle_on,
                 [0x01] = handle_on
@@ -153,6 +142,12 @@ zigbee_driver:run()
 
 -- Ref
 -- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy
+-- ZCLCommandId????
+
+--        <ZigbeeDevice: 58fef5c4-4a61-4173-a413-e2b3df2c041a [0xEA78] (Zigbee Tuya 4 Button)> sending Zigbee message: < ZigbeeMessageTx || Uint16: 0x0000, < AddressHeader || src_addr:
+--0x0000, src_endpoint: 0x01, dest_addr: 0xEA78, dest_endpoint: 0x01, profile: 0x0000, cluster: 0x0021 >, < ZDOMessageBody || < ZDOHeader || seqno: 0x00 >, < BindRequest || src_address: CC86ECFFFE1177FE, src_endpoint: 0x02, cluster: Pow
+--erConfiguration, dest_addr_mode: 0x03, dest_address: D052A89101610001, dest_endpoint: 0x01 > > >
+
 
 --01 0104 0000 01 03 0000 0001 0006 02 0019 000A
 --<ZigbeeDevice: bfb32008-2365-4292-bcfc-20a81ec34301 [0x5595] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x5595,
@@ -164,8 +159,3 @@ zigbee_driver:run()
 --<ZigbeeDevice: 133b2345-22c2-493b-aac6-536ffeb2f121 [0x3029] (Tuya Wall Gang)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0--x3029,
 -- src_endpoint: 0x02, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -62, body_length: 0x0005, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x08, seqno: 0x3F, ZCLCommandId: 0x0B >, <
 --DefaultResponse || cmd: 0x00, ZclStatus: SUCCESS > > >
-
--- ikea button
---<ZigbeeDevice: 5c73efe2-19a2-4f8b-b9b0-15bf7c2121e5 [0xC1CE] (IKEA Shortcut Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr:
---0xC1CE, src_endpoint: 0x04, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -57, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x1F, ZCLCommandId: 0xFD >, G
---enericBody:  00 > >

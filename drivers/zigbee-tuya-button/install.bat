@@ -29,7 +29,7 @@ smartthings edge:drivers:uninstall %driverId% --hub %hub%
 smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%
 smartthings edge:drivers:install %driverId% --channel %channel% --hub %hub%
-smartthings edge:drivers:logcat --hub-address=%hub_address% --all
+smartthings edge:drivers:logcat %driverId% --hub-address=%hub_address%
 
 @REM # For Posix : zigee-tuya-button
 @REM driverId=5bbfa147-9fc5-4fd3-85b3-b053937a4341
@@ -42,6 +42,3 @@ smartthings edge:drivers:logcat --hub-address=%hub_address% --all
 @REM smartthings edge:drivers:publish $driverId --channel $channel
 @REM smartthings edge:drivers:install $driverId --channel $channel --hub $hub
 @REM smartthings edge:drivers:logcat --hub-address=$hub_address --all
-
-
-52e42f69-a8ea-4ab6-91f2-3a3087fa9840
