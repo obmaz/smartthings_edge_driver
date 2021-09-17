@@ -1,4 +1,0 @@
-name: 'zigbee-tuya-switch-temp'
-packageKey: 'zigbee-tuya-switch-temp'
-permissions:
-  zigbee: {}
