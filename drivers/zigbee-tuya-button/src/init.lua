@@ -149,7 +149,9 @@ defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbe
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
 
+-- Ref
 -- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy
+
 --01 0104 0000 01 03 0000 0001 0006 02 0019 000A
 --<ZigbeeDevice: bfb32008-2365-4292-bcfc-20a81ec34301 [0x5595] (Tuya 4 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x5595,
 --src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -64, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x5A, ZCLCommandId: 0xFD >,
