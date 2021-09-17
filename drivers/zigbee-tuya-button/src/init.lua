@@ -63,6 +63,8 @@ local device_added = function(driver, device)
         log.info("--------- Moon --------->> device_added - component : ", key)
         device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
         device.profile.components[key]:emit_event(capabilities.button.button.pushed())
+        device.profile.components[key]:send_event(capabilities.button.button.pushed())
+        --device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
 end
 
@@ -140,7 +142,7 @@ local zigbee_tuya_button_driver_template = {
     },
     lifecycle_handlers = {
         added = device_added,
-        doConfigure = configure_device,
+        --doConfigure = configure_device,
         init = device_init,
     }
 }
