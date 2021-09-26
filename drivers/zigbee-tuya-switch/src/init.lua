@@ -35,7 +35,7 @@ local device_added = function(driver, device)
     end
 end
 
-local function handle_on(driver, device, command)
+local function handleOn(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
     if command.component == remapButton then
@@ -50,7 +50,7 @@ local function handle_on(driver, device, command)
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
-local function handle_off(driver, device, command)
+local function handleOff(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
     if command.component == remapButton then
@@ -86,7 +86,7 @@ local endpoint_to_component = function(device, ep)
     local component_id = string.format("switch%d", ep)
 
     if component_id == remapButton then
-        syncComponent(device)
+        --syncComponent(device, "on")
     end
 
     return component_id
@@ -100,15 +100,15 @@ end
 
 local device_info_changed = function(driver, device, event, args)
     remapButton = remapButtonTbl[device.preferences.remapButton]
-    syncComponent(device)
+    syncComponent(device, "off")
 end
 
-function syncComponent(device)
+function syncComponent(device, reverse)
     local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
-    if status == "on" then
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-    else
+    if status == reverse then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
+    else
+        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
     end
 end
 
@@ -127,8 +127,8 @@ local zigbee_tuya_switch_driver_template = {
     -- UI를 누를때 호출
     capability_handlers = {
         [capabilities.switch.ID] = {
-            [capabilities.switch.commands.on.NAME] = handle_on,
-            [capabilities.switch.commands.off.NAME] = handle_off
+            [capabilities.switch.commands.on.NAME] = handleOn,
+            [capabilities.switch.commands.off.NAME] = handleOff
         }
     },
     lifecycle_handlers = {

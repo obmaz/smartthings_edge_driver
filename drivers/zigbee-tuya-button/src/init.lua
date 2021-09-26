@@ -19,7 +19,7 @@ local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local handle_pushed = function(driver, device, zb_rx)
+function handle_pushed (driver, device, zb_rx)
     log.info("--------- Moon --------->> button_handler")
 
     device.profile.components["main"]:emit_event(capabilities.button.button.pushed())
@@ -117,15 +117,15 @@ local zigbee_tuya_button_driver_template = {
     zigbee_handlers = {
         cluster = {
             [0x0006] = { -- zcl_clusters.OnOff.ID
-                [0x00] = handle_on,
-                [0x01] = handle_on
+                [0x00] = handle_pushed,
+                [0x01] = handle_pushed
                 --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
             }
         },
         attr = {
             [zcl_clusters.OnOff.ID] = {
-                [0x00] = handle_on,
-                [0x01] = handle_on
+                [0x00] = handle_pushed,
+                [0x01] = handle_pushed
             }
         }
     },
