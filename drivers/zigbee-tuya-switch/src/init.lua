@@ -31,12 +31,12 @@ end
 local function handle_on(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
-    local remap = "switch1"
+    local remapButton = "switch1"
 
     if command.component == "main" or command.component == "switch1" then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
         device.profile.components["switch1"]:emit_event(capabilities.switch.switch.on())
-        command.component = remap
+        command.component = remapButton
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
@@ -46,12 +46,12 @@ end
 local function handle_off(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
-    local remap = "switch1"
+    local remapButton = "switch1"
 
     if command.component == "main" or command.component == "switch1" then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
         device.profile.components["switch1"]:emit_event(capabilities.switch.switch.off())
-        command.component = remap
+        command.component = remapButton
     end
 
     -- Note : The logic is the same, but it uses endpoint.

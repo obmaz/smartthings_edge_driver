@@ -21,7 +21,7 @@ components:
 metadata:
   ocfDeviceType: oic.d.switch
 preferences:
-  - title: Remap Main Button
+  - title: "Remap Main Button"
     description: "Select a button to map to the main button"
     name: remapButton
     required: true
