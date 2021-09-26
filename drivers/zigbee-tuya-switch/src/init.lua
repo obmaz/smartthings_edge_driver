@@ -38,12 +38,9 @@ end
 local function handleOn(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
-    if command.component == remapButton then
-        command.component = "main"
-    end
-
-    if command.component == "main" then
-        device.profile.components[remapButton]:emit_event(capabilities.switch.switch.on())
+    if command.component == "main" or command.component == remapButton then
+        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+        command.component = remapButton
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
@@ -53,12 +50,9 @@ end
 local function handleOff(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
-    if command.component == remapButton then
-        command.component = "main"
-    end
-
-    if command.component == "main" then
-        device.profile.components[remapButton]:emit_event(capabilities.switch.switch.off())
+    if command.component == "main" or command.component == remapButton then
+        device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
+        command.component = remapButton
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -71,11 +65,6 @@ end
 
 local component_to_endpoint = function(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
-
-    if component_id == "main" then
-        component_id = remapButton
-    end
-
     local ep_num = component_id:match("switch(%d)")
     return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
 end
