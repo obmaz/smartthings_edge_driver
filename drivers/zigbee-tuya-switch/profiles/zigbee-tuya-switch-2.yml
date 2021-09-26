@@ -28,6 +28,6 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        one: 1
-        two: 2
+        one: Switch 1
+        two: Switch 2
       default: one

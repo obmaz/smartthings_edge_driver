@@ -17,9 +17,20 @@ local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
+local remapButton = 1
+
+local remapButtonTbl = {
+    ["one"] = 1,
+    ["two"] = 2,
+    ["three"] = 3,
+}
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
+    remapButton = remapButtonTbl[device.preferences.remapButton]
+
+    log.info("--------- Moon --------->> device_added remapButton", remapButton)
+
     -- Workaround : Should emit or send to enable capabilities UI
     for key, value in pairs(device.profile.components) do
         log.info("--------- Moon --------->> device_added - component : ", key)
@@ -31,12 +42,14 @@ end
 local function handle_on(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
-    local remapButton = "switch1"
+    local remapButton = remapButtonTbl[device.preferences.remapButton]
 
-    if command.component == "main" or command.component == "switch1" then
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-        device.profile.components["switch1"]:emit_event(capabilities.switch.switch.on())
-        command.component = remapButton
+    if command.component == remapButton then
+        command.component = "main"
+    end
+
+    if command.component == "main" then
+        device.profile.components[remapButton]:emit_event(capabilities.switch.switch.on())
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
@@ -46,12 +59,14 @@ end
 local function handle_off(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
-    local remapButton = "switch1"
+    local remapButton = device.preferences.remapButton
 
-    if command.component == "main" or command.component == "switch1" then
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
-        device.profile.components["switch1"]:emit_event(capabilities.switch.switch.off())
-        command.component = remapButton
+    if command.component == remapButton then
+        command.component = "main"
+    end
+
+    if command.component == "main" then
+        device.profile.components[remapButton]:emit_event(capabilities.switch.switch.off())
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -65,8 +80,10 @@ end
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
 
+    local remapButton = remapButtonTbl[device.preferences.remapButton]
+
     if component_id == "main" then
-        ep_num = 1
+        component_id = remapButton
     end
 
     local ep_num = component_id:match("switch(%d)")
@@ -93,10 +110,22 @@ local function endpoint_to_component(device, ep)
     --end
 end
 
+local function device_info_changed(driver, device, event, args)
+    log.info("--------- Moon --------->> device_info_changed")
+    log.info("--------- Moon --------->> device_info_changed 1", args.old_st_store.preferences.remapButton)
+    log.info("--------- Moon --------->> device_info_changed 2", device.preferences.remapButton)
+
+    remapButton = remapButtonTbl[device.preferences.remapButton]
+    log.info("--------- Moon --------->> device_info_changed 3", remapButton)
+
+end
+
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
     device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
     device:set_endpoint_to_component_fn(endpoint_to_component)
+
+    remapButton = remapButtonTbl[device.preferences.remapButton]
 end
 
 local zigbee_tuya_switch_driver_template = {
@@ -114,6 +143,7 @@ local zigbee_tuya_switch_driver_template = {
     lifecycle_handlers = {
         added = device_added,
         init = device_init,
+        infoChanged = device_info_changed,
     }
 }
 
