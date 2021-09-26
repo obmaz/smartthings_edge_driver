@@ -6,6 +6,12 @@ components:
         version: 1
         categories:
           - name: switch
+  - id: switch1
+    capabilities:
+      - id: switch
+        version: 1
+        categories:
+          - name: switch
   - id: switch2
     capabilities:
       - id: switch
@@ -20,3 +26,15 @@ components:
           - name: switch
 metadata:
   ocfDeviceType: oic.d.switch
+preferences:
+  - title: Remap Main Button
+    description: "Select a button to map to the main button"
+    name: remapButton
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        one: 1
+        two: 2
+        three: 3
+      default: one

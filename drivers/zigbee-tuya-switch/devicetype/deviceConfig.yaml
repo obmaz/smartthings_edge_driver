@@ -1,0 +1,68 @@
+dashboard:
+  states:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+  actions:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+detailView:
+  - component: main
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+  - component: switch1
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+  - component: switch2
+    capability: switch
+    version: 1
+    values: []
+    patch: []
+automation:
+  conditions:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+    - component: switch1
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+    - component: switch2
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+  actions:
+    - component: main
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+    - component: switch1
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+    - component: switch2
+      capability: switch
+      version: 1
+      values: []
+      patch: []
+type: dth
+presentationId: 7058efc0-258b-3f62-8500-062816ef1bf7
+manufacturerName: SmartThingsCommunity
+vid: 5b6aeb9d-e140-3614-9dd0-2e53b9b8e654
+mnmn: SmartThingsCommunity
+version: 0.0.1
