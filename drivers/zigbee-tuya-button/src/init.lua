@@ -71,14 +71,13 @@ end
 local foo
 
 local configure_device = function(self, device)
-    --foo ="0x"..device.device_network_id
-    foo = tonumber(device.device_network_id)
-    log.info("--------- Moon --------->> configure_device", device.device_network_id)
-
+    log.info("--------- Moon --------->> configure_device")
     device:configure()
+    --foo ="0x"..device.device_network_id
+    --foo = tonumber(device.device_network_id)
     --    ["zdo mgmt-bind 0x${device.deviceNetworkId} 0","delay 200"]
     --device:send(device_management.build_bind_request(device, foo, device.driver.environment_info.hub_zigbee_eui))
-    device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
+    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
@@ -131,7 +130,7 @@ local zigbee_tuya_button_driver_template = {
     },
     lifecycle_handlers = {
         added = device_added,
-        --doConfigure = configure_device,
+        doConfigure = configure_device,
         init = device_init,
     }
 }

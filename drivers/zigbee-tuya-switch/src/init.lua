@@ -108,6 +108,14 @@ local device_init = function(self, device)
     remapButton = remapButtonTbl[device.preferences.remapButton]
 end
 
+local foo = function(a, b, c, d)
+    log.info("--------- Moon --------->> foo")
+end
+
+local function configure_device(self, device)
+    device:configure()
+end
+
 local zigbee_tuya_switch_driver_template = {
     supported_capabilities = {
         capabilities.switch,
@@ -120,10 +128,24 @@ local zigbee_tuya_switch_driver_template = {
             [capabilities.switch.commands.off.NAME] = handleOff
         }
     },
+    zigbee_handlers = {
+        global = {},
+        cluster = {
+            [0x06] = {
+                [0x01] = foo
+            }
+        },
+        attr = {
+            [0x06] = {
+                [0x01] = foo
+            }
+        }
+    },
     lifecycle_handlers = {
         added = device_added,
         init = device_init,
         infoChanged = device_info_changed,
+        doConfigure = configure_device
     }
 }
 
