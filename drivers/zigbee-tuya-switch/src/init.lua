@@ -64,7 +64,6 @@ local function handleOff(driver, device, command)
 end
 
 local component_to_endpoint = function(device, component_id)
-    -- ???????? main to endpoint?
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
     local ep_num = component_id:match("switch(%d)")
     return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
@@ -76,7 +75,7 @@ local endpoint_to_component = function(device, ep)
     local component_id = string.format("switch%d", ep)
 
     if component_id == remapButton then
-        --syncComponent(device, "on")
+        --syncComponent(device)
     end
 
     return component_id
@@ -90,12 +89,12 @@ end
 
 local device_info_changed = function(driver, device, event, args)
     remapButton = remapButtonTbl[device.preferences.remapButton]
-    syncComponent(device, "off")
+    syncComponent(device)
 end
 
-function syncComponent(device, reverse)
+function syncComponent(device)
     local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
-    if status == reverse then
+    if status == "off" then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
     else
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())

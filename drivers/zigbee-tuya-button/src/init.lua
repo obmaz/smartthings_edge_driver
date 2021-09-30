@@ -84,7 +84,6 @@ end
 
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
-    log.info("--------- Moon --------->> component_to_endpoint - device.fingerprinted_endpoint_id : ", device.fingerprinted_endpoint_id)
     if component_id == "main" then
         return device.fingerprinted_endpoint_id
     else
@@ -140,6 +139,9 @@ local zigbee_tuya_button_driver_template = {
 defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
+
+
+--zigbee-tuya-switch-beta  Executing ZclClusterAttributeValueHandler: cluster: OnOff, attribute: OnOff
 
 -- Ref
 -- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy
