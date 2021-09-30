@@ -64,6 +64,7 @@ local function handleOff(driver, device, command)
 end
 
 local component_to_endpoint = function(device, component_id)
+    -- ???????? main to endpoint?
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
     local ep_num = component_id:match("switch(%d)")
     return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
@@ -108,10 +109,6 @@ local device_init = function(self, device)
     remapButton = remapButtonTbl[device.preferences.remapButton]
 end
 
-local foo = function(a, b, c, d)
-    log.info("--------- Moon --------->> foo")
-end
-
 local function configure_device(self, device)
     device:configure()
 end
@@ -126,19 +123,6 @@ local zigbee_tuya_switch_driver_template = {
         [capabilities.switch.ID] = {
             [capabilities.switch.commands.on.NAME] = handleOn,
             [capabilities.switch.commands.off.NAME] = handleOff
-        }
-    },
-    zigbee_handlers = {
-        global = {},
-        cluster = {
-            [0x06] = {
-                [0x01] = foo
-            }
-        },
-        attr = {
-            [0x06] = {
-                [0x01] = foo
-            }
         }
     },
     lifecycle_handlers = {

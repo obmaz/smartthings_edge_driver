@@ -29,7 +29,6 @@ function handle_pushed (driver, device, zb_rx)
 end
 
 local function handle_on(driver, device, command)
-    log.info("--------- Moon --------->> 1111111111111111111111111111111111111111111111111111111111111111111111")
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
     device.profile.components[command.component]:emit_event(capabilities.button.button.pushed())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
@@ -58,8 +57,9 @@ local device_added = function(driver, device)
     --        end
     --    end
     --end
-    device:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
-    device:emit_event(capabilities.button.button.pushed())
+    --device:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
+    --device:emit_event(capabilities.button.button.pushed())
+
     for key, value in pairs(device.profile.components) do
         log.info("--------- Moon --------->> device_added - component : ", key)
         device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
@@ -78,13 +78,15 @@ local configure_device = function(self, device)
     --    ["zdo mgmt-bind 0x${device.deviceNetworkId} 0","delay 200"]
     --device:send(device_management.build_bind_request(device, foo, device.driver.environment_info.hub_zigbee_eui))
     --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
-    device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+
+    --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
 local function component_to_endpoint(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
+    log.info("--------- Moon --------->> component_to_endpoint - device.fingerprinted_endpoint_id : ", device.fingerprinted_endpoint_id)
     if component_id == "main" then
-        --return device.fingerprinted_endpoint_id
+        return device.fingerprinted_endpoint_id
     else
         local ep_num = component_id:match("button(%d)")
         return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
@@ -109,8 +111,8 @@ end
 local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
-        capabilities.battery,
-        capabilities.refresh
+        --capabilities.battery,
+        --capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {

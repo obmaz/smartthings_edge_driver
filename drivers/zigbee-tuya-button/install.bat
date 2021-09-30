@@ -19,7 +19,7 @@
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
 @REM # For window : zigee-tuya-button
-set driverId=1d8cb13e-7fa9-40b3-bd43-e3ec68caed4e
+set driverId=95b94182-0102-47ce-acef-553cbd8aa6d6
 set channel=143f8c3b-5fcf-4013-a795-49bf690eb3b9
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119
