@@ -43,7 +43,6 @@ local function handleOn(driver, device, command)
         command.component = remapButton
     end
 
-    device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
@@ -59,7 +58,10 @@ local function handleOff(driver, device, command)
     --local endpoint = device:get_endpoint_for_component_id(command.component)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
+
+    -- if send emit_event, it will cause syny problem between main and remap remapButton
+    -- since main button status will be changed when remap button receive "endpoint_to_component"
+    --device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
@@ -75,26 +77,20 @@ local endpoint_to_component = function(device, ep)
     local component_id = string.format("switch%d", ep)
 
     if component_id == remapButton then
-        --syncComponent(device)
+        syncComponent(device, "on")
     end
 
     return component_id
-
-    --if ep == device.fingerprinted_endpoint_id then
-    --    return "main"
-    --else
-    --    return string.format("switch%d", ep)
-    --end
 end
 
 local device_info_changed = function(driver, device, event, args)
     remapButton = remapButtonTbl[device.preferences.remapButton]
-    syncComponent(device)
+    syncComponent(device, "off")
 end
 
-function syncComponent(device)
+function syncComponent(device, reverse)
     local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
-    if status == "off" then
+    if status == reverse then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
     else
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
@@ -135,10 +131,4 @@ local zigbee_tuya_switch_driver_template = {
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()
-
---  onOff: {ID: 0, type: DataType.boolean},
---  tuyaBacklightMode: {ID: 0x8001, type: DataType.enum8}, ?????
---        <ZigbeeDevice: fb5ec176-64fc-400e-b8fa-6fd0abec0f4f [0xD261] (Tuya Wall Switch 2 Gang)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_add
---r: 0xD261, src_endpoint: 0x00, dest_addr: 0x0000, dest_endpoint: 0x00, profile: 0x0000, cluster: 0x8001 >, lqi: 0xFF, rssi: -63, body_length: 0x000C, < ZDOMessageBody || < ZDOHeader || seqno: 0x14 >, GenericBody:  00 FE 77 11 FE FF E
---C 86 CC 89 A1 > >
 
