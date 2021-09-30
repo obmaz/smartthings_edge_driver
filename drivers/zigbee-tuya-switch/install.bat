@@ -20,10 +20,10 @@
 
 
 @REM packageKey: 'zigbee-tuya-switch'
-set driverId=de2773fd-2901-4254-9009-276f1ca90350
+@REM set driverId=de2773fd-2901-4254-9009-276f1ca90350
 
 @REM packageKey: 'zigbee-tuya-switch-dev'
-@REM set driverId=ac07f7e5-09a3-4899-9fb4-5f9cf0589488
+set driverId=ac07f7e5-09a3-4899-9fb4-5f9cf0589488
 
 set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
