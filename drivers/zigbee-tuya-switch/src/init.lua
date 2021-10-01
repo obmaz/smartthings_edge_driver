@@ -18,6 +18,7 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
+local isAlreadyEmit = false
 local remapButtonTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
@@ -27,7 +28,7 @@ local remapButtonTbl = {
 local function getRemapButton(device)
     local remapButton = device.preferences.remapButton
 
-    if remap == nil then
+    if remapButton == nil then
         return "main"
     else
         return remapButtonTbl[remapButton]
@@ -52,7 +53,9 @@ local function handleOn(driver, device, command)
         command.component = getRemapButton(device)
     end
 
+    device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
+    isAlreadyEmit = true
 end
 
 local function handleOff(driver, device, command)
@@ -70,8 +73,9 @@ local function handleOff(driver, device, command)
 
     -- if send emit_event, it will cause syny problem between main and remapButton
     -- since main button status will be changed when remap button receive "endpoint_to_component"
-    --device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
+    device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
+    isAlreadyEmit = true
 end
 
 local component_to_endpoint = function(device, component_id)
@@ -85,9 +89,11 @@ local endpoint_to_component = function(device, ep)
 
     local component_id = string.format("switch%d", ep)
 
-    if getRemapButton(device) == component_id then
+    if getRemapButton(device) == component_id and isAlreadyEmit == false then
         syncComponent(device, "on")
     end
+
+    isAlreadyEmit = false
 
     if getRemapButton(device) == "main" then
         component_id = "main"
