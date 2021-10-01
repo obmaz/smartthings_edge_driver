@@ -18,7 +18,6 @@
 @REM smartthings edge:drivers:package ./
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
-
 @REM packageKey: 'zigbee-tuya-switch'
 @REM set driverId=de2773fd-2901-4254-9009-276f1ca90350
 
@@ -35,15 +34,3 @@ smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%
 smartthings edge:drivers:install %driverId% --channel %channel% --hub %hub%
 smartthings edge:drivers:logcat -all --hub-address=%hub_address%
-
-@REM # For Posix : zigbee-tuya-switch
-@REM driverId=de2773fd-2901-4254-9009-276f1ca90350
-@REM channel=f86b30bb-00d0-4b90-8849-53beb1109dba
-@REM hub=37d997a3-7579-47f2-8ae9-804fce729f7b
-@REM hub_address=192.168.0.119
-
-@REM smartthings edge:drivers:uninstall $driverId --hub $hub
-@REM smartthings edge:drivers:package ./
-@REM smartthings edge:drivers:publish $driverId --channel $channel
-@REM smartthings edge:drivers:install $driverId --channel $channel --hub $hub
-@REM smartthings edge:drivers:logcat --hub-address=$hub_address --all

@@ -116,7 +116,7 @@ local zigbee_tuya_button_driver_template = {
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
-            [0x0006] = { -- zcl_clusters.OnOff.ID
+            [0x06] = { -- zcl_clusters.OnOff.ID
                 [0x00] = handle_pushed,
                 [0x01] = handle_pushed
                 --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
@@ -142,6 +142,17 @@ zigbee_driver:run()
 
 
 --zigbee-tuya-switch-beta  Executing ZclClusterAttributeValueHandler: cluster: OnOff, attribute: OnOff
+
+--ZigbeeMessageDispatcher: zigbee-tuya-switch
+--default_handlers:
+--attr:
+--ZclClusterAttributeValueHandler: cluster: OnOff, attribute: OnOff
+--global:
+--cluster:
+--zdo:
+--child_dispatchers:
+
+
 
 -- Ref
 -- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy

@@ -1,10 +1,10 @@
 name: zigbee-tuya-switch-1
 components:
-- id: main
-  capabilities:
-  - id: switch
-    version: 1
-    categories:
-      - name: switch
+  - id: main
+    capabilities:
+      - id: switch
+        version: 1
+        categories:
+          - name: switch
 metadata:
   ocfDeviceType: oic.d.switch

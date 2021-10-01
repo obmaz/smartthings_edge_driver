@@ -17,13 +17,23 @@ local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
-local remapButton = "switch1"
 
 local remapButtonTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
     ["three"] = "switch3",
 }
+
+local function getRemapButton(device)
+    local remapButton = device.preferences.remapButton
+
+    if remap == nil then
+        return "main"
+    else
+        return remapButtonTbl[remapButton]
+    end
+
+end
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
@@ -34,13 +44,12 @@ local device_added = function(driver, device)
         device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
 end
-
 local function handleOn(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
-    if command.component == "main" or command.component == remapButton then
+    if command.component == "main" or command.component == getRemapButton(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-        command.component = remapButton
+        command.component = getRemapButton(device)
     end
 
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
@@ -49,9 +58,9 @@ end
 local function handleOff(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
-    if command.component == "main" or command.component == remapButton then
+    if command.component == "main" or command.component == getRemapButton(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
-        command.component = remapButton
+        command.component = getRemapButton(device)
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -59,7 +68,7 @@ local function handleOff(driver, device, command)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
 
-    -- if send emit_event, it will cause syny problem between main and remap remapButton
+    -- if send emit_event, it will cause syny problem between main and remapButton
     -- since main button status will be changed when remap button receive "endpoint_to_component"
     --device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
@@ -76,20 +85,23 @@ local endpoint_to_component = function(device, ep)
 
     local component_id = string.format("switch%d", ep)
 
-    if component_id == remapButton then
+    if getRemapButton(device) == component_id then
         syncComponent(device, "on")
+    end
+
+    if getRemapButton(device) == "main" then
+        component_id = "main"
     end
 
     return component_id
 end
 
 local device_info_changed = function(driver, device, event, args)
-    remapButton = remapButtonTbl[device.preferences.remapButton]
     syncComponent(device, "off")
 end
 
 function syncComponent(device, reverse)
-    local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
+    local status = device:get_latest_state(getRemapButton(device), "switch", "switch", "off", nil)
     if status == reverse then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
     else
@@ -101,7 +113,6 @@ local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
     device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
     device:set_endpoint_to_component_fn(endpoint_to_component)
-    remapButton = remapButtonTbl[device.preferences.remapButton]
 end
 
 local function configure_device(self, device)
