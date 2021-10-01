@@ -2,21 +2,16 @@ name: zigbee-tuya-switch-2
 components:
   - id: main
     capabilities:
-      - id: switch
-        version: 1
-          - name: switch
+    - id: switch
+      version: 1
   - id: switch1
     capabilities:
-      - id: switch
-        version: 1
-        categories:
-          - name: switch
+    - id: switch
+      version: 1
   - id: switch2
     capabilities:
-      - id: switch
-        version: 1
-        categories:
-          - name: switch
+    - id: switch
+      version: 1
 metadata:
   ocfDeviceType: oic.d.switch
 preferences:
