@@ -1,0 +1,4 @@
+name: 'zigbee-ikea-button'
+packageKey: 'zigbee-ikea-button'
+permissions:
+  zigbee: {}

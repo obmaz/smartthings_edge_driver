@@ -25,7 +25,6 @@ set channel=143f8c3b-5fcf-4013-a795-49bf690eb3b9
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119
 
-@REM # Each OS will show error like "command not found", but it's ok
 smartthings edge:drivers:uninstall %driverId% --hub %hub%
 smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%

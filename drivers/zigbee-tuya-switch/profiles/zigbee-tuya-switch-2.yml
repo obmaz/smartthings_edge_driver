@@ -4,7 +4,6 @@ components:
     capabilities:
       - id: switch
         version: 1
-        categories:
           - name: switch
   - id: switch1
     capabilities:

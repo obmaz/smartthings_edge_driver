@@ -18,13 +18,10 @@
 @REM smartthings edge:drivers:package ./
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
-@REM packageKey: 'zigbee-tuya-switch'
-@REM set driverId=de2773fd-2901-4254-9009-276f1ca90350
+@REM packageKey: 'zigbee-ikea-button'
+set driverId=ed635baa-53a4-44c5-914b-ebad8c6cd472
 
-@REM packageKey: 'zigbee-tuya-switch-dev'
-set driverId=ac07f7e5-09a3-4899-9fb4-5f9cf0589488
-
-set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
+set channel=143f8c3b-5fcf-4013-a795-49bf690eb3b9
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119
 
@@ -32,4 +29,4 @@ smartthings edge:drivers:uninstall %driverId% --hub %hub%
 smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%
 smartthings edge:drivers:install %driverId% --channel %channel% --hub %hub%
-smartthings edge:drivers:logcat -all --hub-address=%hub_address%
+smartthings edge:drivers:logcat %driverId% --hub-address=%hub_address%
