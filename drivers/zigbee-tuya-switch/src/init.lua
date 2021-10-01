@@ -45,6 +45,7 @@ local device_added = function(driver, device)
         device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
 end
+
 local function handleOn(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
@@ -130,7 +131,6 @@ local zigbee_tuya_switch_driver_template = {
         capabilities.switch,
         capabilities.refresh
     },
-    -- UI를 누를때 호출
     capability_handlers = {
         [capabilities.switch.ID] = {
             [capabilities.switch.commands.on.NAME] = handleOn,

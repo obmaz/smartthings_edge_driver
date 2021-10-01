@@ -19,120 +19,72 @@ local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function handle_pushed (driver, device, zb_rx)
-    log.info("--------- Moon --------->> button_handler")
-
-    device.profile.components["main"]:emit_event(capabilities.button.button.pushed())
-    device.profile.components["button2"]:emit_event(capabilities.button.button.pushed())
-    device.profile.components["button3"]:emit_event(capabilities.button.button.pushed())
-    device.profile.components["button4"]:emit_event(capabilities.button.button.pushed())
+local function handleOn(driver, device, command)
+    log.info("--------- Moon --------->> handle_on - component : ", command)
 end
 
-local function handle_on(driver, device, command)
-    log.info("--------- Moon --------->> handle_on - component : ", command.component)
-    device.profile.components[command.component]:emit_event(capabilities.button.button.pushed())
-    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
+local function handleOff(driver, device, command)
+    log.info("--------- Moon --------->> handle_off - component : ", command)
 end
 
-local function handle_off(driver, device, command)
-    log.info("--------- Moon --------->> handle_off - component : ", command.component)
-    --아래와 같이 endpoint를 구해서 호출도 가능, endpoint 값 조작이 필요할 경우 사용
-    --local endpoint = device:get_endpoint_for_component_id(command.component)
-    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-    device.profile.components[command.component]:emit_event(capabilities.button.button.pushed())
-    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
+local function handleOffStart(driver, device, command)
+    log.info("--------- Moon --------->> handleOffStart - component : ", command)
+end
+
+local function handleOnStart(driver, device, command)
+    log.info("--------- Moon --------->> handleOnStart - component : ", command)
+end
+
+local function handleStop(driver, device, command)
+    log.info("--------- Moon --------->> handleStop - component : ", command)
 end
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
-
-    --Add the manufacturer-specific attributes to generate their configure reporting and bind requests
-    --for capability_id, configs in pairs(common.get_cluster_configurations(device:get_manufacturer())) do
-    --    if device:supports_capability_by_id(capability_id) then
-    --        for _, config in pairs(configs) do
-    --            device:add_configured_attribute(config)
-    --            device:add_monitored_attribute(config)
-    --            log.info("--------- Moon --------->> device_added config", config)
-    --        end
-    --    end
-    --end
-    --device:emit_event(capabilities.button.supportedButtonValues({"pushed", "held"}))
-    --device:emit_event(capabilities.button.button.pushed())
-
-    for key, value in pairs(device.profile.components) do
-        log.info("--------- Moon --------->> device_added - component : ", key)
-        device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-        device.profile.components[key]:emit_event(capabilities.button.button.pushed())
-        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
-    end
+    device.profile.components[key]:emit_event(capabilities.switchLevel.level(50))
+    -- \lua_libs-api_v0\st\zigbee\generated\zcl_clusters\OnOff\server\commands
+    --device:send_to_component(key, zcl_clusters.Level.server.commands.Stop())
+    --device:send_to_component(key, zcl_clusters.Level.server.commands.Move())
+    --device:send_to_component(key, zcl_clusters.Level.server.commands.MoveToLevel())
 end
-
-local foo
 
 local configure_device = function(self, device)
     log.info("--------- Moon --------->> configure_device")
     device:configure()
-    --foo ="0x"..device.device_network_id
-    --foo = tonumber(device.device_network_id)
-    --    ["zdo mgmt-bind 0x${device.deviceNetworkId} 0","delay 200"]
-    --device:send(device_management.build_bind_request(device, foo, device.driver.environment_info.hub_zigbee_eui))
-    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
-
+    --device:send(device_management.build_bind_request(device, 0x0008, device.driver.environment_info.hub_zigbee_eui))
     --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-end
-
-local function component_to_endpoint(device, component_id)
-    log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
-    if component_id == "main" then
-        return device.fingerprinted_endpoint_id
-    else
-        local ep_num = component_id:match("button(%d)")
-        return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
-    end
-end
-
-local function endpoint_to_component(device, ep)
-    log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
-    if ep == device.fingerprinted_endpoint_id then
-        return "main"
-    else
-        return string.format("button%d", ep)
-    end
-end
-
-local device_init = function(self, device)
-    log.info("--------- Moon --------->> device_init")
-    device:set_component_to_endpoint_fn(component_to_endpoint)
-    device:set_endpoint_to_component_fn(endpoint_to_component)
 end
 
 local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
-        capabilities.button,
+        capabilities.switchLevel,
         --capabilities.battery,
-        --capabilities.refresh
+        capabilities.refresh
     },
-    -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
+    capability_handlers = {
+        [capabilities.switchLevel.ID] = {
+            [0x00] = handleOff,
+            [0x01] = handleOn,
+        }
+    },
     zigbee_handlers = {
         cluster = {
-            [0x06] = { -- zcl_clusters.OnOff.ID
-                [0x00] = handle_pushed,
-                [0x01] = handle_pushed
-                --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
-            }
-        },
-        attr = {
-            [zcl_clusters.OnOff.ID] = {
-                [0x00] = handle_pushed,
-                [0x01] = handle_pushed
+            -- on off cluster
+            [0x0006] = {
+                [0x00] = handleOff,
+                [0x01] = handleOn,
+            },
+            -- level cluster
+            [0x0008] = {
+                [0x01] = handleOffStart,
+                [0x05] = handleOnStart,
+                [0x07] = handleStop,
             }
         }
     },
     lifecycle_handlers = {
         added = device_added,
         doConfigure = configure_device,
-        init = device_init,
     }
 }
 
