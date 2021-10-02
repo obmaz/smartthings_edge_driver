@@ -1,11 +1,11 @@
 name: zigbee-ikea-button-dimmer
 components:
-- id: main
-  capabilities:
-  - id: battery
-    version: 1
-  - id: switchLevel
-    version: 1
+  - id: main
+    capabilities:
+      - id: battery
+        version: 1
+      - id: switchLevel
+        version: 1
 metadata:
   mnmn: SmartThingsCommunity
 preferences:

@@ -75,11 +75,10 @@ local zigbee_tuya_button_driver_template = {
         capabilities.battery,
         capabilities.refresh
     },
-    --zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
+    -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
-            -- 0x0006
-            [zcl_clusters.OnOff.server.commands.OnOff.ID] = {
+            [0x0006] = {
                 -- ZCLCommandId
                 [0xFD] = handle_pushed
             }
