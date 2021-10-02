@@ -2,8 +2,8 @@ name: zigbee-tuya-button-4
 components:
 - id: main
   capabilities:
-#  - id: battery
-#    version: 1
+  - id: battery
+    version: 1
   - id: button
     version: 1
 #  categories:
@@ -22,17 +22,4 @@ components:
     version: 1
 metadata:
   mnmn: SmartThingsCommunity
-  ocfDeviceType: x.com.st.d.remotecontroller
-preferences:
-  - title: Remap Button 1
-    description: "description"
-    name: remapButton1
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
-        one: 1
-        two: 2
-        three: 3
-        four: 4
-      default: one
+#  ocfDeviceType: x.com.st.d.remotecontroller
