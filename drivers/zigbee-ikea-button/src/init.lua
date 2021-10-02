@@ -19,76 +19,83 @@ local defaults = require "st.zigbee.defaults"
 local device_management = require "st.zigbee.device_management"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local remapButtonTbl = {
-    ["one"] = "switch1",
-    ["two"] = "switch2",
-    ["three"] = "switch3",
-}
 local incValue = 10
 
-local function handleOn(driver, device, command)
-    log.info("--------- Moon --------->> handle_on - component : ", command)
+local function updateIncValue(device)
+    incValue = math.floor(device.preferences.incValue)
+    return
 end
 
-local function handleOff(driver, device, command)
-    log.info("--------- Moon --------->> handle_off - component : ", command)
+local function level_handler(driver, device, command)
+    log.info("--------- Moon --------->> level_handler - component : ", command.args.level)
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(command.args.level))
 end
 
-local function handleOffStart(driver, device, command)
-    log.info("--------- Moon --------->> handleOffStart - component : ", command)
+local function on_handler(driver, device, command)
+    log.info("--------- Moon --------->> on_handler - component : ", command)
+    local currentValue = device:get_latest_state("main", "switchLevel", "level", 50, nil)
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(currentValue + incValue))
 end
 
-local function handleOnStart(driver, device, command)
-    log.info("--------- Moon --------->> handleOnStart - component : ", command)
+local function off_handler(driver, device, command)
+    log.info("--------- Moon --------->> off_handler - component : ", command)
+    local currentValue = device:get_latest_state("main", "switchLevel", "level", 50, nil)
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(currentValue - incValue))
 end
 
-local function handleStop(driver, device, command)
-    log.info("--------- Moon --------->> handleStop - component : ", command)
+local function on_start_handler(driver, device, command)
+    log.info("--------- Moon --------->> on_start_handler - component : ", command)
+end
+
+local function off_start_handler(driver, device, command)
+    log.info("--------- Moon --------->> off_start_handler - component : ", command)
+end
+
+local function stop_handler(driver, device, command)
+    log.info("--------- Moon --------->> stop_handler - component : ", command)
 end
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
-    incValue = device.preferences.incValue
-    device.profile.components[key]:emit_event(capabilities.switchLevel.level(50))
-    -- \lua_libs-api_v0\st\zigbee\generated\zcl_clusters\OnOff\server\commands
-    --device:send_to_component(key, zcl_clusters.Level.server.commands.Stop())
-    --device:send_to_component(key, zcl_clusters.Level.server.commands.Move())
-    --device:send_to_component(key, zcl_clusters.Level.server.commands.MoveToLevel())
+    updateIncValue(device)
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(50))
 end
 
 local configure_device = function(self, device)
     log.info("--------- Moon --------->> configure_device")
     device:configure()
-    --device:send(device_management.build_bind_request(device, 0x0008, device.driver.environment_info.hub_zigbee_eui))
-    --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+    device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
 local device_info_changed = function(driver, device, event, args)
-    incValue = device.preferences.incValue
+    updateIncValue(device)
 end
 
-local zigbee_tuya_button_driver_template = {
+local zigbee_ikea_button_driver_template = {
     supported_capabilities = {
         capabilities.switchLevel,
-        --capabilities.battery,
+        capabilities.battery,
         capabilities.refresh
     },
     capability_handlers = {
         [capabilities.switchLevel.ID] = {
-            [0x00] = handleOff,
-            [0x01] = handleOn,
+            [capabilities.switchLevel.commands.setLevel.NAME] = level_handler,
         }
     },
     zigbee_handlers = {
         cluster = {
-            [0x0006] = {
-                [0x00] = handleOff,
-                [0x01] = handleOn,
+            -- 0x0006
+            [zcl_clusters.OnOff.server.commands.OnOff.ID] = {
+                -- ZCLCommandId
+                [zcl_clusters.OnOff.server.commands.Off.ID] = off_handler,
+                [zcl_clusters.OnOff.server.commands.On.ID] = on_handler,
             },
-            [0x0008] = {
-                [0x01] = handleOffStart,
-                [0x05] = handleOnStart,
-                [0x07] = handleStop,
+            -- 0x0008
+            [zcl_clusters.Level.server.commands.MoveToClosestFrequency.ID] = {
+                -- ZCLCommandId
+                [zcl_clusters.Level.server.commands.Move.ID] = off_start_handler,
+                [zcl_clusters.Level.server.commands.MoveWithOnOff.ID] = on_start_handler,
+                [zcl_clusters.Level.server.commands.StopWithOnOff.ID] = stop_handler,
             }
         }
     },
@@ -99,6 +106,6 @@ local zigbee_tuya_button_driver_template = {
     }
 }
 
-defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-ikea-button", zigbee_tuya_button_driver_template)
+defaults.register_for_default_handlers(zigbee_ikea_button_driver_template, zigbee_ikea_button_driver_template.supported_capabilities)
+local zigbee_driver = ZigbeeDriver("zigbee-ikea-button", zigbee_ikea_button_driver_template)
 zigbee_driver:run()

@@ -73,12 +73,6 @@ local foo
 local configure_device = function(self, device)
     log.info("--------- Moon --------->> configure_device")
     device:configure()
-    --foo ="0x"..device.device_network_id
-    --foo = tonumber(device.device_network_id)
-    --    ["zdo mgmt-bind 0x${device.deviceNetworkId} 0","delay 200"]
-    --device:send(device_management.build_bind_request(device, foo, device.driver.environment_info.hub_zigbee_eui))
-    --device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
-
     --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
@@ -110,22 +104,16 @@ end
 local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
-        --capabilities.battery,
-        --capabilities.refresh
+        capabilities.battery,
+        capabilities.refresh
     },
     -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
-            [0x06] = { -- zcl_clusters.OnOff.ID
-                [0x00] = handle_pushed,
-                [0x01] = handle_pushed
-                --[zcl_clusters.OnOff.commands.server.Off.ID] = handle_on, -- on
-            }
-        },
-        attr = {
-            [zcl_clusters.OnOff.ID] = {
-                [0x00] = handle_pushed,
-                [0x01] = handle_pushed
+            -- 0x0006
+            [zcl_clusters.OnOff.server.commands.OnOff.ID] = {
+                -- ZCLCommandId
+                [0xFD] = handle_pushed
             }
         }
     },
@@ -152,8 +140,6 @@ zigbee_driver:run()
 --zdo:
 --child_dispatchers:
 
-
-
 -- Ref
 -- https://github.com/YooSangBeom/SangBoyST/blob/master/devicetypes/sangboy/zemismart-button.src/zemismart-button.groovy
 -- ZCLCommandId????
@@ -168,6 +154,9 @@ zigbee_driver:run()
 --src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -64, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x5A, ZCLCommandId: 0xFD >,
 -- GenericBody:  00 > >
 
+--<ZigbeeDevice: 5f8724a7-7533-40eb-8838-46f76ccc61a1 [0xEBF4] (Zigbee ikea button dimmer)> received Zigbee message: < ZigbeeMessageRx || type: 0x01, < AddressHeader || src_add
+--r: 0xEBF4, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0xFF, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -42, body_length: 0x0003, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x0F, ZCLCommandId: 0x01 >
+--, < On ||  > > >
 
 --*zigbee switch
 --<ZigbeeDevice: 133b2345-22c2-493b-aac6-536ffeb2f121 [0x3029] (Tuya Wall Gang)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0--x3029,
