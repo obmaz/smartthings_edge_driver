@@ -4,17 +4,18 @@ components:
     capabilities:
       - id: battery
         version: 1
-      - id: switchLevel
+      - id: button
+        version: 1
+    categories:
+      - name: RemoteController
+  - id: button1
+    capabilities:
+      - id: button
+        version: 1
+  - id: button2
+    capabilities:
+      - id: button
         version: 1
 metadata:
   mnmn: SmartThingsCommunity
-preferences:
-  - title: "Button Increment Value"
-    description: "Default : 10, (Min: 0, Max: 100)"
-    name: incValue
-    required: true
-    preferenceType: number
-    definition:
-      minimum: 1
-      maximum: 100
-      default: 10
+  ocfDeviceType: x.com.st.d.remotecontroller

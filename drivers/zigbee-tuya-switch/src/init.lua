@@ -26,16 +26,6 @@ local remapButtonTbl = {
     ["three"] = "switch3",
 }
 
-local function getRemapButton(device)
-    local remapButton = device.preferences.remapButton
-
-    if remapButton == nil then
-        return "main"
-    else
-        return remapButtonTbl[remapButton]
-    end
-end
-
 local function updateRemapButton(device)
     remapButton = device.preferences.remapButton
 
@@ -43,17 +33,6 @@ local function updateRemapButton(device)
         remapButton = "main"
     else
         remapButton = remapButtonTbl[remapButton]
-    end
-end
-
-local device_added = function(driver, device)
-    log.info("--------- Moon --------->> device_added")
-    updateRemapButton(device)
-    -- Workaround : Should emit or send to enable capabilities UI
-    for key, value in pairs(device.profile.components) do
-        log.info("--------- Moon --------->> device_added - component : ", key)
-        device.profile.components[key]:emit_event(capabilities.switch.switch.on())
-        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
 end
 
@@ -114,11 +93,6 @@ local endpoint_to_component = function(device, ep)
     return component_id
 end
 
-local device_info_changed = function(driver, device, event, args)
-    updateRemapButton(device)
-    syncComponent(device, "off")
-end
-
 function syncComponent(device, reverse)
     local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
     if status == reverse then
@@ -128,10 +102,26 @@ function syncComponent(device, reverse)
     end
 end
 
+local device_added = function(driver, device)
+    log.info("--------- Moon --------->> device_added")
+    updateRemapButton(device)
+    -- Workaround : Should emit or send to enable capabilities UI
+    for key, value in pairs(device.profile.components) do
+        log.info("--------- Moon --------->> device_added - component : ", key)
+        device.profile.components[key]:emit_event(capabilities.switch.switch.on())
+        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+    end
+end
+
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
     device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
     device:set_endpoint_to_component_fn(endpoint_to_component)
+end
+
+local device_info_changed = function(driver, device, event, args)
+    updateRemapButton(device)
+    syncComponent(device, "off")
 end
 
 local function configure_device(self, device)
