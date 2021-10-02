@@ -9,3 +9,13 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
 #  ocfDeviceType: x.com.st.d.remotecontroller
+preferences:
+  - title: "Button Increment Value"
+    description: "Default : 10"
+    name: incValue
+    required: true
+    preferenceType: Number
+    definition:
+      minimum: 1
+      maximum: 100
+      default: 10

@@ -46,7 +46,7 @@ local device_added = function(driver, device)
     end
 end
 
-local function handleOn(driver, device, command)
+local on_handler = function(driver, device, command)
     log.info("--------- Moon --------->> handle_on - component : ", command.component)
 
     if command.component == "main" or command.component == getRemapButton(device) then
@@ -59,7 +59,7 @@ local function handleOn(driver, device, command)
     isAlreadyEmit = true
 end
 
-local function handleOff(driver, device, command)
+local off_handler = function(driver, device, command)
     log.info("--------- Moon --------->> handle_off - component : ", command.component)
 
     if command.component == "main" or command.component == getRemapButton(device) then
@@ -133,8 +133,8 @@ local zigbee_tuya_switch_driver_template = {
     },
     capability_handlers = {
         [capabilities.switch.ID] = {
-            [capabilities.switch.commands.on.NAME] = handleOn,
-            [capabilities.switch.commands.off.NAME] = handleOff
+            [capabilities.switch.commands.on.NAME] = on_handler,
+            [capabilities.switch.commands.off.NAME] = off_handler
         }
     },
     lifecycle_handlers = {
