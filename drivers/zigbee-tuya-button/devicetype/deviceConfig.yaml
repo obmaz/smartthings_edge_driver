@@ -1,3 +1,4 @@
+#smartthings presentation:device-config:create --yaml --input deviceConfig.yaml
 dashboard:
   states:
     - component: main

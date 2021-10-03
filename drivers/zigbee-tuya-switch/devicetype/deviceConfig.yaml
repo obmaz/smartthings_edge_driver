@@ -1,7 +1,8 @@
+#smartthings presentation:device-config:create --yaml --input deviceConfig.yaml
 dashboard:
   states:
     - component: main
-      capability: battery
+      capability: switch
       version: 1
       values: [ ]
       patch: [ ]
@@ -32,11 +33,6 @@ detailView:
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch4
-    capability: switch
-    version: 1
-    values: [ ]
-    patch: [ ]
 automation:
   conditions:
     - component: main
@@ -55,11 +51,6 @@ automation:
       values: [ ]
       patch: [ ]
     - component: switch3
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
-    - component: switch4
       capability: switch
       version: 1
       values: [ ]
@@ -85,14 +76,9 @@ automation:
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch4
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
 type: dth
-presentationId: 7058efc0-258b-3f62-8500-062816ef1bf7
+presentationId: 5452ec63-9c17-3c23-a83b-ee938e87740d
 manufacturerName: SmartThingsCommunity
-vid: 5b6aeb9d-e140-3614-9dd0-2e53b9b8e654
+vid: 5452ec63-9c17-3c23-a83b-ee938e87740d
 mnmn: SmartThingsCommunity
 version: 0.0.1
