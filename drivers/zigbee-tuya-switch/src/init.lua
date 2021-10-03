@@ -61,9 +61,6 @@ local off_handler = function(driver, device, command)
     --local endpoint = device:get_endpoint_for_component_id(command.component)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-
-    -- if send emit_event, it will cause syny problem between main and remapButton
-    -- since main button status will be changed when remap button receive "endpoint_to_component"
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
     isAlreadyEmit = true
@@ -71,8 +68,8 @@ end
 
 local component_to_endpoint = function(device, component_id)
     log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
-    local ep_num = component_id:match("switch(%d)")
-    return ep_num and tonumber(ep_num) or device.fingerprinted_endpoint_id
+    local ep = component_id:match("switch(%d)")
+    return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
 local endpoint_to_component = function(device, ep)
