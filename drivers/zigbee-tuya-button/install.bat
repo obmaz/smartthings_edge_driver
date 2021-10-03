@@ -1,4 +1,3 @@
-#!/bin/bash
 @REM # CLI Commands
 @REM smartthings edge:channels:assign
 @REM smartthings edge:channels:create

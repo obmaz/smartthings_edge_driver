@@ -1,0 +1,63 @@
+mnmn: SmartThingsCommunity
+vid: 6198818d-9256-3237-861a-55ce14526a83
+version: 0.0.1
+type: profile
+dashboard:
+  states:
+    - component: main
+      capability: battery
+      version: 1
+      idx: 0
+      group: main
+      values: [ ]
+  actions:
+    - component: main
+      capability: button
+      version: 1
+      idx: 0
+      group: main
+detailView:
+  - component: main
+    capability: battery
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: main
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button2
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+automation:
+  conditions:
+    - component: main
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+  actions:
+    - component: main
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+presentationId: 6198818d-9256-3237-861a-55ce14526a83
+manufacturerName: SmartThingsCommunity

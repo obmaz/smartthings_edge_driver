@@ -1,4 +1,4 @@
-name: zigbee-tuya-button-4
+name: zigbee-tuya-button-2
 components:
   - id: main
     capabilities:
@@ -10,15 +10,7 @@ components:
     capabilities:
       - id: button
         version: 1
-  - id: button3
-    capabilities:
-      - id: button
-        version: 1
-  - id: button4
-    capabilities:
-      - id: button
-        version: 1
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: x.com.st.d.remotecontroller
-  vid: aa3209b5-fa8d-3e51-aabd-57cd213e40bd
+  vid: 6198818d-9256-3237-861a-55ce14526a83

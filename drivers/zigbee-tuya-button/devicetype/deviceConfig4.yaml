@@ -1,0 +1,97 @@
+mnmn: SmartThingsCommunity
+vid: aa3209b5-fa8d-3e51-aabd-57cd213e40bd
+version: 0.0.1
+type: profile
+dashboard:
+  states:
+    - component: main
+      capability: battery
+      version: 1
+      idx: 0
+      group: main
+      values: [ ]
+  actions:
+    - component: main
+      capability: button
+      version: 1
+      idx: 0
+      group: main
+detailView:
+  - component: main
+    capability: battery
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: main
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button2
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button3
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button4
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+automation:
+  conditions:
+    - component: main
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button3
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+  actions:
+    - component: main
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button3
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+presentationId: aa3209b5-fa8d-3e51-aabd-57cd213e40bd
+manufacturerName: SmartThingsCommunity

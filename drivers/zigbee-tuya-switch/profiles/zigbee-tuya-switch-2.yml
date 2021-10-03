@@ -13,7 +13,9 @@ components:
       - id: switch
         version: 1
 metadata:
+  mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
+  vid: ed6124ac-2d22-3d72-8772-e8c51bc2e2ff
 preferences:
   - title: "Remap Main Button"
     description: "Select a button to map to the main button"

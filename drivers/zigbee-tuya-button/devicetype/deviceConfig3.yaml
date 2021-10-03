@@ -1,17 +1,21 @@
-#smartthings presentation:device-config:create --yaml --input deviceConfig.yaml
+mnmn: SmartThingsCommunity
+vid: cef083d9-ba68-367a-a946-b4566c7e92a5
+version: 0.0.1
+type: profile
 dashboard:
   states:
     - component: main
       capability: battery
       version: 1
+      idx: 0
+      group: main
       values: [ ]
-      patch: [ ]
   actions:
     - component: main
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
+      idx: 0
+      group: main
 detailView:
   - component: main
     capability: battery
@@ -33,11 +37,6 @@ detailView:
     version: 1
     values: [ ]
     patch: [ ]
-  - component: button4
-    capability: button
-    version: 1
-    values: [ ]
-    patch: [ ]
 automation:
   conditions:
     - component: main
@@ -45,45 +44,37 @@ automation:
       version: 1
       values: [ ]
       patch: [ ]
+      exclusion: [ ]
     - component: button2
       capability: button
       version: 1
       values: [ ]
       patch: [ ]
+      exclusion: [ ]
     - component: button3
       capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: button4
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
+      exclusion: [ ]
   actions:
     - component: main
       capability: button
       version: 1
       values: [ ]
       patch: [ ]
+      exclusion: [ ]
     - component: button2
       capability: button
       version: 1
       values: [ ]
       patch: [ ]
+      exclusion: [ ]
     - component: button3
       capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: button4
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
-type: dth
-presentationId: ff3f5d4c-7b45-3b89-927e-710289f2b28d
+      exclusion: [ ]
+presentationId: cef083d9-ba68-367a-a946-b4566c7e92a5
 manufacturerName: SmartThingsCommunity
-vid: ff3f5d4c-7b45-3b89-927e-710289f2b28d
-mnmn: SmartThingsCommunity
-version: 0.0.1
