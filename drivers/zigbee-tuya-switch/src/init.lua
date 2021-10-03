@@ -100,6 +100,18 @@ function syncComponent(device, reverse)
     end
 end
 
+local device_info_changed = function(driver, device, event, args)
+    updateRemapButton(device)
+    syncComponent(device, "off")
+end
+
+local device_init = function(self, device)
+    log.info("--------- Moon --------->> device_init")
+    updateRemapButton(device)
+    device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
+    device:set_endpoint_to_component_fn(endpoint_to_component)
+end
+
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
     updateRemapButton(device)
@@ -111,16 +123,8 @@ local device_added = function(driver, device)
     end
 end
 
-local device_init = function(self, device)
-    log.info("--------- Moon --------->> device_init")
+local device_driver_switched = function()
     updateRemapButton(device)
-    device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
-    device:set_endpoint_to_component_fn(endpoint_to_component)
-end
-
-local device_info_changed = function(driver, device, event, args)
-    updateRemapButton(device)
-    syncComponent(device, "off")
 end
 
 local function configure_device(self, device)
@@ -139,9 +143,10 @@ local zigbee_tuya_switch_driver_template = {
         }
     },
     lifecycle_handlers = {
-        added = device_added,
-        init = device_init,
         infoChanged = device_info_changed,
+        init = device_init,
+        added = device_added,
+        --driverSwitched = device_driver_switched,
         doConfigure = configure_device
     }
 }
