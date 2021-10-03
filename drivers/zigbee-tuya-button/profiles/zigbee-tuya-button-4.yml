@@ -6,8 +6,6 @@ components:
         version: 1
       - id: button
         version: 1
-    categories:
-      - name: RemoteController
   - id: button2
     capabilities:
       - id: button
@@ -23,3 +21,4 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: x.com.st.d.remotecontroller
+  vid: ff3f5d4c-7b45-3b89-927e-710289f2b28d # battery component in detail

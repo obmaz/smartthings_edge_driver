@@ -7,92 +7,82 @@ dashboard:
       patch: [ ]
   actions:
     - component: main
-      capability: switch
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
 detailView:
   - component: main
-    capability: switch
+    capability: battery
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch1
-    capability: switch
+  - component: main
+    capability: button
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch2
-    capability: switch
+  - component: button2
+    capability: button
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch3
-    capability: switch
+  - component: button3
+    capability: button
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch4
-    capability: switch
+  - component: button4
+    capability: button
     version: 1
     values: [ ]
     patch: [ ]
 automation:
   conditions:
     - component: main
-      capability: switch
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch1
-      capability: switch
+    - component: button2
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch2
-      capability: switch
+    - component: button3
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch3
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
-    - component: switch4
-      capability: switch
+    - component: button4
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
   actions:
     - component: main
-      capability: switch
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch1
-      capability: switch
+    - component: button2
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch2
-      capability: switch
+    - component: button3
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
-    - component: switch3
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
-    - component: switch4
-      capability: switch
+    - component: button4
+      capability: button
       version: 1
       values: [ ]
       patch: [ ]
 type: dth
-presentationId: 7058efc0-258b-3f62-8500-062816ef1bf7
+presentationId: ff3f5d4c-7b45-3b89-927e-710289f2b28d
 manufacturerName: SmartThingsCommunity
-vid: 5b6aeb9d-e140-3614-9dd0-2e53b9b8e654
+vid: ff3f5d4c-7b45-3b89-927e-710289f2b28d
 mnmn: SmartThingsCommunity
 version: 0.0.1
