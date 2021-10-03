@@ -22,12 +22,14 @@ function button_handler (driver, device, zb_rx)
     log.info("--------- Moon --------->> button_handler")
 
     local clickType = string.byte(zb_rx.body.zcl_body.body_bytes) -- 00: click, 01: double click, 02: hold_release
-    log.info("--------- Moon --------->> button_handler clickType", clickType)
+    local ep = zb_rx.address_header.src_endpoint.value
 
-    local ep = zb_rx.address_header.src_endpoint
-    log.info("--------- Moon --------->> button_handler ep", ep)
+    local component_id = string.format("button%d", ep)
 
-    local component_id = string.format("button%d", tonumber(ep))
+    if ep == 1 then
+        component_id = "main"
+    end
+
     device.profile.components[component_id]:emit_event(capabilities.button.button.pushed())
 end
 
