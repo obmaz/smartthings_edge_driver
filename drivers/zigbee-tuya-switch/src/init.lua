@@ -28,6 +28,7 @@ local remapButtonTbl = {
 
 local function updateRemapButton(device)
     remapButton = device.preferences.remapButton
+    log.info("--------- Moon --------->> remapButton: ", remapButton)
 
     if remapButton == nil then
         remapButton = "main"
@@ -45,8 +46,8 @@ local on_handler = function(driver, device, command)
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
-    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
     isAlreadyEmit = true
+    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
 local off_handler = function(driver, device, command)
@@ -62,8 +63,8 @@ local off_handler = function(driver, device, command)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
-    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
     isAlreadyEmit = true
+    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
 local component_to_endpoint = function(device, component_id)
@@ -104,7 +105,7 @@ local device_added = function(driver, device)
     updateRemapButton(device)
     -- Workaround : Should emit or send to enable capabilities UI
     for key, value in pairs(device.profile.components) do
-        log.info("--------- Moon --------->> device_added - component : ", key)
+        log.info("--------- Moon --------->> device_added - key : ", key)
         device.profile.components[key]:emit_event(capabilities.switch.switch.on())
         device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
     end
@@ -112,6 +113,7 @@ end
 
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
+    updateRemapButton(device)
     device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
     device:set_endpoint_to_component_fn(endpoint_to_component)
 end
