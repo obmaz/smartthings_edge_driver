@@ -1,5 +1,6 @@
+#smartthings presentation:device-config:create --yaml --input deviceConfig4.yaml
 mnmn: SmartThingsCommunity
-vid: aa3209b5-fa8d-3e51-aabd-57cd213e40bd
+vid: aa2db431-73b8-3001-8cc1-4621c359d8de
 version: 0.0.1
 type: profile
 dashboard:
@@ -9,9 +10,9 @@ dashboard:
       version: 1
       idx: 0
       group: main
-      values: [ ]
+      values: []
   actions:
-    - component: main
+    - component: button1
       capability: button
       version: 1
       idx: 0
@@ -20,78 +21,56 @@ detailView:
   - component: main
     capability: battery
     version: 1
-    values: [ ]
-    patch: [ ]
-  - component: main
+    values: []
+    patch: []
+  - component: button1
     capability: button
     version: 1
-    values: [ ]
-    patch: [ ]
+    values: []
+    patch: []
   - component: button2
     capability: button
     version: 1
-    values: [ ]
-    patch: [ ]
-  - component: button3
-    capability: button
-    version: 1
-    values: [ ]
-    patch: [ ]
-  - component: button4
-    capability: button
-    version: 1
-    values: [ ]
-    patch: [ ]
+    values: []
+    patch: []
 automation:
   conditions:
     - component: main
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
+      values: []
+      patch: []
+      exclusion: []
+    - component: button1
+      capability: button
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-    - component: button3
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-    - component: button4
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
+      values: []
+      patch: []
+      exclusion: []
   actions:
     - component: main
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
+      values: []
+      patch: []
+      exclusion: []
+    - component: button1
+      capability: button
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-    - component: button3
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-    - component: button4
-      capability: button
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-presentationId: aa3209b5-fa8d-3e51-aabd-57cd213e40bd
+      values: []
+      patch: []
+      exclusion: []
+presentationId: aa2db431-73b8-3001-8cc1-4621c359d8de
 manufacturerName: SmartThingsCommunity

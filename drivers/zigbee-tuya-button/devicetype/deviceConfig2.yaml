@@ -1,3 +1,4 @@
+#smartthings presentation:device-config:create --yaml --input deviceConfig2.yaml
 mnmn: SmartThingsCommunity
 vid: 6198818d-9256-3237-861a-55ce14526a83
 version: 0.0.1
@@ -11,18 +12,18 @@ dashboard:
       group: main
       values: [ ]
   actions:
-    - component: main
+    - component: button1
       capability: button
       version: 1
-      idx: 0
-      group: main
+      values: [ ]
+      patch: [ ]
 detailView:
   - component: main
     capability: battery
     version: 1
     values: [ ]
     patch: [ ]
-  - component: main
+  - component: button1
     capability: button
     version: 1
     values: [ ]
@@ -40,6 +41,11 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+    - component: button1
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
     - component: button2
       capability: button
       version: 1
@@ -53,6 +59,11 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+    - component: button1
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
     - component: button2
       capability: button
       version: 1
