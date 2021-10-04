@@ -27,6 +27,13 @@ local remapSwitchTbl = {
 
 local function getRemapSwitch(device)
     remapSwitch = device.preferences.remapSwitch
+
+    -- workaround: even if driver is updated, the profile does not reload
+    -- so if preference variable is changed in profile, device does not use new varialbe
+    if remapSwitch == nil then
+        remapSwitch = device.preferences.remapButton
+    end
+
     log.info("--------- Moon --------->> remapSwitch: ", remapSwitch)
 
     if remapSwitch == nil then
