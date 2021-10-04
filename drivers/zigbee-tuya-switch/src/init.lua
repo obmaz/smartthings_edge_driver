@@ -19,29 +19,29 @@ local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local isAlreadyEmit = false
-local remapButtonTbl = {
+local remapSwitchTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
     ["three"] = "switch3",
 }
 
-local function getRemapButton(device)
-    remapButton = device.preferences.remapButton
-    log.info("--------- Moon --------->> remapButton: ", remapButton)
+local function getRemapSwitch(device)
+    remapSwitch = device.preferences.remapSwitch
+    log.info("--------- Moon --------->> remapSwitch: ", remapSwitch)
 
-    if remapButton == nil then
+    if remapSwitch == nil then
         return "main"
     else
-        return remapButtonTbl[remapButton]
+        return remapSwitchTbl[remapSwitch]
     end
 end
 
 local on_handler = function(driver, device, command)
     log.info("--------- Moon --------->> on_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == getRemapButton(device) then
+    if command.component == "main" or command.component == getRemapSwitch(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-        command.component = getRemapButton(device)
+        command.component = getRemapSwitch(device)
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
@@ -52,9 +52,9 @@ end
 local off_handler = function(driver, device, command)
     log.info("--------- Moon --------->> off_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == getRemapButton(device) then
+    if command.component == "main" or command.component == getRemapSwitch(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
-        command.component = getRemapButton(device)
+        command.component = getRemapSwitch(device)
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -72,18 +72,20 @@ local component_to_endpoint = function(device, component_id)
     return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
+-- 물리 버튼을 누를때는 명시적, 아닐 경우 주기적으로 기기가 리포팅함
 local endpoint_to_component = function(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
 
     local component_id = string.format("switch%d", ep)
 
-    if getRemapButton(device) == component_id and isAlreadyEmit == false then
-        syncComponent(device, "on")
+    if getRemapSwitch(device) == component_id and isAlreadyEmit == false then
+        -- 버튼을 눌렀을때와 아닐때 구분 필요
+        --syncComponent(device, "on")
     end
 
     isAlreadyEmit = false
 
-    if getRemapButton(device) == "main" then
+    if getRemapSwitch(device) == "main" then
         component_id = "main"
     end
 
@@ -91,11 +93,13 @@ local endpoint_to_component = function(device, ep)
 end
 
 function syncComponent(device, reverse)
-    local status = device:get_latest_state(getRemapButton(device), "switch", "switch", "off", nil)
-    if status == reverse then
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
-    else
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+    local status = device:get_latest_state(getRemapSwitch(device), "switch", "switch", "off", nil)
+    if status ~= nil then
+        if status == reverse then
+            device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
+        else
+            device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+        end
     end
 end
 
@@ -120,7 +124,7 @@ local device_added = function(driver, device)
 end
 
 local device_driver_switched = function()
-    getRemapButton(device)(device)
+    getRemapSwitch(device)(device)
 end
 
 local function configure_device(self, device)
@@ -151,3 +155,11 @@ defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbe
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
 --local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch-dev", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()
+
+--        <ZigbeeDevice: 9a334f24-44fc-42a2-bae3-7e96ef58ad9c [0xFBFA] (침실 조명)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0xFBFA, src
+--_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -60, body_length: 0x0008, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x18, seqno: 0x37, ZCLCommandId: 0x01 >, < ReadAttr
+--ibuteReponse || < AttributeRecord || AttributeId: 0x0000, ZclStatus: SUCCESS, DataType: Boolean, OnOff: false > > > >
+
+--        <ZigbeeDevice: 9a334f24-44fc-42a2-bae3-7e96ef58ad9c [0xFBFA] (침실 조명)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0xFBFA, src
+--_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -70, body_length: 0x0007, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x08, seqno: 0x3E, ZCLCommandId: 0x0A >, < ReportAt
+--tribute || < AttributeRecord || AttributeId: 0x0000, DataType: Boolean, OnOff: true > > > >

@@ -19,7 +19,7 @@ metadata:
 preferences:
   - title: "Remap Main Button"
     description: "Select a button to map to the main button"
-    name: remapButton
+    name: remapSwitch
     required: true
     preferenceType: enumeration
     definition:
