@@ -80,6 +80,8 @@ local endpoint_to_component = function(device, ep)
 
     if getRemapSwitch(device) == component_id and isAlreadyEmit == false then
         -- 버튼을 눌렀을때와 아닐때 구분 필요
+        -- reportAttribute로 다르기는 함 readAttribute
+        -- 컴스텀 핸들러로 만들어야 할듯
         --syncComponent(device, "on")
     end
 
