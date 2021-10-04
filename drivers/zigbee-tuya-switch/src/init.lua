@@ -19,30 +19,29 @@ local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local isAlreadyEmit = false
-local remapButton ="main"
 local remapButtonTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
     ["three"] = "switch3",
 }
 
-local function updateRemapButton(device)
+local function getRemapButton(device)
     remapButton = device.preferences.remapButton
     log.info("--------- Moon --------->> remapButton: ", remapButton)
 
     if remapButton == nil then
-        remapButton = "main"
+        return "main"
     else
-        remapButton = remapButtonTbl[remapButton]
+        return remapButtonTbl[remapButton]
     end
 end
 
 local on_handler = function(driver, device, command)
     log.info("--------- Moon --------->> on_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == remapButton then
+    if command.component == "main" or command.component == getRemapButton(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-        command.component = remapButton
+        command.component = getRemapButton(device)
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
@@ -53,9 +52,9 @@ end
 local off_handler = function(driver, device, command)
     log.info("--------- Moon --------->> off_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == remapButton then
+    if command.component == "main" or command.component == getRemapButton(device) then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
-        command.component = remapButton
+        command.component = getRemapButton(device)
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -78,13 +77,13 @@ local endpoint_to_component = function(device, ep)
 
     local component_id = string.format("switch%d", ep)
 
-    if remapButton == component_id and isAlreadyEmit == false then
+    if getRemapButton(device) == component_id and isAlreadyEmit == false then
         syncComponent(device, "on")
     end
 
     isAlreadyEmit = false
 
-    if remapButton == "main" then
+    if getRemapButton(device) == "main" then
         component_id = "main"
     end
 
@@ -92,7 +91,7 @@ local endpoint_to_component = function(device, ep)
 end
 
 function syncComponent(device, reverse)
-    local status = device:get_latest_state(remapButton, "switch", "switch", "off", nil)
+    local status = device:get_latest_state(getRemapButton(device), "switch", "switch", "off", nil)
     if status == reverse then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
     else
@@ -101,20 +100,17 @@ function syncComponent(device, reverse)
 end
 
 local device_info_changed = function(driver, device, event, args)
-    updateRemapButton(device)
     syncComponent(device, "off")
 end
 
 local device_init = function(self, device)
     log.info("--------- Moon --------->> device_init")
-    updateRemapButton(device)
     device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
     device:set_endpoint_to_component_fn(endpoint_to_component)
 end
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
-    updateRemapButton(device)
     -- Workaround : Should emit or send to enable capabilities UI
     for key, value in pairs(device.profile.components) do
         log.info("--------- Moon --------->> device_added - key : ", key)
@@ -124,7 +120,7 @@ local device_added = function(driver, device)
 end
 
 local device_driver_switched = function()
-    updateRemapButton(device)
+    getRemapButton(device)(device)
 end
 
 local function configure_device(self, device)
