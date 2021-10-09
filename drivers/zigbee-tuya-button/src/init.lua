@@ -61,19 +61,12 @@ local configure_device = function(self, device)
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
---local device_init = function(self, device)
---    log.info("--------- Moon --------->> device_init")
---    device:set_component_to_endpoint_fn(component_to_endpoint)
---    device:set_endpoint_to_component_fn(endpoint_to_component)
---end
-
 local zigbee_tuya_button_driver_template = {
     supported_capabilities = {
         capabilities.button,
         capabilities.battery,
         capabilities.refresh
     },
-    -- zigbee 로 들어오는 신호 = 리모콘 버튼을 누를때
     zigbee_handlers = {
         cluster = {
             -- zcl_clusters.OnOff.server.commands.OnOff.ID
@@ -86,7 +79,6 @@ local zigbee_tuya_button_driver_template = {
     lifecycle_handlers = {
         added = device_added,
         doConfigure = configure_device,
-        --init = device_init,
     }
 }
 
