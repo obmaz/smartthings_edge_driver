@@ -73,15 +73,14 @@ local off_handler = function(driver, device, command)
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
-local received_handler = function(driver, device, value)
-    log.info("--------- Moon --------->> received_handler", value.OnOff)
+local received_handler = function(driver, device, OnOff)
+    log.info("--------- Moon --------->> received_handler", OnOff.value)
 
-    local ep = value.address_header.src_endpoint.value
+    --local ep = value.address_header.src_endpoint.value
+    local ep = 1
     local component_id = string.format("switch%d", ep)
 
-    -- true / false
-    local clickType = string.byte(value.body.zcl_body.body_bytes)
-
+    local clickType = OnOff.value
     local ev = capabilities.switch.switch.off()
     if clickType == true then
         ev = capabilities.switch.switch.on()
