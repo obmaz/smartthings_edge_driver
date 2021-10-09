@@ -4,6 +4,8 @@ components:
     capabilities:
       - id: battery
         version: 1
+  - id: button1
+    capabilities:
       - id: button
         version: 1
   - id: button2

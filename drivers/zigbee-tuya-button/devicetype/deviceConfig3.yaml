@@ -45,7 +45,6 @@ automation:
       version: 1
       values: []
       patch: []
-      exclusion: []
     - component: button2
       capability: button
       version: 1
@@ -64,7 +63,6 @@ automation:
       version: 1
       values: []
       patch: []
-      exclusion: []
     - component: button2
       capability: button
       version: 1

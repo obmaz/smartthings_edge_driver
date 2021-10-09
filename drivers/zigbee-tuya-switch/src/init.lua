@@ -140,6 +140,10 @@ local function configure_device(self, device)
     device:configure()
 end
 
+--function button_handler (driver, device, zb_rx)
+--    log.info("--------- Moon --------->> button_handler")
+--end
+
 local zigbee_tuya_switch_driver_template = {
     supported_capabilities = {
         capabilities.switch,
@@ -151,6 +155,15 @@ local zigbee_tuya_switch_driver_template = {
             [capabilities.switch.commands.off.NAME] = off_handler
         }
     },
+    --zigbee_handlers = {
+    --    cluster = {
+    --        -- zcl_clusters.OnOff.server.commands.OnOff.ID
+    --        [0x0006] = {
+    --            -- ZCLCommandId
+    --            [0x0A] = button_handler
+    --        }
+    --    }
+    --},
     lifecycle_handlers = {
         infoChanged = device_info_changed,
         init = device_init,

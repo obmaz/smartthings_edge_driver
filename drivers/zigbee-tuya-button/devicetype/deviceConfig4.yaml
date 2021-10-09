@@ -1,6 +1,6 @@
 #smartthings presentation:device-config:create --yaml --input deviceConfig4.yaml
 mnmn: SmartThingsCommunity
-vid: aa2db431-73b8-3001-8cc1-4621c359d8de
+vid: 447e18d4-7e73-3c53-a0a6-4c7322e65664
 version: 0.0.1
 type: profile
 dashboard:
@@ -33,44 +33,62 @@ detailView:
     version: 1
     values: []
     patch: []
+  - component: button3
+    capability: button
+    version: 1
+    values: []
+    patch: []
+  - component: button4
+    capability: button
+    version: 1
+    values: []
+    patch: []
 automation:
   conditions:
-    - component: main
-      capability: button
-      version: 1
-      values: []
-      patch: []
-      exclusion: []
     - component: button1
       capability: button
       version: 1
       values: []
       patch: []
-      exclusion: []
     - component: button2
       capability: button
       version: 1
       values: []
       patch: []
       exclusion: []
+    - component: button3
+      capability: button
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
   actions:
-    - component: main
-      capability: button
-      version: 1
-      values: []
-      patch: []
-      exclusion: []
     - component: button1
       capability: button
       version: 1
       values: []
       patch: []
-      exclusion: []
     - component: button2
       capability: button
       version: 1
       values: []
       patch: []
       exclusion: []
-presentationId: aa2db431-73b8-3001-8cc1-4621c359d8de
+    - component: button3
+      capability: button
+      version: 1
+      values: []
+      patch: []
+    - component: button4
+      capability: button
+      version: 1
+      values: []
+      patch: []
+      exclusion: []
+presentationId: 447e18d4-7e73-3c53-a0a6-4c7322e65664
 manufacturerName: SmartThingsCommunity

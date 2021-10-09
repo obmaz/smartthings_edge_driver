@@ -24,10 +24,6 @@ function button_handler (driver, device, zb_rx)
     local ep = zb_rx.address_header.src_endpoint.value
     local component_id = string.format("button%d", ep)
 
-    if ep == 1 then
-        component_id = "main"
-    end
-
     -- 00: click, 01: double click, 02: hold_release
     local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
     if clickType == 0 then
@@ -97,12 +93,3 @@ local zigbee_tuya_button_driver_template = {
 defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
-
-
---< ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x3F9D, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -56, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x05, ZCLCommandId: 0xFD >, GenericBody:  00 > >
-
---< ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x3F9D, src_endpoint: 0x01, dest_addr: 0x0000, dest_e
---ndpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -55, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x06, ZCLCommandId: 0xFD >, GenericBody:  01 > >
-
---< ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x3F9D, src_endpoint: 0x01, dest_addr: 0x0000, dest_e
---ndpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xF1, rssi: -55, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x07, ZCLCommandId: 0xFD >, GenericBody:  02 > >
