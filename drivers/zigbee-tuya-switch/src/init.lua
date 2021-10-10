@@ -1,4 +1,4 @@
--- Zigbee Tuya Button
+-- Zigbee Tuya Switch
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local isAlreadyEmit = false
 local remapSwitchTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
@@ -52,7 +51,6 @@ local on_handler = function(driver, device, command)
     end
 
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
-    isAlreadyEmit = true
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
 end
 
@@ -69,15 +67,13 @@ local off_handler = function(driver, device, command)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
     device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
-    isAlreadyEmit = true
     device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
-local received_handler = function(driver, device, OnOff)
-    log.info("--------- Moon --------->> received_handler", OnOff.value)
+local received_handler = function(driver, device, OnOff, zb_rx)
+    log.info("--------- Moon --------->> received_handler")
 
-    --local ep = value.address_header.src_endpoint.value
-    local ep = 1
+    local ep = zb_rx.address_header.src_endpoint.value
     local component_id = string.format("switch%d", ep)
 
     local clickType = OnOff.value
@@ -100,17 +96,17 @@ local component_to_endpoint = function(device, component_id)
     return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
--- received_handler를 사용해서 이건 호출되지 않음
+-- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
     log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
     local component_id = string.format("switch%d", ep)
     return component_id
 end
 
-function syncComponent(device, reverse)
+function syncComponent(device)
     local status = device:get_latest_state(getRemapSwitch(device), "switch", "switch", "off", nil)
     if status ~= nil then
-        if status == reverse then
+        if status == "off" then
             device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
         else
             device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
@@ -119,7 +115,7 @@ function syncComponent(device, reverse)
 end
 
 local device_info_changed = function(driver, device, event, args)
-    syncComponent(device, "off")
+    syncComponent(device)
 end
 
 local device_init = function(self, device)
