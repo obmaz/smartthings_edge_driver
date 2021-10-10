@@ -26,4 +26,5 @@ preferences:
       options:
         one: Switch 1
         two: Switch 2
+        all: All
       default: one

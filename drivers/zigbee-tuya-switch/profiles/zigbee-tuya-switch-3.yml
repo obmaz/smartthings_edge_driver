@@ -31,4 +31,5 @@ preferences:
         one: Switch 1
         two: Switch 2
         three: Switch 3
+        all: All
       default: one

@@ -22,6 +22,7 @@ local remapSwitchTbl = {
     ["one"] = "switch1",
     ["two"] = "switch2",
     ["three"] = "switch3",
+    ["all"] = "all",
 }
 
 local function getRemapSwitch(device)
