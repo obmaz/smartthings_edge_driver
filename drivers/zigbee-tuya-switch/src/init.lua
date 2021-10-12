@@ -26,21 +26,13 @@ local remapSwitchTbl = {
 }
 
 local function getRemapSwitch(device)
-    log.info("--------- Moon --------->> remapSwitch: ", remapSwitch)
-    remapSwitch = device.preferences.remapSwitch
-
-    -- workaround: even if driver is updated, the profile does not reload
-    -- so if preference variable is changed in profile, device does not use new varialbe
-    if remapSwitch == nil then
-        log.info("--------- Moon --------->> remapSwitch: nil")
-        remapSwitch = device.preferences.remapButton
-        log.info("--------- Moon --------->> remapSwitch: device.preferences.remapButton", remapSwitch)
-    end
+    log.info("--------- Moon --------->> remapSwitch")
+    local remapSwitch = remapSwitchTbl[device.preferences.remapSwitch]
 
     if remapSwitch == nil then
         return "main"
     else
-        return remapSwitchTbl[remapSwitch]
+        return remapSwitch
     end
 end
 
@@ -95,10 +87,10 @@ local off_handler = function(driver, device, command)
 end
 
 local received_handler = function(driver, device, OnOff, zb_rx)
-    log.info("--------- Moon --------->> received_handler")
 
     local ep = zb_rx.address_header.src_endpoint.value
     local component_id = string.format("switch%d", ep)
+    log.info("--------- Moon --------->> received_handler : ", component_id)
 
     local clickType = OnOff.value
     local ev = capabilities.switch.switch.off()
