@@ -47,11 +47,6 @@ end
 local on_handler = function(driver, device, command)
     log.info("--------- Moon --------->> on_handler - component : ", command.component)
 
-    --if command.component == "main" or command.component == getRemapSwitch(device) then
-    --    device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-    --    command.component = getRemapSwitch(device)
-    --end
-
     if "all" == getRemapSwitch(device) then
         for key, value in pairs(device.profile.components) do
             log.info("--------- Moon --------->> on_handler - key : ", key)
@@ -64,11 +59,7 @@ local on_handler = function(driver, device, command)
     end
 
     if command.component == getRemapSwitch(device) or command.component == "main" then
-        -- UI 속도 확인해 볼것
-        ev = capabilities.switch.switch.on()
-        ev.state_change = true
-        device.profile.components["main"]:emit_event(ev)
-        --device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
         command.component = getRemapSwitch(device)
     end
 
@@ -79,7 +70,18 @@ end
 local off_handler = function(driver, device, command)
     log.info("--------- Moon --------->> off_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == getRemapSwitch(device) then
+    if "all" == getRemapSwitch(device) then
+        for key, value in pairs(device.profile.components) do
+            log.info("--------- Moon --------->> off_handler - key : ", key)
+            device.profile.components[key]:emit_event(capabilities.switch.switch.off())
+            if key ~= "main" then
+                device:send_to_component(key, zcl_clusters.OnOff.server.commands.Off(device))
+            end
+        end
+        return
+    end
+
+    if command.component == getRemapSwitch(device) or command.component == "main" then
         device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
         command.component = getRemapSwitch(device)
     end
