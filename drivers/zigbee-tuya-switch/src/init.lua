@@ -26,15 +26,16 @@ local remapSwitchTbl = {
 }
 
 local function getRemapSwitch(device)
+    log.info("--------- Moon --------->> remapSwitch: ", remapSwitch)
     remapSwitch = device.preferences.remapSwitch
 
     -- workaround: even if driver is updated, the profile does not reload
     -- so if preference variable is changed in profile, device does not use new varialbe
     if remapSwitch == nil then
+        log.info("--------- Moon --------->> remapSwitch: nil")
         remapSwitch = device.preferences.remapButton
+        log.info("--------- Moon --------->> remapSwitch: device.preferences.remapButton", remapSwitch)
     end
-
-    log.info("--------- Moon --------->> remapSwitch: ", remapSwitch)
 
     if remapSwitch == nil then
         return "main"
@@ -46,8 +47,28 @@ end
 local on_handler = function(driver, device, command)
     log.info("--------- Moon --------->> on_handler - component : ", command.component)
 
-    if command.component == "main" or command.component == getRemapSwitch(device) then
-        device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+    --if command.component == "main" or command.component == getRemapSwitch(device) then
+    --    device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+    --    command.component = getRemapSwitch(device)
+    --end
+
+    if "all" == getRemapSwitch(device) then
+        for key, value in pairs(device.profile.components) do
+            log.info("--------- Moon --------->> on_handler - key : ", key)
+            device.profile.components[key]:emit_event(capabilities.switch.switch.on())
+            if key ~= "main" then
+                device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+            end
+        end
+        return
+    end
+
+    if command.component == getRemapSwitch(device) or command.component == "main" then
+        -- UI 속도 확인해 볼것
+        ev = capabilities.switch.switch.on()
+        ev.state_change = true
+        device.profile.components["main"]:emit_event(ev)
+        --device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
         command.component = getRemapSwitch(device)
     end
 
@@ -135,10 +156,6 @@ local device_added = function(driver, device)
     end
 end
 
-local device_driver_switched = function()
-    getRemapSwitch(device)(device)
-end
-
 local function configure_device(self, device)
     device:configure()
 end
@@ -165,7 +182,6 @@ local zigbee_tuya_switch_driver_template = {
         infoChanged = device_info_changed,
         init = device_init,
         added = device_added,
-        --driverSwitched = device_driver_switched,
         doConfigure = configure_device
     }
 }
