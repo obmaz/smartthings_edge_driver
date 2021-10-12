@@ -102,7 +102,7 @@ local received_handler = function(driver, device, OnOff, zb_rx)
     if component_id == getRemapSwitch(device) then
         device.profile.components["main"]:emit_event(ev)
     end
-    --todo: switch 1은 main 임
+    --todo: 1gang switch 1은 main 임
     device.profile.components[component_id]:emit_event(ev)
 end
 
