@@ -20,8 +20,7 @@
 
 @REM packageKey: 'zigbee-ikea-button'
 set driverId=ed635baa-53a4-44c5-914b-ebad8c6cd472
-
-set channel=143f8c3b-5fcf-4013-a795-49bf690eb3b9
+set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119
 

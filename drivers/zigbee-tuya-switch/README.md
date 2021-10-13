@@ -1,7 +1,9 @@
-# Tuya Wall Switch Edge Driver
-It is the SmartThings Edge Driver for Tuya wall switch.  
+# Zigbee Tuya Switch Edge Driver
+It is the SmartThings Edge Driver for tuya-platform based zigbee switch.  
 It supports 1,2 and 3 gang switch.  
-Please see the fingerprint before install.
+
+## Support Device
+See fingerprint.yml in src
 
 ## License
 It is released under the Apache 2.0 License.
