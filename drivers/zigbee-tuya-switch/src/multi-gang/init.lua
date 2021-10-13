@@ -176,10 +176,12 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
 local is_multi_gang = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      log.info("--------- Moon --------->> is_multi_gang : true")
       return true
     end
   end
 
+  log.info("--------- Moon --------->> is_multi_gang : false")
   return false
 end
 

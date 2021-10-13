@@ -86,35 +86,12 @@ local off_handler = function(driver, device, command)
   device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
 end
 
-local received_handler = function(driver, device, OnOff, zb_rx)
-
-  local ep = zb_rx.address_header.src_endpoint.value
-  local component_id = string.format("switch%d", ep)
-  log.info("--------- Moon --------->> received_handler : ", component_id)
-
-  local clickType = OnOff.value
-  local ev = capabilities.switch.switch.off()
-  if clickType == true then
-    ev = capabilities.switch.switch.on()
-  end
-
-  ev.state_change = true
-  if component_id == getRemapSwitch(device) then
-    device.profile.components["main"]:emit_event(ev)
-  end
-  --todo: 1gang switch 1은 main 임
-  device.profile.components[component_id]:emit_event(ev)
-
-  syncComponent(device)
-end
-
 local component_to_endpoint = function(device, component_id)
   log.info("--------- Moon --------->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
   return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
--- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
   log.info("--------- Moon --------->> endpoint_to_component - endpoint : ", ep)
   local component_id = string.format("switch%d", ep)
@@ -169,17 +146,18 @@ local function configure_device(self, device)
 end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
-  { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
-  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" }
+  { mfr = "_TZ3000_oysiif07", model = "TS0001" }
 }
 
 local is_one_gang = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      log.info("--------- Moon --------->> is_one_gang : true")
       return true
     end
   end
 
+  log.info("--------- Moon --------->> is_one_gang : false")
   return false
 end
 
@@ -194,13 +172,6 @@ local zigbee_tuya_switch_driver_template = {
       [capabilities.switch.commands.off.NAME] = off_handler
     }
   },
-  zigbee_handlers = {
-    attr = {
-      [zcl_clusters.OnOff.ID] = {
-        [zcl_clusters.OnOff.attributes.OnOff.ID] = received_handler
-      }
-    }
-  },
   lifecycle_handlers = {
     infoChanged = device_info_changed,
     init = device_init,
@@ -212,5 +183,4 @@ local zigbee_tuya_switch_driver_template = {
 
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
---local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch-dev", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()

@@ -1,7 +1,7 @@
-zigbeeManufacturer:
+zigbeeManufacturer: _TZ3000_oysiif07
   - id: zigbee-tuya-switch1
     deviceLabel: Tuya Wall Switch 1 Gang
-    manufacturer: _TZ3000_oysiif07
+    manufacturer:
     model: TS0001
     deviceProfileName: zigbee-tuya-switch-1
   - id: zigbee-tuya-switch2
