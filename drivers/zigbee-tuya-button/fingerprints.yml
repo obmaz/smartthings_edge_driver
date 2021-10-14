@@ -26,12 +26,12 @@ zigbeeManufacturer:
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
   # 3 Button
-  - id: zigbee-tuya-button-1-1
+  - id: zigbee-tuya-button-3-1
     deviceLabel: Zigbee Tuya 3 Button
     manufacturer: _TZ3400_key8kk7r
     model: TS0043
     deviceProfileName: zigbee-tuya-button-3
-  - id: zigbee-tuya-button-1-2
+  - id: zigbee-tuya-button-3-2
     deviceLabel: Zigbee Tuya 3 Button
     manufacturer: _TZ3000_qzjcsmar
     model: TS0043
