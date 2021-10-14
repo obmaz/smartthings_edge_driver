@@ -203,36 +203,16 @@
 local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
-local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local zigbee_tuya_switch_driver_template = {
   supported_capabilities = {
     capabilities.switch,
     capabilities.refresh
   },
-  capability_handlers = {
-    [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = on_handler,
-      [capabilities.switch.commands.off.NAME] = off_handler
-    }
-  },
-  zigbee_handlers = {
-    attr = {
-      [zcl_clusters.OnOff.ID] = {
-        [zcl_clusters.OnOff.attributes.OnOff.ID] = received_handler
-      }
-    }
-  },
-  lifecycle_handlers = {
-    infoChanged = device_info_changed,
-    init = device_init,
-    added = device_added,
-    doConfigure = configure_device
-  },
-  sub_drivers = { require("one-gang"), require("multi-gang") }
+  sub_drivers = { require("one-switch"),
+                  require("multi-switch") }
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
---local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch-dev", zigbee_tuya_switch_driver_template)
 zigbee_driver:run()
