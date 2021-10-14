@@ -16,20 +16,33 @@ local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local on_handler = function(driver, device, command)
-  log.info("--------- Moon --------->> on_handler - component : ", command.component)
-  device:emit_event(capabilities.switch.switch.on())
-  device:send(zcl_clusters.OnOff.server.commands.On(device))
+--local on_handler = function(driver, device, command)
+--  log.info("<<---- Moon ---->> on_handler - component : ", command.component)
+--  device:emit_event(capabilities.switch.switch.on())
+--  device:send(zcl_clusters.OnOff.server.commands.On(device))
+--end
+--
+--local off_handler = function(driver, device, command)
+--  log.info("<<---- Moon ---->> off_handler - component : ", command.component)
+--  device:emit_event(capabilities.switch.switch.off())
+--  device:send(zcl_clusters.OnOff.server.commands.Off(device))
+--end
+
+local on_off_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
+  local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+  local OnOff = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
+  device:emit_event(ev)
+  device:send(OnOff)
 end
 
-local off_handler = function(driver, device, command)
-  log.info("--------- Moon --------->> off_handler - component : ", command.component)
-  device:emit_event(capabilities.switch.switch.off())
-  device:send(zcl_clusters.OnOff.server.commands.Off(device))
+local refresh_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> refresh_handler")
 end
 
 local device_added = function(driver, device)
-  log.info("--------- Moon --------->> device_added")
+  log.info("<<---- Moon ---->> device_added")
   device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
   device:send_to_component("main", zcl_clusters.OnOff.server.commands.On(device))
 end
@@ -45,12 +58,12 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
 local is_one_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("--------- Moon --------->> is_one_switch : true")
+      log.info("<<---- Moon ---->> is_one_switch : true")
       return true
     end
   end
 
-  log.info("--------- Moon --------->> is_one_switch : false")
+  log.info("<<---- Moon ---->> is_one_switch : false")
   return false
 end
 
@@ -58,8 +71,9 @@ local zigbee_tuya_one_switch = {
   NAME = "zigbee tuya one switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = on_handler,
-      [capabilities.switch.commands.off.NAME] = off_handler
+      [capabilities.switch.commands.on.NAME] = on_off_handler, --on_handler,
+      [capabilities.switch.commands.off.NAME] = on_off_handler, --off_handler,
+      [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
     }
   },
   lifecycle_handlers = {

@@ -19,7 +19,7 @@ local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 function button_handler (driver, device, zb_rx)
-    log.info("--------- Moon --------->> button_handler")
+    log.info("<<---- Moon ---->> button_handler")
 
     local ep = zb_rx.address_header.src_endpoint.value
     local component_id = string.format("button%d", ep)
@@ -46,17 +46,17 @@ function button_handler (driver, device, zb_rx)
 end
 
 local device_added = function(driver, device)
-    log.info("--------- Moon --------->> device_added")
+    log.info("<<---- Moon ---->> device_added")
 
     for key, value in pairs(device.profile.components) do
-        log.info("--------- Moon --------->> device_added - component : ", key)
+        log.info("<<---- Moon ---->> device_added - component : ", key)
         device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
         device.profile.components[key]:emit_event(capabilities.button.button.pushed())
     end
 end
 
 local configure_device = function(self, device)
-    log.info("--------- Moon --------->> configure_device")
+    log.info("<<---- Moon ---->> configure_device")
     device:configure()
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
