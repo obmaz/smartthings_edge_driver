@@ -1,0 +1,4 @@
+name: 'sihas-people-counter'
+packageKey: 'sihas-people-counter'
+permissions:
+  zigbee: {}

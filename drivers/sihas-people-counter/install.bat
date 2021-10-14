@@ -17,8 +17,8 @@
 @REM smartthings edge:drivers:package ./
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
-@REM packageKey: 'zigbee-tuya-switch'
-set driverId=de2773fd-2901-4254-9009-276f1ca90350
+@REM packageKey: 'sihas-people-counter'
+set driverId=f93d58ed-0d89-4a49-b5e7-2ea9c3659e15
 set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119

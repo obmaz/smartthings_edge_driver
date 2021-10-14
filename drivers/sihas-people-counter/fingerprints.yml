@@ -1,0 +1,6 @@
+zigbeeManufacturer:
+  - id: sihas-people-counter
+    deviceLabel: SiHAS People Counter
+    manufacturer:
+    model:
+    deviceProfileName: sihas-people-counter
