@@ -1,4 +1,4 @@
-# Smartthings Edge Driver
+# SmartThings Edge Driver
 It is the SmartThings Edge Drivers.  
 
 ## Install

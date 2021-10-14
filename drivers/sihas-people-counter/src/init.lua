@@ -20,13 +20,14 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local function on_handler(driver, device, command)
     log.info("--------- Moon --------->> on_handler - component : ", command)
-    local currentValue = device:get_latest_state("main", "switchLevel", "level", 50, nil)
-    device.profile.components["main"]:emit_event(capabilities.button.button.pushed())
+    local currentValue = device:get_latest_state("main", "switchLevel", "level", 0, nil)
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(currentValue + 1))
 end
 
 local function off_handler(driver, device, command)
     log.info("--------- Moon --------->> off_handler - component : ", command)
-    device.profile.components["button2"]:emit_event(capabilities.switchLevel.level(currentValue - incValue))
+    local currentValue = device:get_latest_state("main", "switchLevel", "level", 0, nil)
+    device.profile.components["button2"]:emit_event(capabilities.switchLevel.level(currentValue - 1))
 end
 
 local function on_start_handler(driver, device, command)
@@ -43,7 +44,7 @@ end
 
 local device_added = function(driver, device)
     log.info("--------- Moon --------->> device_added")
-    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(50))
+    device.profile.components["main"]:emit_event(capabilities.switchLevel.level(0))
 end
 
 local configure_device = function(self, device)
@@ -52,15 +53,15 @@ local configure_device = function(self, device)
     device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
-local device_init = function(self, device)
-    log.info("--------- Moon --------->> device_init")
-    device:set_component_to_endpoint_fn(component_to_endpoint)
-    device:set_endpoint_to_component_fn(endpoint_to_component)
-end
+--local device_init = function(self, device)
+--    log.info("--------- Moon --------->> device_init")
+--    device:set_component_to_endpoint_fn(component_to_endpoint)
+--    device:set_endpoint_to_component_fn(endpoint_to_component)
+--end
 
 local sihas_people_counter_template = {
     supported_capabilities = {
-        capabilities.button,
+        capabilities.switchLevel,
         capabilities.battery,
         capabilities.refresh
     },
@@ -84,7 +85,7 @@ local sihas_people_counter_template = {
     lifecycle_handlers = {
         added = device_added,
         doConfigure = configure_device,
-        init = device_init,
+        --init = device_init,
     }
 }
 
