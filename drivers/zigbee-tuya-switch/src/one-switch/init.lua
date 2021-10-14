@@ -14,8 +14,6 @@
 
 local log = require "log"
 local capabilities = require "st.capabilities"
-local ZigbeeDriver = require "st.zigbee"
-local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local on_handler = function(driver, device, command)
@@ -64,19 +62,19 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "_TZ3000_oysiif07", model = "TS0001" }
 }
 
-local is_one_gang = function(opts, driver, device)
+local is_one_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("--------- Moon --------->> is_one_gang : true")
+      log.info("--------- Moon --------->> is_one_switch : true")
       return true
     end
   end
 
-  log.info("--------- Moon --------->> is_one_gang : false")
+  log.info("--------- Moon --------->> is_one_switch : false")
   return false
 end
 
-local zigbee_tuya_switch_driver_template = {
+local zigbee_tuya_one_switch = {
   capability_handlers = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_handler,
@@ -88,9 +86,7 @@ local zigbee_tuya_switch_driver_template = {
     added = device_added,
     doConfigure = configure_device
   },
-  can_handle = is_one_gang
+  can_handle = is_one_switch
 }
 
-defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
-zigbee_driver:run()
+return zigbee_tuya_one_switch

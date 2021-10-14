@@ -1,6 +1,6 @@
 # Zigbee Tuya Switch Edge Driver
 It is the SmartThings Edge Driver for tuya-platform based zigbee switch.  
-It supports 1,2 and 3 gang switch.  
+It supports 1,2 and 3 switch.  
 
 ## Support Device
 See fingerprint.yml in src

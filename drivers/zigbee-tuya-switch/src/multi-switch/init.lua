@@ -14,8 +14,6 @@
 
 local log = require "log"
 local capabilities = require "st.capabilities"
-local ZigbeeDriver = require "st.zigbee"
-local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 local remapSwitchTbl = {
@@ -143,6 +141,10 @@ local device_info_changed = function(driver, device, event, args)
   syncMainComponent(device)
 end
 
+local device_driver_switched = function(driver, device, event, args)
+  syncMainComponent(device)
+end
+
 local device_init = function(self, device)
   log.info("--------- Moon --------->> device_init")
   device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
@@ -168,19 +170,19 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" }
 }
 
-local is_multi_gang = function(opts, driver, device)
+local is_multi_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("--------- Moon --------->> is_multi_gang : true")
+      log.info("--------- Moon --------->> is_multi_switch : true")
       return true
     end
   end
 
-  log.info("--------- Moon --------->> is_multi_gang : false")
+  log.info("--------- Moon --------->> is_multi_switch : false")
   return false
 end
 
-local zigbee_tuya_switch_driver_template = {
+local zigbee_tuya_multi_switch = {
   capability_handlers = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_handler,
@@ -195,14 +197,13 @@ local zigbee_tuya_switch_driver_template = {
     }
   },
   lifecycle_handlers = {
-    infoChanged = device_info_changed,
     init = device_init,
     added = device_added,
+    driverSwitched= device_driver_switched,
+    infoChanged = device_info_changed,
     doConfigure = configure_device
   },
-  can_handle = is_multi_gang
+  can_handle = is_multi_switch
 }
 
-defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
-zigbee_driver:run()
+return zigbee_tuya_multi_switch
