@@ -183,6 +183,7 @@ local is_multi_switch = function(opts, driver, device)
 end
 
 local zigbee_tuya_multi_switch = {
+  NAME = "zigbee tuya mutil switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_handler,

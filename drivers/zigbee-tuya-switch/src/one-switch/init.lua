@@ -75,6 +75,7 @@ local is_one_switch = function(opts, driver, device)
 end
 
 local zigbee_tuya_one_switch = {
+  NAME = "zigbee tuya one switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_handler,
@@ -82,7 +83,7 @@ local zigbee_tuya_one_switch = {
     }
   },
   lifecycle_handlers = {
-    --init = device_init,
+    init = device_init,
     added = device_added,
     doConfigure = configure_device
   },
