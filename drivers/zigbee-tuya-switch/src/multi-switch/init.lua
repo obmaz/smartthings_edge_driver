@@ -149,7 +149,8 @@ end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
-  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" }
+  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
+  { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
 }
 
 local is_multi_switch = function(opts, driver, device)
@@ -164,12 +165,12 @@ local is_multi_switch = function(opts, driver, device)
   return false
 end
 
-local zigbee_tuya_multi_switch = {
-  NAME = "zigbee tuya mutil switch",
+local multi_switch = {
+  NAME = "mutil switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = on_off_handler, --on_handler,
-      [capabilities.switch.commands.off.NAME] = on_off_handler, --off_handler
+      [capabilities.switch.commands.on.NAME] = on_off_handler,
+      [capabilities.switch.commands.off.NAME] = on_off_handler,
     }
   },
   zigbee_handlers = {
@@ -189,4 +190,4 @@ local zigbee_tuya_multi_switch = {
   can_handle = is_multi_switch
 }
 
-return zigbee_tuya_multi_switch
+return multi_switch

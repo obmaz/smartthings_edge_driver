@@ -1,6 +1,6 @@
 # Zigbee Tuya Switch Edge Driver
-It is the SmartThings Edge Driver for tuya-platform based zigbee switch.  
-It supports 1,2 and 3 switch.  
+It is the SmartThings Edge Driver for tuya-platform based zigbee switch.   
+The general zigbee switch might work
 
 ## Device UI Screen
 ![ui](./readme_images/app1.jpg)

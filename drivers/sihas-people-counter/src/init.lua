@@ -92,3 +92,14 @@ local sihas_people_counter_template = {
 defaults.register_for_default_handlers(sihas_people_counter_template, sihas_people_counter_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("sihas-people-counter", sihas_people_counter_template)
 zigbee_driver:run()
+--https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/3f1cdd530445f2d93e0a4c6eca5a7823e3ee5563/devicetypes/shinasys/sihas-multipurpose-sensor.src/sihas-multipurpose-sensor.groovy
+
+--	01 0104 0402 01 05 0000 0004 0003 0001 000C 05 0000 0004 0003 0019 0006
+--application: 01
+--endpointId: 01
+--firmwareFullVersion: 00000001
+--firmwareImageType: 5632
+--firmwareManufacturerCode: 4151
+--manufacturer: ShinaSystem
+--model: CSM-300Z
+--zigbeeNodeType: SLEEPY_END_DEVICE

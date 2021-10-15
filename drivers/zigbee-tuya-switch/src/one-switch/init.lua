@@ -55,12 +55,12 @@ local is_one_switch = function(opts, driver, device)
   return false
 end
 
-local zigbee_tuya_one_switch = {
-  NAME = "zigbee tuya one switch",
+local one_switch = {
+  NAME = "one switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = on_off_handler, --on_handler,
-      [capabilities.switch.commands.off.NAME] = on_off_handler, --off_handler,
+      [capabilities.switch.commands.on.NAME] = on_off_handler,
+      [capabilities.switch.commands.off.NAME] = on_off_handler,
       [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
     }
   },
@@ -71,4 +71,4 @@ local zigbee_tuya_one_switch = {
   can_handle = is_one_switch
 }
 
-return zigbee_tuya_one_switch
+return one_switch
