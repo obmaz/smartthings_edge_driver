@@ -2,6 +2,10 @@
 It is the SmartThings Edge Driver for tuya-platform based zigbee switch.  
 It supports 1,2 and 3 switch.  
 
+## Device UI Screen
+![ui](./readme_images/app1.jpg)
+![ui](./readme_images/app2.jpg)
+
 ## Support Device
 See fingerprint.yml in src
 
