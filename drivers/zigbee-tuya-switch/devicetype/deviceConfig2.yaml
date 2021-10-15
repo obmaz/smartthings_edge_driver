@@ -1,6 +1,6 @@
 #smartthings presentation:device-config:create --yaml --input deviceConfig2.yaml
 mnmn: SmartThingsCommunity
-vid: ed6124ac-2d22-3d72-8772-e8c51bc2e2ff
+vid: e72801a8-0ebf-36ad-a270-80004e8bfcaa
 version: 0.0.1
 type: profile
 dashboard:
@@ -20,6 +20,11 @@ dashboard:
 detailView:
   - component: main
     capability: switch
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: main
+    capability: refresh
     version: 1
     values: [ ]
     patch: [ ]
@@ -72,5 +77,5 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-presentationId: ed6124ac-2d22-3d72-8772-e8c51bc2e2ff
+presentationId: e72801a8-0ebf-36ad-a270-80004e8bfcaa
 manufacturerName: SmartThingsCommunity

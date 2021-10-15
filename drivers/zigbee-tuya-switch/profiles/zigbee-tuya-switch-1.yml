@@ -4,5 +4,7 @@ components:
     capabilities:
       - id: switch
         version: 1
+      - id: refresh
+        version: 1
 metadata:
   ocfDeviceType: oic.d.switch

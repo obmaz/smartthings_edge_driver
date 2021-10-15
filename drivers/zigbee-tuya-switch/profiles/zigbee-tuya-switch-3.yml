@@ -4,6 +4,8 @@ components:
     capabilities:
       - id: switch
         version: 1
+      - id: refresh
+        version: 1
   - id: switch1
     capabilities:
       - id: switch
@@ -19,7 +21,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: f20a5cb4-9edb-3379-927b-6c04b1669b58
+  vid: 06a53b41-8190-3568-879e-fe6987c62533
 preferences:
   - title: "Remap Main Button"
     description: "Select a button to map to the main button"
