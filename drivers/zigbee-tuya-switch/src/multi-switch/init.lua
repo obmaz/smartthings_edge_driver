@@ -151,6 +151,7 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
   { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
   { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
+  { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
 }
 
 local is_multi_switch = function(opts, driver, device)

@@ -14,8 +14,18 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_c0wbnbbf
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
+  - id: 3A-Smart-Home-DE-1
+    deviceLabel: 3A Smart Home DE 1
+    manufacturer: 3A Smart Home DE
+    model: LXN-1S27LX1.0
+    deviceProfileName: zigbee-tuya-switch-2
   - id: 3A-Smart-Home-DE-2
     deviceLabel: 3A Smart Home DE 2
     manufacturer: 3A Smart Home DE
     model: LXN-2S27LX1.0
     deviceProfileName: zigbee-tuya-switch-2
+  - id: 3A-Smart-Home-DE-3
+    deviceLabel: 3A Smart Home DE 3
+    manufacturer: 3A Smart Home DE
+    model: LXN-3S27LX1.0
+    deviceProfileName: zigbee-tuya-switch-3
