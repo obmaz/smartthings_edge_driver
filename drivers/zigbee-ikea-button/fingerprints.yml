@@ -1,6 +1,0 @@
-zigbeeManufacturer:
-  - id: zigbee-ikea-button-dimmer
-    deviceLabel: Zigbee ikea button dimmer
-    manufacturer: IKEA of Sweden
-    model: TRADFRI on/off switch
-    deviceProfileName: zigbee-ikea-button-dimmer
