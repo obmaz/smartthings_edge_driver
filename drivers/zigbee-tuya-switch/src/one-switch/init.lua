@@ -25,10 +25,6 @@ local on_off_handler = function(driver, device, command)
   device:send(on_off)
 end
 
-local refresh_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> refresh_handler")
-end
-
 local device_added = function(driver, device)
   log.info("<<---- Moon ---->> device_added")
   device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
@@ -62,7 +58,6 @@ local one_switch = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_off_handler,
       [capabilities.switch.commands.off.NAME] = on_off_handler,
-      [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
     }
   },
   lifecycle_handlers = {
@@ -73,3 +68,9 @@ local one_switch = {
 }
 
 return one_switch
+
+--<ZigbeeDevice: 2f6b3743-da3e-46b7-8d49-66848e2e277d [0xE617] (Tuya Switch 1)> emitting event: {"state":{"value":"on"},"capability_id":"switch","component_id":"main","attribut
+--e_id":"switch"}
+--<ZigbeeDevice: 2f6b3743-da3e-46b7-8d49-66848e2e277d [0xE617] (Tuya Switch 1)> received command: {"component":"main","args":[],"command":"refresh","positional_args":[],"capabi
+--lity":"refresh"}
+

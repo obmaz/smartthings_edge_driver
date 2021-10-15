@@ -166,13 +166,20 @@ local is_multi_switch = function(opts, driver, device)
   return false
 end
 
+local refresh_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> refresh_handler")
+end
+
 local multi_switch = {
   NAME = "mutil switch",
   capability_handlers = {
     [capabilities.switch.ID] = {
       [capabilities.switch.commands.on.NAME] = on_off_handler,
       [capabilities.switch.commands.off.NAME] = on_off_handler,
-    }
+    },
+    --[capabilities.refresh.ID] = {
+    --  [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
+    --}
   },
   zigbee_handlers = {
     attr = {
