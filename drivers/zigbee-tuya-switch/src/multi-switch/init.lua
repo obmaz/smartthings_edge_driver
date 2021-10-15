@@ -23,7 +23,7 @@ local remapSwitchTbl = {
   ["all"] = "all",
 }
 
-local function getRemapSwitch(device)
+local function get_remap_switch(device)
   log.info("<<---- Moon ---->> remapSwitch")
   local remapSwitch = remapSwitchTbl[device.preferences.remapSwitch]
 
@@ -34,72 +34,24 @@ local function getRemapSwitch(device)
   end
 end
 
---local on_handler = function(driver, device, command)
---  log.info("<<---- Moon ---->> on_handler - component : ", command.component)
---
---  if command.component == "main" and getRemapSwitch(device) == "all" then
---    for key, value in pairs(device.profile.components) do
---      log.info("<<---- Moon ---->> on_handler - key : ", key)
---      device.profile.components[key]:emit_event(capabilities.switch.switch.on())
---      if key ~= "main" then
---        device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
---      end
---    end
---  else
---    if command.component == "main" or command.component == getRemapSwitch(device) then
---      device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
---      command.component = getRemapSwitch(device)
---    end
---
---    device.profile.components[command.component]:emit_event(capabilities.switch.switch.on())
---    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.On(device))
---  end
---end
---
---local off_handler = function(driver, device, command)
---  log.info("<<---- Moon ---->> off_handler - component : ", command.component)
---
---  if command.component == "main" and getRemapSwitch(device) == "all" then
---    for key, value in pairs(device.profile.components) do
---      log.info("<<---- Moon ---->> off_handler - key : ", key)
---      device.profile.components[key]:emit_event(capabilities.switch.switch.off())
---      if key ~= "main" then
---        device:send_to_component(key, zcl_clusters.OnOff.server.commands.Off(device))
---      end
---    end
---  else
---    if command.component == "main" or command.component == getRemapSwitch(device) then
---      device.profile.components["main"]:emit_event(capabilities.switch.switch.off())
---      command.component = getRemapSwitch(device)
---    end
---
---    -- Note : The logic is the same, but it uses endpoint.
---    --local endpoint = device:get_endpoint_for_component_id(command.component)
---    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
---    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
---    device.profile.components[command.component]:emit_event(capabilities.switch.switch.off())
---    device:send_to_component(command.component, zcl_clusters.OnOff.server.commands.Off(device))
---  end
---end
-
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
-  local OnOff = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
+  local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
 
-  if command.component == "main" and getRemapSwitch(device) == "all" then
+  if command.component == "main" and get_remap_switch(device) == "all" then
     for key, value in pairs(device.profile.components) do
       log.info("<<---- Moon ---->> off_handler - key : ", key)
       device.profile.components[key]:emit_event(ev)
       if key ~= "main" then
-        device:send_to_component(key, OnOff)
+        device:send_to_component(key, on_off)
       end
     end
   else
-    if command.component == "main" or command.component == getRemapSwitch(device) then
+    if command.component == "main" or command.component == get_remap_switch(device) then
       device.profile.components["main"]:emit_event(ev)
-      command.component = getRemapSwitch(device)
+      command.component = get_remap_switch(device)
     end
 
     -- Note : The logic is the same, but it uses endpoint.
@@ -107,7 +59,7 @@ local on_off_handler = function(driver, device, command)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
     device.profile.components[command.component]:emit_event(ev)
-    device:send_to_component(command.component, OnOff)
+    device:send_to_component(command.component, on_off)
   end
 
 end
@@ -124,7 +76,7 @@ local received_handler = function(driver, device, OnOff, zb_rx)
   end
 
   ev.state_change = true
-  if component_id == getRemapSwitch(device) then
+  if component_id == get_remap_switch(device) then
     device.profile.components["main"]:emit_event(ev)
   end
   device.profile.components[component_id]:emit_event(ev)
@@ -145,7 +97,7 @@ local endpoint_to_component = function(device, ep)
 end
 
 function syncMainComponent(device)
-  local component_id = getRemapSwitch(device)
+  local component_id = get_remap_switch(device)
   local remapButtonStatus = device:get_latest_state(component_id, "switch", "switch", "off", nil)
   local ev = capabilities.switch.switch.on()
 

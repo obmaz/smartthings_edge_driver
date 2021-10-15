@@ -16,25 +16,13 @@ local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
---local on_handler = function(driver, device, command)
---  log.info("<<---- Moon ---->> on_handler - component : ", command.component)
---  device:emit_event(capabilities.switch.switch.on())
---  device:send(zcl_clusters.OnOff.server.commands.On(device))
---end
---
---local off_handler = function(driver, device, command)
---  log.info("<<---- Moon ---->> off_handler - component : ", command.component)
---  device:emit_event(capabilities.switch.switch.off())
---  device:send(zcl_clusters.OnOff.server.commands.Off(device))
---end
-
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
-  local OnOff = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
+  local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
   device:emit_event(ev)
-  device:send(OnOff)
+  device:send(on_off)
 end
 
 local refresh_handler = function(driver, device, command)
