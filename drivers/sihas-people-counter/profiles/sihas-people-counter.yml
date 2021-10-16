@@ -2,7 +2,11 @@ name: sihas-people-counter
 components:
   - id: main
     capabilities:
-      - id: switch
+      - id: switchLevel
+        version: 1
+      - id: refresh
+        version: 1
+      - id: battery
         version: 1
 metadata:
   ocfDeviceType: oic.d.switch

@@ -1,6 +1,6 @@
 zigbeeManufacturer:
   - id: sihas-people-counter
-    deviceLabel: SiHAS People Counter
+    deviceLabel: SiHAS People Counter Edge
     manufacturer: ShinaSystem
     model: CSM-300Z
     deviceProfileName: sihas-people-counter

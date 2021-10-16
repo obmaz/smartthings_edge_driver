@@ -65,20 +65,17 @@ local sihas_people_counter_template = {
         capabilities.battery,
         capabilities.refresh
     },
+    capability_handlers = {
+        [capabilities.switchLevel.ID] = {
+            [capabilities.switchLevel.commands.setLevel.level] = on_handler,
+        }
+    },
     zigbee_handlers = {
         cluster = {
-            -- zcl_clusters.OnOff.server.commands.OnOff.ID
-            [0x0006] = {
+            [0x01] = {
                 -- ZCLCommandId
-                [zcl_clusters.OnOff.server.commands.Off.ID] = off_handler,
-                [zcl_clusters.OnOff.server.commands.On.ID] = on_handler,
-            },
-            -- zcl_clusters.Level.server.commands.MoveToClosestFrequency.ID
-            [0x0008] = {
-                -- ZCLCommandId
-                [zcl_clusters.Level.server.commands.Move.ID] = off_start_handler,
-                [zcl_clusters.Level.server.commands.MoveWithOnOff.ID] = on_start_handler,
-                [zcl_clusters.Level.server.commands.StopWithOnOff.ID] = stop_handler,
+                [0x01] = off_start_handler,
+
             }
         }
     },
@@ -89,10 +86,18 @@ local sihas_people_counter_template = {
     }
 }
 
+-- refersh
+--     refreshCmds += zigbee.readAttribute(ANALOG_INPUT_BASIC_CLUSTER, ANALOG_INPUT_BASIC_PRESENT_VALUE_ATTRIBUTE)
+-- configCmds += zigbee.configureReporting(zigbee.POWER_CONFIGURATION_CLUSTER, POWER_CONFIGURATION_BATTERY_VOLTAGE_ATTRIBUTE, DataType.UINT8, 30, 21600, 0x01/*100mv*1*/)
+--configCmds += zigbee.configureReporting(ANALOG_INPUT_BASIC_CLUSTER, ANALOG_INPUT_BASIC_PRESENT_VALUE_ATTRIBUTE, DataType.FLOAT4, 1, 600, 1)
 defaults.register_for_default_handlers(sihas_people_counter_template, sihas_people_counter_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("sihas-people-counter", sihas_people_counter_template)
 zigbee_driver:run()
 --https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/3f1cdd530445f2d93e0a4c6eca5a7823e3ee5563/devicetypes/shinasys/sihas-multipurpose-sensor.src/sihas-multipurpose-sensor.groovy
+
+--        <ZigbeeDevice: 2825c729-0dd9-4757-851a-60f438e23c99 [0x6074] (SiHAS People Counter)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr:
+--0x6074, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: PowerConfiguration >, lqi: 0xFF, rssi: -51, body_length: 0x0008, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x18, seqno: 0x18, ZCLCommand
+--Id: 0x01 >, < ReadAttributeReponse || < AttributeRecord || AttributeId: 0x0021, ZclStatus: SUCCESS, DataType: Uint8, BatteryPercentageRemaining: 0xC8 > > > >
 
 --	01 0104 0402 01 05 0000 0004 0003 0001 000C 05 0000 0004 0003 0019 0006
 --application: 01
