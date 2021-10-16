@@ -12,7 +12,7 @@ zigbeeManufacturer:
     deviceProfileName: zigbee-tuya-button-4
   - id: zigbee-zemismart-button-4-1
     deviceLabel: Zemismart 4 Button
-    manufacturer: _TZ3000_vp6clf9d
+    manufacturer: _TZ3000_vp6clf9d # Tested
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
   - id: zigbee-zemismart-button-4-2
