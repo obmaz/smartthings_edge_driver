@@ -18,7 +18,7 @@ zigbeeManufacturer:
     deviceLabel: 3A Smart Home DE 1
     manufacturer: 3A Smart Home DE
     model: LXN-1S27LX1.0
-    deviceProfileName: zigbee-tuya-switch-2
+    deviceProfileName: zigbee-tuya-switch-1
   - id: 3A-Smart-Home-DE-2
     deviceLabel: 3A Smart Home DE 2
     manufacturer: 3A Smart Home DE
