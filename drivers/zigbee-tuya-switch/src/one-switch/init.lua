@@ -15,7 +15,6 @@
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
-local ep_offset = 0x00
 
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
@@ -46,7 +45,6 @@ local is_one_switch = function(opts, driver, device)
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_one_switch : true")
       log.info("<<---- Moon ---->> is_one_switch ep :", fingerprint.ep)
-      ep_offset = fingerprint.ep - 1
       return true
     end
   end

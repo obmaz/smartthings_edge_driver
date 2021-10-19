@@ -86,9 +86,16 @@ local received_handler = function(driver, device, OnOff, zb_rx)
   syncMainComponent(device)
 end
 
+function string_to_hex(str)
+  return (str:gsub('.', function (c)
+    return string.format('%02X', string.byte(c))
+  end))
+end
+
 local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
+
   -- For test
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep 1: ", ep)
 
@@ -98,8 +105,22 @@ local component_to_endpoint = function(device, component_id)
   ep = tonumber(ep)
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep 3: ", ep)
 
+  ep = string.format("%x", ep)
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep 4: ", ep)
+
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep 5: ", string_to_hex(ep))
+
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset: ", ep_offset)
 
+   --2021-10-19T12:20:21.873899858+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - component_id :  switch2
+   --2021-10-19T12:20:21.878164191+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep 1:         2
+   --2021-10-19T12:20:21.881449358+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep 2:         12.0
+   --2021-10-19T12:20:21.884767483+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep 3:         12.0
+   --2021-10-19T12:20:21.888187691+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep 4:         c
+   --2021-10-19T12:20:21.891596233+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep 5:         63
+   --2021-10-19T12:20:21.894749483+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep_offset:    0
+   --2021-10-19T12:20:21.897995316+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted ep :  2.0
+   --2021-10-19T12:20:21.901375858+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> component_to_endpoint - converted tonumber(ep) :        2.0
   -- End
   local ep = component_id:match("switch(%d)")
   ep = ep + ep_offset
