@@ -43,7 +43,7 @@ local on_off_handler = function(driver, device, command)
 
   if command.component == "main" and get_remap_switch(device) == "all" then
     for key, value in pairs(device.profile.components) do
-      log.info("<<---- Moon ---->> off_handler - key : ", key)
+      log.info("<<---- Moon ---->> on_off_handler - key : ", key)
       device.profile.components[key]:emit_event(ev)
       if key ~= "main" then
         device:send_to_component(key, on_off)
@@ -161,41 +161,13 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0", ep = 0x0B },
 }
 
---function find_fingerprint(device)
---  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
---    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
---      log.info("<<---- Moon ---->> find_fingerprint :", fingerprint.mfr)
---      log.info("<<---- Moon ---->> find_fingerprint ep :", fingerprint.ep)
---      return fingerprint
---    end
---  end
---  return nil
---end
-
---function get_ep_offset(device)
---  local fingerprint = find_fingerprint(device)
---  if fingerprint then
---    log.info("<<---- Moon ---->> ep_offset :", fingerprint.ep)
---    return fingerprint.ep_offset
---  else
---    log.info("<<---- Moon ---->> ep_offset : nil")
---    return 0x00
---  end
---end
-
 local is_multi_switch = function(opts, driver, device)
-  --local fingerprint = find_fingerprint(device)
-  --if fingerprint then
-  --  log.info("<<---- Moon ---->> is_multi_switch : true")
-  --  return true
-  --else
-  --  log.info("<<---- Moon ---->> is_multi_switch : false")
-  --  return false
-  --end
-  --
-  --ep_offset =  get_ep_offset(device)
-  --
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
+    log.info("<<---- Moon ---->> aaaaa1 :", device:get_manufacturer())
+    log.info("<<---- Moon ---->> aaaaa2 :", fingerprint.mfr)
+    log.info("<<---- Moon ---->> aaaaa3 :", device:get_model())
+    log.info("<<---- Moon ---->> aaaaa4 :", fingerprint.model)
+
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_multi_switch : true")
       log.info("<<---- Moon ---->> is_multi_switch ep :", fingerprint.ep)
