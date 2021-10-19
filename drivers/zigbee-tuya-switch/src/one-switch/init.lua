@@ -15,6 +15,7 @@
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
+local ep_offset = 0x00
 
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
@@ -36,14 +37,16 @@ local function configure_device(self, device)
 end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
-  { mfr = "_TZ3000_oysiif07", model = "TS0001" },
-  { mfr = "3A Smart Home DE", model = "LXN-1S27LX1.0" },
+  { mfr = "_TZ3000_oysiif07", model = "TS0001", ep = 0x01 },
+  { mfr = "3A Smart Home DE", model = "LXN-1S27LX1.0", ep = 0x0B },
 }
 
 local is_one_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_one_switch : true")
+      log.info("<<---- Moon ---->> is_one_switch ep :", fingerprint.ep)
+      ep_offset = fingerprint.ep - 1
       return true
     end
   end
@@ -68,9 +71,4 @@ local one_switch = {
 }
 
 return one_switch
-
---<ZigbeeDevice: 2f6b3743-da3e-46b7-8d49-66848e2e277d [0xE617] (Tuya Switch 1)> emitting event: {"state":{"value":"on"},"capability_id":"switch","component_id":"main","attribut
---e_id":"switch"}
---<ZigbeeDevice: 2f6b3743-da3e-46b7-8d49-66848e2e277d [0xE617] (Tuya Switch 1)> received command: {"component":"main","args":[],"command":"refresh","positional_args":[],"capabi
---lity":"refresh"}
 

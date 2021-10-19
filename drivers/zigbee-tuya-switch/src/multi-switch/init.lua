@@ -15,6 +15,7 @@
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
+local ep_offset = 0x00
 
 local remapSwitchTbl = {
   ["one"] = "switch1",
@@ -66,6 +67,7 @@ end
 
 local received_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
+  ep = ep - ep_offset
   local component_id = string.format("switch%d", ep)
   log.info("<<---- Moon ---->> received_handler : ", component_id)
 
@@ -87,6 +89,22 @@ end
 local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
+  -- For test
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep 1: ", ep)
+
+  ep = ep + 0x0A
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep 2: ", ep)
+
+  ep = tonumber(ep)
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep 3: ", ep)
+
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset: ", ep_offset)
+
+  -- End
+  local ep = component_id:match("switch(%d)")
+  ep = ep + ep_offset
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep : ", ep)
+  log.info("<<---- Moon ---->> component_to_endpoint - converted tonumber(ep) : ", tonumber(ep))
   return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
@@ -148,16 +166,51 @@ local function configure_device(self, device)
 end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
-  { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
-  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
-  { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
-  { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
+  { mfr = "_TZ3000_7hp93xpr", model = "TS0002", ep = 0x01 },
+  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003", ep = 0x01 },
+  { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0", ep = 0x0B },
+  { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0", ep = 0x0B },
 }
 
+--function find_fingerprint(device)
+--  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
+--    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+--      log.info("<<---- Moon ---->> find_fingerprint :", fingerprint.mfr)
+--      log.info("<<---- Moon ---->> find_fingerprint ep :", fingerprint.ep)
+--      return fingerprint
+--    end
+--  end
+--  return nil
+--end
+
+--function get_ep_offset(device)
+--  local fingerprint = find_fingerprint(device)
+--  if fingerprint then
+--    log.info("<<---- Moon ---->> ep_offset :", fingerprint.ep)
+--    return fingerprint.ep_offset
+--  else
+--    log.info("<<---- Moon ---->> ep_offset : nil")
+--    return 0x00
+--  end
+--end
+
 local is_multi_switch = function(opts, driver, device)
+  --local fingerprint = find_fingerprint(device)
+  --if fingerprint then
+  --  log.info("<<---- Moon ---->> is_multi_switch : true")
+  --  return true
+  --else
+  --  log.info("<<---- Moon ---->> is_multi_switch : false")
+  --  return false
+  --end
+  --
+  --ep_offset =  get_ep_offset(device)
+  --
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_multi_switch : true")
+      log.info("<<---- Moon ---->> is_multi_switch ep :", fingerprint.ep)
+      ep_offset = fingerprint.ep - 1
       return true
     end
   end
@@ -195,7 +248,7 @@ local multi_switch = {
     infoChanged = device_info_changed,
     doConfigure = configure_device
   },
-  can_handle = is_multi_switch
+  can_handle = is_multi_switch,
 }
 
 return multi_switch

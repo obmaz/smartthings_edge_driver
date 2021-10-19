@@ -1,4 +1,5 @@
 zigbeeManufacturer:
+  # EP : 0x01
   - id: zigbee-tuya-switch1
     deviceLabel: Tuya Switch 1
     manufacturer: _TZ3000_oysiif07
@@ -14,6 +15,7 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_c0wbnbbf
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
+  # EP : 0x0B
   - id: 3A-Smart-Home-DE-1
     deviceLabel: 3A Smart Home DE 1
     manufacturer: 3A Smart Home DE
