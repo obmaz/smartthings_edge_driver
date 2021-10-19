@@ -89,8 +89,10 @@ end
 local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
-  ep = ep + ep_offset
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep : ", ep)
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset : ", ep_offset)
+  ep = ep + ep_offset
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep + ep_offset : ", ep)
   log.info("<<---- Moon ---->> component_to_endpoint - converted tonumber(ep) : ", tonumber(ep))
   return ep and tonumber(ep) or device.fingerprinted_endpoint_id
 end
