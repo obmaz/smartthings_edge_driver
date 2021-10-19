@@ -117,11 +117,9 @@ function syncMainComponent(device)
       end
     end
   else
-    --if status ~= nil then
     if remapButtonStatus == "off" then
       ev = capabilities.switch.switch.off()
     end
-    --end
   end
   device.profile.components["main"]:emit_event(ev)
 end
