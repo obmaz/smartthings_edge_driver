@@ -28,3 +28,4 @@ smartthings edge:drivers:package ./
 smartthings edge:drivers:publish %driverId% --channel %channel%
 smartthings edge:drivers:install %driverId% --channel %channel% --hub %hub%
 smartthings edge:drivers:logcat %driverId% --hub-address=%hub_address%
+
