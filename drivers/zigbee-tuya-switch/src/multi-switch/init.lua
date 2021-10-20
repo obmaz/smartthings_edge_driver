@@ -65,10 +65,10 @@ local on_off_handler = function(driver, device, command)
     device.profile.components[command.component]:emit_event(ev)
     device:send_to_component(command.component, on_off)
   end
-
 end
 
-local received_handler = function(driver, device, OnOff, zb_rx)
+-- when receive zb_rx from device
+local attr_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> received_handler ep :", ep)
   ep = ep - get_ep_offset(device)
@@ -87,7 +87,7 @@ local received_handler = function(driver, device, OnOff, zb_rx)
     device.profile.components["main"]:emit_event(ev)
   end
   device.profile.components[component_id]:emit_event(ev)
-
+  --device:emit_event_for_endpoint(src_endpoint, ev) -- it cannot use since endpoint_to_component does not handle main button sync
   syncMainComponent(device)
 end
 
@@ -98,12 +98,12 @@ local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset : ", get_ep_offset(device))
   ep = ep + get_ep_offset(device)
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep + ep_offset : ", ep)
-  log.info("<<---- Moon ---->> component_to_endpoint - converted tonumber(ep) : ", tonumber(ep))
-  return ep and tonumber(ep) or device.fingerprinted_endpoint_id
+  return ep -- and tonumber(ep) or device.fingerprinted_endpoint_id
 end
 
 -- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
+  ep = ep - get_ep_offset(device)
   log.info("<<---- Moon ---->> endpoint_to_component - endpoint : ", ep)
   return string.format("switch%d", ep)
 end
@@ -139,8 +139,8 @@ end
 
 local device_init = function(self, device)
   log.info("<<---- Moon ---->> device_init")
-  device:set_component_to_endpoint_fn(component_to_endpoint) -- get_endpoint_for_component_id
-  device:set_endpoint_to_component_fn(endpoint_to_component)
+  device:set_component_to_endpoint_fn(component_to_endpoint)
+  device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
 end
 
 local device_added = function(driver, device)
@@ -183,10 +183,6 @@ local is_multi_switch = function(opts, driver, device)
   return false
 end
 
-local refresh_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> refresh_handler")
-end
-
 local multi_switch = {
   NAME = "mutil switch",
   capability_handlers = {
@@ -194,14 +190,11 @@ local multi_switch = {
       [capabilities.switch.commands.on.NAME] = on_off_handler,
       [capabilities.switch.commands.off.NAME] = on_off_handler,
     },
-    --[capabilities.refresh.ID] = {
-    --  [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
-    --}
   },
   zigbee_handlers = {
     attr = {
       [zcl_clusters.OnOff.ID] = {
-        [zcl_clusters.OnOff.attributes.OnOff.ID] = received_handler
+        [zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
       }
     }
   },
