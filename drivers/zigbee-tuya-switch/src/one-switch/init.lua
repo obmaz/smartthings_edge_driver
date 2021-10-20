@@ -31,13 +31,13 @@ local device_added = function(driver, device)
   device:send_to_component("main", zcl_clusters.OnOff.server.commands.On(device))
 end
 
-local function configure_device(self, device)
+local configure_device = function(self, device)
   device:configure()
 end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
-  { mfr = "_TZ3000_oysiif07", model = "TS0001"},
-  { mfr = "3A Smart Home DE", model = "LXN-1S27LX1.0"},
+  { mfr = "_TZ3000_oysiif07", model = "TS0001" },
+  { mfr = "3A Smart Home DE", model = "LXN-1S27LX1.0" },
 }
 
 local is_one_switch = function(opts, driver, device)

@@ -153,7 +153,7 @@ local device_added = function(driver, device)
   end
 end
 
-local function configure_device(self, device)
+local configure_device = function(self, device)
   device:configure()
 end
 
