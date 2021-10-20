@@ -27,35 +27,19 @@ end
 
 test.set_test_init_function(test_init)
 
---test.register_message_test(
---    "Switch",
---    {
---      --{
---      --  channel = "device_lifecycle",
---      --  direction = "receive",
---      --  message = { mock_device.id, "added" }
---      --},
---      {
---        channel = "capability",
---        direction = "send",
---        message = mock_device:generate_test_message("main", capabilities.switch.switch.on())
---      }
---    }
---)
-
 test.register_message_test(
-    "Reported on off status should be handled: on",
+    "Switch",
     {
       {
-        channel = "zigbee",
+        channel = "device_lifecycle",
         direction = "receive",
-        message = { mock_device.id, zcl_clusters.OnOff.attributes.OnOff:build_test_attr_report(mock_device, true) }
+        message = { mock_device.id, "added" }
       },
-      {
-        channel = "capability",
-        direction = "send",
-        message = mock_device:generate_test_message("main", capabilities.switch.switch.on())
-      }
+      --{
+      --  channel = "capability",
+      --  direction = "send",
+      --  message = mock_device:generate_test_message("main", capabilities.switch.switch.on())
+      --}
     }
 )
 
