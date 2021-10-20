@@ -75,12 +75,6 @@ local zigbee_tuya_button_driver_template = {
                 [0xFD] = button_handler
             }
         },
-        -- Attr 로 테스트 해볼것
-        --attr = {
-        --    [zcl_clusters.OnOff.ID] = {
-        --        [0xFD] = button_handler
-        --    }
-        --},
     },
     lifecycle_handlers = {
         added = device_added,

@@ -17,13 +17,13 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 
 local zigbee_tuya_switch_driver_template = {
-  supported_capabilities = {
-    capabilities.switch,
-    capabilities.refresh
-  },
-  -- 1gang은 supported_capabilities 만 있어도 작도 되는지 확인 할것
-  sub_drivers = { require("one-switch"),
-                  require("multi-switch") }
+    supported_capabilities = {
+        capabilities.switch,
+        capabilities.refresh
+    },
+    sub_drivers = {
+        require("multi-switch")
+    }
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)

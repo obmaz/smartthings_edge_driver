@@ -172,7 +172,6 @@ local is_multi_switch = function(opts, driver, device)
     log.info("<<---- Moon ---->> aaaaa3 :", device:get_model())
     log.info("<<---- Moon ---->> aaaaa4 :", fingerprint.model)
 
-    --if device:id_match(fingerprint.mfr, fingerprint.model) then
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_multi_switch : true")
       log.info("<<---- Moon ---->> is_multi_switch device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)

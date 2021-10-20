@@ -15,25 +15,26 @@
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
+--
+--local on_off_handler = function(driver, device, command)
+--  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
+--  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
+--  local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+--  local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
+--  device:emit_event(ev)
+--  device:send(on_off)
+--end
 
-local on_off_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
-  local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
-  local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
-  device:emit_event(ev)
-  device:send(on_off)
-end
+--local device_added = function(driver, device)
+--  log.info("<<---- Moon ---->> device_added")
+--  device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
+--  device:send_to_component("main", zcl_clusters.OnOff.server.commands.On(device))
+--end
 
-local device_added = function(driver, device)
-  log.info("<<---- Moon ---->> device_added")
-  device.profile.components["main"]:emit_event(capabilities.switch.switch.on())
-  device:send_to_component("main", zcl_clusters.OnOff.server.commands.On(device))
-end
 
-local configure_device = function(self, device)
-  device:configure()
-end
+--local configure_device = function(self, device)
+--  device:configure()
+--end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
   { mfr = "_TZ3000_oysiif07", model = "TS0001" },
@@ -55,12 +56,12 @@ end
 
 local one_switch = {
   NAME = "one switch",
-  capability_handlers = {
-    [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = on_off_handler,
-      [capabilities.switch.commands.off.NAME] = on_off_handler,
-    }
-  },
+  --capability_handlers = {
+  --  [capabilities.switch.ID] = {
+  --    [capabilities.switch.commands.on.NAME] = on_off_handler,
+  --    [capabilities.switch.commands.off.NAME] = on_off_handler,
+  --  }
+  --},
   lifecycle_handlers = {
     added = device_added,
     doConfigure = configure_device
