@@ -69,8 +69,8 @@ local zigbee_tuya_button_driver_template = {
     },
     zigbee_handlers = {
         cluster = {
-            -- zcl_clusters.OnOff.server.commands.OnOff.ID
-            [0x0006] = {
+            -- No Attr Data from zb_rx, so it should use cluster handler
+            [zcl_clusters.OnOff.ID] = {
                 -- ZCLCommandId
                 [0xFD] = button_handler
             }
