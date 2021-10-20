@@ -64,6 +64,7 @@ local on_off_handler = function(driver, device, command)
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
     device.profile.components[command.component]:emit_event(ev)
     device:send_to_component(command.component, on_off)
+    --device.profile.components[command.component]:send(on_off)) -- 가능?
   end
 end
 
