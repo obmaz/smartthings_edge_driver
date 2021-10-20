@@ -1,5 +1,5 @@
-# Zigbee Tuya Switch Edge Driver
-It is the SmartThings Edge Driver for tuya-platform based zigbee switch.   
+# Edge Driver: Zigbee Tuya Enhanded Switch 
+It is the SmartThings Edge Driver for tuya-platform based zigbee switch. (Tuya, Zemismart ...)   
 The general zigbee switch might work
 
 ## Device UI Screen

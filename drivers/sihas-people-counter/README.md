@@ -1,4 +1,4 @@
-# SiHAS People Counter
+# Edge Driver: SiHAS People Counter
 << Currently Dev Stage, so it might not working >>  
 
 It is the SmartThings Edge Driver for SiHAS People Counter  
