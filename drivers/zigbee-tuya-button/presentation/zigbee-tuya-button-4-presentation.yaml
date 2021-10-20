@@ -1,6 +1,6 @@
-#smartthings presentation:device-config:create --yaml --input deviceConfig3.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-4-presentation.yaml
 mnmn: SmartThingsCommunity
-vid: bc787364-1e72-3008-a815-af60d25cf1dd
+vid: 447e18d4-7e73-3c53-a0a6-4c7322e65664
 version: 0.0.1
 type: profile
 dashboard:
@@ -38,6 +38,11 @@ detailView:
     version: 1
     values: []
     patch: []
+  - component: button4
+    capability: button
+    version: 1
+    values: []
+    patch: []
 automation:
   conditions:
     - component: button1
@@ -57,6 +62,11 @@ automation:
       values: []
       patch: []
       exclusion: []
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
   actions:
     - component: button1
       capability: button
@@ -74,6 +84,11 @@ automation:
       version: 1
       values: []
       patch: []
+    - component: button4
+      capability: button
+      version: 1
+      values: []
+      patch: []
       exclusion: []
-presentationId: bc787364-1e72-3008-a815-af60d25cf1dd
+presentationId: 447e18d4-7e73-3c53-a0a6-4c7322e65664
 manufacturerName: SmartThingsCommunity
