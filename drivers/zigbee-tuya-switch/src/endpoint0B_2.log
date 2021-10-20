@@ -109,7 +109,6 @@ UI Physical buttons  All off:
 2021-10-19T16:58:40.631918807+00:00 INFO zigbee-tuya-switch  <ZigbeeDevice: a1fc1da6-8daa-45fa-abae-9866f3f7b34b [0x04BA] (Luce Bagno giorno)> emitting event: {"capability_id":"switch","state":{"value":"off"},"attribute_id":"switch","component_id":"main"}
 2021-10-19T16:58:40.650761474+00:00 DEBUG zigbee-tuya-switch  Luce Bagno giorno device thread event handledlistening for logs...
 
-
 Key Main ON :
 2021-10-19T17:10:46.171141604+00:00 TRACE zigbee-tuya-switch  Received event with handler capability
 2021-10-19T17:10:46.181858604+00:00 INFO zigbee-tuya-switch  <ZigbeeDevice: a1fc1da6-8daa-45fa-abae-9866f3f7b34b [0x04BA] (Luce Bagno giorno)> received command: {"command":"on","capability":"switch","args":[],"positional_args":[],"component":"main"}
@@ -195,7 +194,12 @@ Key Main ON :
 2021-10-19T17:14:51.419997472+00:00 TRACE zigbee-tuya-switch  Found ZigbeeMessageDispatcher handler in zigbee-tuya-switch
 2021-10-19T17:14:51.426090805+00:00 INFO zigbee-tuya-switch  Executing ZclClusterAttributeValueHandler: cluster: OnOff, attribute: OnOff
 2021-10-19T17:14:51.432871139+00:00 INFO zigbee-tuya-switch  <ZigbeeDevice: a1fc1da6-8daa-45fa-abae-9866f3f7b34b [0x04BA] (Luce Bagno giorno)> emitting event: {"capability_id":"switch","state":{"value":"on"},"attribute_id":"switch","component_id":"main"}
-2021-10-19T17:14:51.448437805+00:00 DEBUG zigbee-tuya-switch  Luce Bagno giorno device thread event handledlistening for logs... / the UI key 1 turned off by itself.I tried to turn key 1 (UI) back on and it went into loop then the network error appearedI can't try it because it always goes OFF (the physical key is on)  Key 1 OFF:I can't try it because it always goes OFF (the physical key is on) Loop . Network Error  Key 2 ON : 
+2021-10-19T17:14:51.448437805+00:00 DEBUG zigbee-tuya-switch  Luce Bagno giorno device thread event handledlistening for logs...
+
+/ the UI key 1 turned off by itself.I tried to turn key 1 (UI) back on and it went into loop then the network error appeared I can't try it because it always goes OFF (the physical key is on)
+Key 1 OFF:I can't try it because it always goes OFF (the physical key is on) Loop . Network Error
+Key 2 ON :
+
 2021-10-19T17:22:49.347403312+00:00 TRACE zigbee-tuya-switch  Received event with handler capability
 2021-10-19T17:22:49.379881646+00:00 INFO zigbee-tuya-switch  <ZigbeeDevice: a1fc1da6-8daa-45fa-abae-9866f3f7b34b [0x04BA] (Luce Bagno giorno)> received command: {"command":"on","capability":"switch","args":[],"positional_args":[],"component":"switch2"}
 2021-10-19T17:22:49.405917312+00:00 INFO zigbee-tuya-switch  <<---- Moon ---->> is_one_switch : false
@@ -214,8 +218,8 @@ Key Main ON :
 2021-10-19T17:22:49.972463312+00:00 INFO zigbee-tuya-switch  Executing ZclGlobalCommandHandler: cluster: OnOff, command: DefaultResponse
 2021-10-19T17:22:49.981510312+00:00 INFO zigbee-tuya-switch  <ZigbeeDevice: a1fc1da6-8daa-45fa-abae-9866f3f7b34b [0x04BA] (Luce Bagno giorno)> emitting event: {"capability_id":"switch","state":{"value":"on"},"attribute_id":"switch","component_id":"main"}
 2021-10-19T17:22:50.010805312+00:00 DEBUG zigbee-tuya-switch  Luce Bagno giorno device thread event handled
-2021-10-19T17:22:53.214092978+00:00 TRACE zigbee-tuya-switch  Received event with handler zigbee health polllistening for logs... |
-Network failure Key 2 OFF : I can't try it because it always goes OFF (the physical key is on). Loop . Network Error    I
+2021-10-19T17:22:53.214092978+00:00 TRACE zigbee-tuya-switch  Received event with handler zigbee health polllistening for logs... | Network failure
+Key 2 OFF : I can't try it because it always goes OFF (the physical key is on). Loop . Network Error    I
 
 
 

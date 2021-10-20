@@ -15,7 +15,6 @@
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
-local ep_offset = 0x00
 
 local remapSwitchTbl = {
   ["one"] = "switch1",
@@ -23,6 +22,10 @@ local remapSwitchTbl = {
   ["three"] = "switch3",
   ["all"] = "all",
 }
+
+local function get_ep_offset(device)
+  return device.fingerprinted_endpoint_id - 1
+end
 
 local function get_remap_switch(device)
   log.info("<<---- Moon ---->> remapSwitch")
@@ -68,7 +71,7 @@ end
 local received_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> received_handler ep :", ep)
-  ep = ep - ep_offset
+  ep = ep - get_ep_offset(device)
   log.info("<<---- Moon ---->> received_handler ep - ep_offset :", ep)
   local component_id = string.format("switch%d", ep)
   log.info("<<---- Moon ---->> received_handler :", component_id)
@@ -92,8 +95,8 @@ local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep : ", ep)
-  log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset : ", ep_offset)
-  ep = ep + ep_offset
+  log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset : ", get_ep_offset(device))
+  ep = ep + get_ep_offset(device)
   log.info("<<---- Moon ---->> component_to_endpoint - converted ep + ep_offset : ", ep)
   log.info("<<---- Moon ---->> component_to_endpoint - converted tonumber(ep) : ", tonumber(ep))
   return ep and tonumber(ep) or device.fingerprinted_endpoint_id
@@ -171,7 +174,6 @@ local is_multi_switch = function(opts, driver, device)
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_multi_switch : true")
       log.info("<<---- Moon ---->> is_multi_switch device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
-      ep_offset = device.fingerprinted_endpoint_id - 1
       return true
     end
   end
