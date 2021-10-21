@@ -22,7 +22,6 @@ local remapSwitchTbl = {
   ["three"] = "switch3",
   ["all"] = "all",
 }
-
 local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
@@ -71,11 +70,11 @@ end
 -- when receive zb_rx from device
 local attr_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
-  log.info("<<---- Moon ---->> received_handler ep :", ep)
+  log.info("<<---- Moon ---->> attr_handler ep :", ep)
+
   ep = ep - get_ep_offset(device)
-  log.info("<<---- Moon ---->> received_handler ep - ep_offset :", ep)
   local component_id = string.format("switch%d", ep)
-  log.info("<<---- Moon ---->> received_handler :", component_id)
+  log.info("<<---- Moon ---->> attr_handler :", component_id)
 
   local clickType = OnOff.value
   local ev = capabilities.switch.switch.off()
@@ -95,17 +94,13 @@ end
 local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
-  log.info("<<---- Moon ---->> component_to_endpoint - converted ep : ", ep)
-  log.info("<<---- Moon ---->> component_to_endpoint - converted ep_offset : ", get_ep_offset(device))
-  ep = ep + get_ep_offset(device)
-  log.info("<<---- Moon ---->> component_to_endpoint - converted ep + ep_offset : ", ep)
-  return ep -- and tonumber(ep) or device.fingerprinted_endpoint_id
+  return ep + get_ep_offset(device)
 end
 
 -- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
-  ep = ep - get_ep_offset(device)
   log.info("<<---- Moon ---->> endpoint_to_component - endpoint : ", ep)
+  ep = ep - get_ep_offset(device)
   return string.format("switch%d", ep)
 end
 
@@ -167,14 +162,13 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
 
 local is_multi_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> aaaaa1 :", device:get_manufacturer())
-    log.info("<<---- Moon ---->> aaaaa2 :", fingerprint.mfr)
-    log.info("<<---- Moon ---->> aaaaa3 :", device:get_model())
-    log.info("<<---- Moon ---->> aaaaa4 :", fingerprint.model)
+    log.info("<<---- Moon ---->> device:get_manufacturer() :", device:get_manufacturer())
+    log.info("<<---- Moon ---->> fingerprint.mfr :", fingerprint.mfr)
+    log.info("<<---- Moon ---->> device:get_model() :", device:get_model())
+    log.info("<<---- Moon ---->> fingerprint.model :", fingerprint.model)
 
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> is_multi_switch : true")
-      log.info("<<---- Moon ---->> is_multi_switch device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+      log.info("<<---- Moon ---->> is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
       return true
     end
   end
