@@ -61,6 +61,7 @@ local on_off_handler = function(driver, device, command)
     --local endpoint = device:get_endpoint_for_component_id(command.component)
     --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
     --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+
     device.profile.components[command.component]:emit_event(ev)
     device:send_to_component(command.component, on_off)
     --device.profile.components[command.component]:send(on_off)) -- 가능?
@@ -82,7 +83,7 @@ local attr_handler = function(driver, device, OnOff, zb_rx)
     ev = capabilities.switch.switch.on()
   end
 
-  ev.state_change = true
+  --ev.state_change = true -- it trigger state change even if the state is the same previous
   if component_id == get_remap_switch(device) then
     device.profile.components["main"]:emit_event(ev)
   end
