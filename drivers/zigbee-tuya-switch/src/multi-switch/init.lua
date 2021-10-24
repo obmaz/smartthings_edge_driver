@@ -147,6 +147,7 @@ local device_added = function(driver, device)
     device.profile.components[key]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
   end
+  device:refresh ()
 end
 
 local configure_device = function(self, device)
@@ -162,10 +163,7 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
 
 local is_multi_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> device:get_manufacturer() :", device:get_manufacturer())
-    log.info("<<---- Moon ---->> fingerprint.mfr :", fingerprint.mfr)
-    log.info("<<---- Moon ---->> device:get_model() :", device:get_model())
-    log.info("<<---- Moon ---->> fingerprint.model :", fingerprint.model)
+    log.info("<<---- Moon ---->> device.pretty_print :", device:pretty_print())
 
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
