@@ -126,14 +126,6 @@ function syncMainComponent(device)
   device.profile.components["main"]:emit_event(ev)
 end
 
-local device_info_changed = function(driver, device, event, args)
-  syncMainComponent(device)
-end
-
-local device_driver_switched = function(driver, device, event, args)
-  syncMainComponent(device)
-end
-
 local device_init = function(self, device)
   log.info("<<---- Moon ---->> device_init")
   device:set_component_to_endpoint_fn(component_to_endpoint)
@@ -148,7 +140,15 @@ local device_added = function(driver, device)
     device.profile.components[key]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
   end
-  device:refresh ()
+  device:refresh()
+end
+
+local device_driver_switched = function(driver, device, event, args)
+  syncMainComponent(device)
+end
+
+local device_info_changed = function(driver, device, event, args)
+  syncMainComponent(device)
 end
 
 local configure_device = function(self, device)

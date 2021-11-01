@@ -17,13 +17,13 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 
 local zigbee_tuya_switch_driver_template = {
-    supported_capabilities = {
-        capabilities.switch,
-        capabilities.refresh
-    },
-    sub_drivers = {
-        require("multi-switch")
-    }
+  supported_capabilities = {
+    capabilities.switch,
+    capabilities.refresh
+  },
+  sub_drivers = {
+    require("multi-switch")
+  }
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
