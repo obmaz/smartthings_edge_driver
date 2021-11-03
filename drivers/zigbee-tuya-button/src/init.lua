@@ -63,12 +63,6 @@ local device_info_changed = function(driver, device, event, args)
   end
 end
 
-local configure_device = function(self, device)
-  log.info("<<---- Moon ---->> configure_device")
-  device:configure()
-  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-end
-
 local zigbee_tuya_button_driver_template = {
   supported_capabilities = {
     capabilities.button,
@@ -87,7 +81,6 @@ local zigbee_tuya_button_driver_template = {
   lifecycle_handlers = {
     added = device_added,
     infoChanged = device_info_changed,
-    doConfigure = configure_device,
   }
 }
 
