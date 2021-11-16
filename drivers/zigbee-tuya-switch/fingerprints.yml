@@ -1,43 +1,50 @@
 zigbeeManufacturer:
   # Tested
-  - id: zigbee-tuya-switch1
+  - id: zigbee-tuya-switch1-1
     deviceLabel: Tuya Switch 1
     manufacturer: _TZ3000_oysiif07
     model: TS0001
     deviceProfileName: zigbee-tuya-switch-1
-  - id: zigbee-tuya-switch2
+  - id: zigbee-tuya-switch2-1
     deviceLabel: Tuya Switch 2
     manufacturer: _TZ3000_7hp93xpr
     model: TS0002
     deviceProfileName: zigbee-tuya-switch-2
-  - id: zigbee-tuya-switch3
+  - id: zigbee-tuya-switch3-1
     deviceLabel: Tuya Switch 3
     manufacturer: _TZ3000_c0wbnbbf
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
-  - id: 3A-Smart-Home-DE-1
+  - id: 3A-Smart-Home-DE-1-1
     deviceLabel: 3A Smart Home DE 1
     manufacturer: 3A Smart Home DE
     model: LXN-1S27LX1.0
     deviceProfileName: zigbee-tuya-switch-1
-  - id: 3A-Smart-Home-DE-2
+  - id: 3A-Smart-Home-DE-2-1
     deviceLabel: 3A Smart Home DE 2
     manufacturer: 3A Smart Home DE
     model: LXN-2S27LX1.0
     deviceProfileName: zigbee-tuya-switch-2
-  - id: 3A-Smart-Home-DE-3
+  - id: 3A-Smart-Home-DE-3-1
     deviceLabel: 3A Smart Home DE 3
     manufacturer: 3A Smart Home DE
     model: LXN-3S27LX1.0
     deviceProfileName: zigbee-tuya-switch-3
   # Not Tested
-  - id: zignee-zemismart-switch2
+  - id: zignee-zemismart-switch2-1
     deviceLabel: Zemismart Switch 2
     manufacturer: _TZ3000_vjhyd6ar
     model: TS0002
     deviceProfileName: zigbee-tuya-switch-2
-  - id: zignee-zemismart-switch3
+  - id: zignee-zemismart-switch3-1
     deviceLabel: Zemismart Switch 3
     manufacturer: _TZ3000_wqfdvxen
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
+  - id: zignee-zemismart-switch3-2
+    deviceLabel: Zemismart Switch 3
+    manufacturer: _TZ3000_tbfw3xj0
+    model: TS0003
+    deviceProfileName: zigbee-tuya-switch-3
+
+
