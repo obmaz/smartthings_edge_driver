@@ -22,6 +22,7 @@ function button_handler (driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler")
 
   local ep = zb_rx.address_header.src_endpoint.value
+  -- ToDo: Check logic when end_point is not 0x01
   local component_id = string.format("button%d", ep)
 
   -- 00: click, 01: double click, 02: hold_release
