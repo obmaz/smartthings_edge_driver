@@ -78,6 +78,8 @@ local zigbee_sonoff_button_driver_template = {
   },
 
   --inClusters: "0000, 0001, 0003", outClusters: "0003, 0006
+  -- 	01 0104 0000 00 03 0000 0003 0001 02 0006 0003
+  -- ep, profile,
   --https://github.com/pablopoo/smartthings/blob/master/Sonoff-Zigbee-Button.groovy
   zigbee_handlers = {
     attr = {
