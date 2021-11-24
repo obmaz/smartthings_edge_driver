@@ -33,5 +33,8 @@ preferences:
         one: Switch 1
         two: Switch 2
         three: Switch 3
+        one_two: Switch 1 and 2
+        one_three: Switch 1 and 3
+        two_three: Switch 2 and 3
         all: All
       default: one

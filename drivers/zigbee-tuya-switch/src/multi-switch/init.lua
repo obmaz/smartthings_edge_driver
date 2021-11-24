@@ -20,6 +20,9 @@ local remapSwitchTbl = {
   ["one"] = "switch1",
   ["two"] = "switch2",
   ["three"] = "switch3",
+  ["one_two"] = "switchA",
+  ["one_three"] = "switchB",
+  ["two_three"] = "switchC",
   ["all"] = "all",
 }
 local function get_ep_offset(device)
@@ -37,35 +40,67 @@ local function get_remap_switch(device)
   end
 end
 
+local function send_multi_switch(device, s1, s2, s3, ev, on_off)
+  device.profile.components["main"]:emit_event(ev)
+
+  if s1 == true then
+    device.profile.components["switch1"]:emit_event(ev)
+    device:send_to_component("switch1", on_off)
+  end
+
+  if s2 == true then
+    device.profile.components["switch2"]:emit_event(ev)
+    device:send_to_component("switch2", on_off)
+  end
+
+  if s3 == true then
+    device.profile.components["switch3"]:emit_event(ev)
+    device:send_to_component("switch3", on_off)
+  end
+end
+
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
   local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
 
+  -- Due to legacy profile and automation, remapSwitchTbl structure cannot be changed
   if command.component == "main" and get_remap_switch(device) == "all" then
-    for key, value in pairs(device.profile.components) do
-      log.info("<<---- Moon ---->> on_off_handler - key : ", key)
-      device.profile.components[key]:emit_event(ev)
-      if key ~= "main" then
-        device:send_to_component(key, on_off)
-      end
-    end
-  else
-    if command.component == "main" or command.component == get_remap_switch(device) then
-      device.profile.components["main"]:emit_event(ev)
-      command.component = get_remap_switch(device)
-    end
-
-    -- Note : The logic is the same, but it uses endpoint.
-    --local endpoint = device:get_endpoint_for_component_id(command.component)
-    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-
-    device.profile.components[command.component]:emit_event(ev)
-    device:send_to_component(command.component, on_off)
-    --device.profile.components[command.component]:send(on_off)) -- 가능?
+    send_multi_switch(device, true, true, true, ev, on_off)
+    return
   end
+
+  if command.component == "main" and get_remap_switch(device) == "switchA" then
+    send_multi_switch(device, true, true, false, ev, on_off)
+    return
+  end
+
+  if command.component == "main" and get_remap_switch(device) == "switchB" then
+    send_multi_switch(device, true, false, true, ev, on_off)
+    return
+  end
+
+  if command.component == "main" and get_remap_switch(device) == "switchC" then
+    send_multi_switch(device, false, true, true, ev, on_off)
+    return
+  end
+
+  --else
+  if command.component == "main" or command.component == get_remap_switch(device) then
+    device.profile.components["main"]:emit_event(ev)
+    command.component = get_remap_switch(device)
+  end
+
+  -- Note : The logic is the same, but it uses endpoint.
+  --local endpoint = device:get_endpoint_for_component_id(command.component)
+  --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
+  --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+
+  device.profile.components[command.component]:emit_event(ev)
+  device:send_to_component(command.component, on_off)
+  --device.profile.components[command.component]:send(on_off)) -- 가능?
+  --end
 end
 
 -- when receive zb_rx from device
@@ -110,7 +145,7 @@ function syncMainComponent(device)
   local remapButtonStatus = device:get_latest_state(component_id, "switch", "switch", "off", nil)
   local ev = capabilities.switch.switch.on()
 
-  if component_id == "all" then
+  if component_id == "all" or component_id == "switchA" or component_id == "switchB" or component_id == "switchC" then
     for key, value in pairs(device.profile.components) do
       local componentStatus = device:get_latest_state(key, "switch", "switch", "off", nil)
       if key ~= "main" and componentStatus == "off" then
