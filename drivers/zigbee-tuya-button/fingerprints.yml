@@ -78,9 +78,3 @@ zigbeeManufacturer:
     manufacturer: _TZ3400_tk3s5tyg
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
-  # Aqara 1 Button
-  - id: LUMI/lumi.sensor_switch.aq3
-    deviceLabel: Zigbee Aqara 1 Button
-    manufacturer: LUMI
-    model: lumi.sensor_switch.aq3
-    deviceProfileName: zigbee-tuya-button-1
