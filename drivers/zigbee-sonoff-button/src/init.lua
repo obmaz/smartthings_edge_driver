@@ -1,4 +1,4 @@
--- Zigbee Tuya Button
+-- Zigbee Sonoff Button
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -64,27 +64,27 @@ local device_info_changed = function(driver, device, event, args)
   end
 end
 
-local zigbee_tuya_button_driver_template = {
+local zigbee_sonoff_button_driver_template = {
   supported_capabilities = {
     capabilities.button,
     capabilities.battery,
     capabilities.refresh
   },
-  zigbee_handlers = {
-    cluster = {
-      -- No Attr Data from zb_rx, so it should use cluster handler
-      [zcl_clusters.OnOff.ID] = {
-        -- ZCLCommandId
-        [0xFD] = button_handler
-      }
-    },
-  },
+  --zigbee_handlers = {
+  --  cluster = {
+  --    -- No Attr Data from zb_rx, so it should use cluster handler
+  --    [zcl_clusters.OnOff.ID] = {
+  --      -- ZCLCommandId
+  --      [0xFD] = button_handler
+  --    }
+  --  },
+  --},
   lifecycle_handlers = {
     added = device_added,
     infoChanged = device_info_changed,
   }
 }
 
-defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
+defaults.register_for_default_handlers(zigbee_sonoff_button_driver_template, zigbee_sonoff_button_driver_template.supported_capabilities)
+local zigbee_driver = ZigbeeDriver("zigbee-sonoff-button", zigbee_sonoff_button_driver_template)
 zigbee_driver:run()

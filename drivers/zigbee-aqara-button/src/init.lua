@@ -1,4 +1,4 @@
--- Zigbee Tuya Button
+-- Zigbee Aqara Button
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ local device_info_changed = function(driver, device, event, args)
   end
 end
 
-local zigbee_tuya_button_driver_template = {
+local zigbee_aqara_button_driver_template = {
   supported_capabilities = {
     capabilities.button,
     capabilities.battery,
@@ -85,6 +85,6 @@ local zigbee_tuya_button_driver_template = {
   }
 }
 
-defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
+defaults.register_for_default_handlers(zigbee_aqara_button_driver_template, zigbee_aqara_button_driver_template.supported_capabilities)
+local zigbee_driver = ZigbeeDriver("zigbee-aqara-button", zigbee_aqara_button_driver_template)
 zigbee_driver:run()

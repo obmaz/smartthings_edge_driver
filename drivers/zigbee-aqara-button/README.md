@@ -1,4 +1,6 @@
 # Edge Driver: Zigbee Aqara Button
+Currently, it does NOT work.!!!!
+
 It is the SmartThings Edge Driver for zigbee Aqara button.  
 It supports 1 buttons.  
 
