@@ -181,82 +181,82 @@ function syncMainComponent(device)
   device.profile.components["main"]:emit_event(ev)
 end
 
-local device_init = function (self, device)
-log.info("<<---- Moon ---->> device_init")
-device:set_component_to_endpoint_fn(component_to_endpoint)
-device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
+local device_init = function(self, device)
+  log.info("<<---- Moon ---->> device_init")
+  device:set_component_to_endpoint_fn(component_to_endpoint)
+  device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
 end
 
-local device_added = function (driver, device)
-log.info("<<---- Moon ---->> device_added")
--- Workaround : Should emit or send to enable capabilities UI
-for key, value in pairs(device.profile.components) do
-log.info("<<---- Moon ---->> device_added - key : ", key)
-device.profile.components[key]:emit_event(capabilities.switch.switch.on())
-device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
-end
-device:refresh()
-end
-
-local device_driver_switched = function (driver, device, event, args)
-syncMainComponent(device)
+local device_added = function(driver, device)
+  log.info("<<---- Moon ---->> device_added")
+  -- Workaround : Should emit or send to enable capabilities UI
+  for key, value in pairs(device.profile.components) do
+    log.info("<<---- Moon ---->> device_added - key : ", key)
+    device.profile.components[key]:emit_event(capabilities.switch.switch.on())
+    device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+  end
+  device:refresh()
 end
 
-local device_info_changed = function (driver, device, event, args)
-syncMainComponent(device)
+local device_driver_switched = function(driver, device, event, args)
+  syncMainComponent(device)
 end
 
-local configure_device = function (self, device)
-device:configure()
+local device_info_changed = function(driver, device, event, args)
+  syncMainComponent(device)
+end
+
+local configure_device = function(self, device)
+  device:configure()
 end
 
 local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
-{ mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
-{ mfr = "_TZ3000_vjhyd6ar", model = "TS0002" },
-{ mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
-{ mfr = "_TZ3000_wqfdvxen", model = "TS0003" },
-{ mfr = "_TZ3000_tbfw3xj0", model = "TS0003" },
-{ mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
-{ mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
+  { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
+  { mfr = "_TZ3000_vjhyd6ar", model = "TS0002" },
+  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
+  { mfr = "_TZ3000_wqfdvxen", model = "TS0003" },
+  { mfr = "_TZ3000_tbfw3xj0", model = "TS0003" },
+  { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
+  { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
 }
 
-local is_multi_switch = function (opts, driver, device)
-for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
-log.info("<<---- Moon ---->> device.pretty_print :", device:pretty_print())
+local is_multi_switch = function(opts, driver, device)
+  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
+    log.info("<<---- Moon ---->> device.pretty_print :", device:pretty_print())
 
-if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-log.info("<<---- Moon ---->> is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
-return true
-end
-end
+    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      log.info("<<---- Moon ---->> is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+      return true
+    end
+  end
 
-log.info("<<---- Moon ---->> is_multi_switch : false")
-return false
+  log.info("<<---- Moon ---->> is_multi_switch : false")
+  return false
 end
 
 local multi_switch = {
-NAME = "mutil switch",
-capability_handlers = {
-[capabilities.switch.ID] = {
-[capabilities.switch.commands.on.NAME] = on_off_handler,
-[capabilities.switch.commands.off.NAME] = on_off_handler,
-},
-},
-zigbee_handlers = {
-attr = {
-[zcl_clusters.OnOff.ID] = {
-[zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
-}
-}
-},
-lifecycle_handlers = {
-init = device_init,
-added = device_added,
-driverSwitched = device_driver_switched,
-infoChanged = device_info_changed,
-doConfigure = configure_device
-},
-can_handle = is_multi_switch,
+  NAME = "mutil switch",
+  capability_handlers = {
+    [capabilities.switch.ID] = {
+      [capabilities.switch.commands.on.NAME] = on_off_handler,
+      [capabilities.switch.commands.off.NAME] = on_off_handler,
+    },
+  },
+  zigbee_handlers = {
+    attr = {
+      [zcl_clusters.OnOff.ID] = {
+        [zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
+      }
+    }
+  },
+  lifecycle_handlers = {
+    init = device_init,
+    added = device_added,
+    driverSwitched = device_driver_switched,
+    infoChanged = device_info_changed,
+    doConfigure = configure_device
+  },
+  can_handle = is_multi_switch,
 }
 
 return multi_switch

@@ -64,26 +64,44 @@ local device_info_changed = function(driver, device, event, args)
   end
 end
 
+local do_configure = function(self, device)
+  device:configure()
+  device:send(device_management.build_bind_request(device, 0x0003, device.driver.environment_info.hub_zigbee_eui))
+  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+end
+
 local zigbee_sonoff_button_driver_template = {
   supported_capabilities = {
     capabilities.button,
     capabilities.battery,
     capabilities.refresh
   },
-  --zigbee_handlers = {
-  --  cluster = {
-  --    -- No Attr Data from zb_rx, so it should use cluster handler
-  --    [zcl_clusters.OnOff.ID] = {
-  --      -- ZCLCommandId
-  --      [0xFD] = button_handler
-  --    }
-  --  },
-  --},
+
+  --inClusters: "0000, 0001, 0003", outClusters: "0003, 0006
+  --https://github.com/pablopoo/smartthings/blob/master/Sonoff-Zigbee-Button.groovy
+  zigbee_handlers = {
+    attr = {
+      [zcl_clusters.OnOff.ID] = {
+        [zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
+      }
+    },
+    cluster = {
+      -- No Attr Data from zb_rx, so it should use cluster handler
+      [0x0003] = {
+        -- ZCLCommandId
+        [0x00] = button_handler
+      }
+    },
+  },
   lifecycle_handlers = {
     added = device_added,
     infoChanged = device_info_changed,
+    doConfigure = do_configure,
   }
 }
+
+local attr_handler = function(driver, device, OnOff, zb_rx)
+end
 
 defaults.register_for_default_handlers(zigbee_sonoff_button_driver_template, zigbee_sonoff_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-sonoff-button", zigbee_sonoff_button_driver_template)
