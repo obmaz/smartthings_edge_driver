@@ -4,7 +4,7 @@ The general zigbee switch might work
 
 ## Device UI Screen
 ![ui](./readme_images/app1.jpg)
-![ui](./readme_images/app12.jpg)
+![ui](./readme_images/app2.jpg)
 
 ## Support Device
 See fingerprint.yml in src
