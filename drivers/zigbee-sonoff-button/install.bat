@@ -18,7 +18,7 @@
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
 @REM packageKey: 'zigbee-sonoff-button'
-set driverId=
+set driverId=62bd9121-0ed3-4724-838f-cfa8a4d5a9a5
 set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
 set hub_address=192.168.0.119

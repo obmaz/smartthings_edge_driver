@@ -1,7 +1,7 @@
 zigbeeManufacturer:
   # 1 Button
   - id: LUMI/lumi.sensor_switch.aq3
-    deviceLabel: aqara 1 Button
+    deviceLabel: Aqara 1 Button
     manufacturer: LUMI # Main Test Device
     model: lumi.sensor_switch.aq3
-    deviceProfileName: zigbee-sonoff-button-1
+    deviceProfileName: zigbee-aqara-button-1
