@@ -60,7 +60,7 @@ local device_info_changed = function(driver, device, event, args)
   -- workaround : edge driver bug..sometime device lost own supported button
   for key, value in pairs(device.profile.components) do
     log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+    --device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
   end
 end
 
@@ -90,6 +90,14 @@ local zigbee_sonoff_button_driver_template = {
     cluster = {
       -- No Attr Data from zb_rx, so it should use cluster handler
       [0x0003] = {
+        -- ZCLCommandId
+        [0x00] = button_handler
+      },
+      [0x0006] = {
+        -- ZCLCommandId
+        [0x00] = button_handler
+      },
+      [0x0001] = {
         -- ZCLCommandId
         [0x00] = button_handler
       }
