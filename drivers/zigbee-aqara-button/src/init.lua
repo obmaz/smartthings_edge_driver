@@ -20,10 +20,12 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 function button_handler (driver, device, value, zb_rx)
   log.info("<<---- Moon ---->> button_handler", value.value)
+  log.info("<<---- Moon ---->> button_handler2", string.byte(value.value))
+
   --local ep = value.value
   local component_id = "button1" --string.format("button%d", ep)cd
 
-  -- 01: click, 01: double click, 02: hold_release
+  -- 01: click, 01: double click, 16: hold, 17: release
   --local clickType = string.byte(value.value)
   --if clickType == 1 then
   --  local ev = capabilities.button.button.pushed()
