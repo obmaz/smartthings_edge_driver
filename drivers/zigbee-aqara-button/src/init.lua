@@ -73,9 +73,9 @@ local zigbee_aqara_button_driver_template = {
   zigbee_handlers = {
     cluster = {
       -- No Attr Data from zb_rx, so it should use cluster handler
-      [zcl_clusters.OnOff.ID] = {
+      [0x0012] = {
         -- ZCLCommandId
-        [0xFD] = button_handler
+        [0x0A] = button_handler
       }
     },
   },
@@ -88,3 +88,12 @@ local zigbee_aqara_button_driver_template = {
 defaults.register_for_default_handlers(zigbee_aqara_button_driver_template, zigbee_aqara_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-aqara-button", zigbee_aqara_button_driver_template)
 zigbee_driver:run()
+
+--<ZigbeeDevice: a79443c8-626b-4577-ada6-1d93a63f030f [0x1A4C] (Aqara 1 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x1A4C,
+--src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: 0x0012 >, lqi: 0xFF, rssi: -69, body_length: 0x0008, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x18, seqno: 0x00, ZCLCommandId: 0x0A >, < Repor
+--tAttribute || < AttributeRecord || AttributeId: 0x0055, DataType: Uint16, Uint16: 0x0001 > > > >
+
+--tuya
+--<ZigbeeDevice: b3c58875-f796-46d6-b40e-2fd2c45c3e71 [0xE0EA] (Zigbee Tuya 3 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x
+--E0EA, src_endpoint: 0x02, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -61, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x53, ZCLCommandId: 0xFD >, Gen
+--ericBody:  00 > >
