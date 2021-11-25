@@ -1,6 +1,6 @@
-#smartthings presentation:device-config:create --yaml --input zigbee-tuya-switch-3-presentation.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-3-presentation.yaml
 mnmn: SmartThingsCommunity
-vid: bc787364-1e72-3008-a815-af60d25cf1dd
+vid: 329f0bbe-8564-3a7e-b102-d691ed51f8e2
 version: 0.0.1
 type: profile
 dashboard:
@@ -21,59 +21,90 @@ detailView:
   - component: main
     capability: battery
     version: 1
-    values: []
-    patch: []
   - component: button1
     capability: button
     version: 1
-    values: []
-    patch: []
+    values:
+      - key: button.value
+        enabledValues:
+          - pushed
+          - double
+          - held
   - component: button2
     capability: button
     version: 1
-    values: []
-    patch: []
+    values:
+      - key: button.value
+        enabledValues:
+          - pushed
+          - double
+          - held
   - component: button3
     capability: button
     version: 1
-    values: []
-    patch: []
+    values:
+      - key: button.value
+        enabledValues:
+          - pushed
+          - double
+          - held
 automation:
   conditions:
     - component: button1
       capability: button
       version: 1
-      values: []
-      patch: []
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
     - component: button2
       capability: button
       version: 1
-      values: []
-      patch: []
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
       exclusion: []
     - component: button3
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
   actions:
     - component: button1
       capability: button
       version: 1
-      values: []
-      patch: []
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
     - component: button2
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
     - component: button3
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
-presentationId: bc787364-1e72-3008-a815-af60d25cf1dd
+      values:
+        - key: button.value
+          enabledValues:
+            - pushed
+            - double
+            - held
+presentationId: 329f0bbe-8564-3a7e-b102-d691ed51f8e2
 manufacturerName: SmartThingsCommunity

@@ -51,17 +51,17 @@ local device_added = function(driver, device)
 
   for key, value in pairs(device.profile.components) do
     log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+    --device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
     device.profile.components[key]:emit_event(capabilities.button.button.pushed())
   end
 end
 
 local device_info_changed = function(driver, device, event, args)
   -- workaround : edge driver bug..sometime device lost own supported button
-  for key, value in pairs(device.profile.components) do
-    log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-  end
+  --for key, value in pairs(device.profile.components) do
+  --  log.info("<<---- Moon ---->> device_added - component : ", key)
+  --  device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+  --end
 end
 
 local do_configure = function(self, device)
