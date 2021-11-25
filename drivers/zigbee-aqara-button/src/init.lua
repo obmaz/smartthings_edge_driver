@@ -20,31 +20,34 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 function button_handler (driver, device, value, zb_rx)
   log.info("<<---- Moon ---->> button_handler", value.value)
-  log.info("<<---- Moon ---->> button_handler2", string.byte(value.value))
-
-  --local ep = value.value
   local component_id = "button1" --string.format("button%d", ep)cd
 
-  -- 01: click, 01: double click, 16: hold, 17: release
-  --local clickType = string.byte(value.value)
-  --if clickType == 1 then
-  --  local ev = capabilities.button.button.pushed()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
-  --end
+  -- 01: click, 02: double click, 16: hold (down_hold), 17: hold_release (up_hold)
+  --local clickType = value.value
+  if clickType == 1 then
+    local ev = capabilities.button.button.pushed()
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
   log.info("<<---- Moon ---->> button_handler 12uvgy")
 
-  --if clickType == 11 then
-  --  local ev = capabilities.button.button.double()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
-  --end
-  --
-  --if clickType == 12 then
-  --  local ev = capabilities.button.button.held()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
-  --end
+  if clickType == 2 then
+    local ev = capabilities.button.button.double()
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
+
+  if clickType == 16 then
+    local ev = capabilities.button.button.down_hold()
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
+
+  if clickType == 17 then
+    local ev = capabilities.button.button.up_hold()
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
 end
 
 local device_added = function(driver, device)
@@ -52,7 +55,7 @@ local device_added = function(driver, device)
 
   for key, value in pairs(device.profile.components) do
     log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "down_hold", "up_hold" }))
     device.profile.components[key]:emit_event(capabilities.button.button.pushed())
   end
 end
@@ -61,7 +64,7 @@ local device_info_changed = function(driver, device, event, args)
   -- workaround : edge driver bug..sometime device lost own supported button
   for key, value in pairs(device.profile.components) do
     log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
+    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "down_hold", "up_hold" }))
   end
 end
 

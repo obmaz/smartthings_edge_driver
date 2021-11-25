@@ -25,7 +25,7 @@ function button_handler (driver, device, zb_rx)
   -- ToDo: Check logic when end_point is not 0x01
   local component_id = string.format("button%d", ep)
 
-  -- 00: click, 01: double click, 02: hold_release
+  -- 00: click, 01: double click, 02: held
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
   if clickType == 0 then
     local ev = capabilities.button.button.pushed()
