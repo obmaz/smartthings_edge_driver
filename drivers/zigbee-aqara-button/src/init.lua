@@ -18,32 +18,31 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function button_handler (driver, device, zb_rx)
-  log.info("<<---- Moon ---->> button_handler")
+function button_handler (driver, device, value, zb_rx)
+  log.info("<<---- Moon ---->> button_handler", value.value)
+  --local ep = value.value
+  local component_id = "button1" --string.format("button%d", ep)cd
 
-  local ep = zb_rx.address_header.src_endpoint.value
-  -- ToDo: Check logic when end_point is not 0x01
-  local component_id = string.format("button%d", ep)
+  -- 01: click, 01: double click, 02: hold_release
+  --local clickType = string.byte(value.value)
+  --if clickType == 1 then
+  --  local ev = capabilities.button.button.pushed()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
+  log.info("<<---- Moon ---->> button_handler 12uvgy")
 
-  -- 00: click, 01: double click, 02: hold_release
-  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
-  if clickType == 0 then
-    local ev = capabilities.button.button.pushed()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
-
-  if clickType == 1 then
-    local ev = capabilities.button.button.double()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
-
-  if clickType == 2 then
-    local ev = capabilities.button.button.held()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
+  --if clickType == 11 then
+  --  local ev = capabilities.button.button.double()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
+  --
+  --if clickType == 12 then
+  --  local ev = capabilities.button.button.held()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
 end
 
 local device_added = function(driver, device)
@@ -71,12 +70,10 @@ local zigbee_aqara_button_driver_template = {
     capabilities.refresh
   },
   zigbee_handlers = {
-    cluster = {
-      -- No Attr Data from zb_rx, so it should use cluster handler
+    attr = {
       [0x0012] = {
-        -- ZCLCommandId
-        [0x0A] = button_handler
-      }
+        [0x0055] = button_handler
+      },
     },
   },
   lifecycle_handlers = {
@@ -84,10 +81,11 @@ local zigbee_aqara_button_driver_template = {
     infoChanged = device_info_changed,
   }
 }
-
 defaults.register_for_default_handlers(zigbee_aqara_button_driver_template, zigbee_aqara_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-aqara-button", zigbee_aqara_button_driver_template)
 zigbee_driver:run()
+
+-- 01 0104 5F01 01 04 0000 0012 0006 0001 01 0000
 
 --<ZigbeeDevice: a79443c8-626b-4577-ada6-1d93a63f030f [0x1A4C] (Aqara 1 Button)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x1A4C,
 --src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: 0x0012 >, lqi: 0xFF, rssi: -69, body_length: 0x0008, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x18, seqno: 0x00, ZCLCommandId: 0x0A >, < Repor

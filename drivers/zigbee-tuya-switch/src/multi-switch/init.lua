@@ -68,39 +68,27 @@ local on_off_handler = function(driver, device, command)
   -- Due to legacy profile and automation, remapSwitchTbl structure cannot be changed
   if command.component == "main" and get_remap_switch(device) == "all" then
     send_multi_switch(device, true, true, true, ev, on_off)
-    return
-  end
-
-  if command.component == "main" and get_remap_switch(device) == "switchA" then
+  elseif command.component == "main" and get_remap_switch(device) == "switchA" then
     send_multi_switch(device, true, true, false, ev, on_off)
-    return
-  end
-
-  if command.component == "main" and get_remap_switch(device) == "switchB" then
+  elseif command.component == "main" and get_remap_switch(device) == "switchB" then
     send_multi_switch(device, true, false, true, ev, on_off)
-    return
-  end
-
-  if command.component == "main" and get_remap_switch(device) == "switchC" then
+  elseif command.component == "main" and get_remap_switch(device) == "switchC" then
     send_multi_switch(device, false, true, true, ev, on_off)
-    return
+  else
+    if command.component == "main" or command.component == get_remap_switch(device) then
+      device.profile.components["main"]:emit_event(ev)
+      command.component = get_remap_switch(device)
+    end
+
+    -- Note : The logic is the same, but it uses endpoint.
+    --local endpoint = device:get_endpoint_for_component_id(command.component)
+    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
+    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+
+    device.profile.components[command.component]:emit_event(ev)
+    device:send_to_component(command.component, on_off)
+    --device.profile.components[command.component]:send(on_off)) -- 가능?
   end
-
-  --else
-  if command.component == "main" or command.component == get_remap_switch(device) then
-    device.profile.components["main"]:emit_event(ev)
-    command.component = get_remap_switch(device)
-  end
-
-  -- Note : The logic is the same, but it uses endpoint.
-  --local endpoint = device:get_endpoint_for_component_id(command.component)
-  --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-  --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
-
-  device.profile.components[command.component]:emit_event(ev)
-  device:send_to_component(command.component, on_off)
-  --device.profile.components[command.component]:send(on_off)) -- 가능?
-  --end
 end
 
 -- when receive zb_rx from device

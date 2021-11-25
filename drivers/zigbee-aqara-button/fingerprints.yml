@@ -5,3 +5,8 @@ zigbeeManufacturer:
     manufacturer: LUMI # Main Test Device
     model: lumi.sensor_switch.aq3
     deviceProfileName: zigbee-aqara-button-1
+  - id: LUMI/lumi.sensor_swit
+    deviceLabel: Aqara 1 Button
+    manufacturer: LUMI # Main Test Device
+    model: lumi.sensor_swit
+    deviceProfileName: zigbee-aqara-button-1

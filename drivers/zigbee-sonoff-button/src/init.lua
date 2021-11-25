@@ -18,7 +18,7 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function button_handler (driver, device, zb_rx)
+function button_handler(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler")
 
   local ep = zb_rx.address_header.src_endpoint.value
@@ -83,7 +83,7 @@ local zigbee_sonoff_button_driver_template = {
   --https://github.com/pablopoo/smartthings/blob/master/Sonoff-Zigbee-Button.groovy
   zigbee_handlers = {
     attr = {
-      [zcl_clusters.OnOff.ID] = {
+      [0x0003] = {
         [zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
       }
     },
@@ -93,13 +93,13 @@ local zigbee_sonoff_button_driver_template = {
         -- ZCLCommandId
         [0x00] = button_handler
       },
-      [0x0006] = {
+      [0x0003] = {
         -- ZCLCommandId
         [0x00] = button_handler
       },
-      [0x0001] = {
+      [0x0003] = {
         -- ZCLCommandId
-        [0x00] = button_handler
+        [0x01] = button_handler
       }
     },
   },
@@ -110,7 +110,9 @@ local zigbee_sonoff_button_driver_template = {
   }
 }
 
-local attr_handler = function(driver, device, OnOff, zb_rx)
+function attr_handler(driver, device, value, zb_rx)
+  log.info("<<---- Moon ---->> attr_handler")
+
 end
 
 defaults.register_for_default_handlers(zigbee_sonoff_button_driver_template, zigbee_sonoff_button_driver_template.supported_capabilities)
