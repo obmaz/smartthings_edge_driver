@@ -61,6 +61,14 @@ local do_configure = function(self, device)
   device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
+--local device_info_changed = function(driver, device, event, args)
+--  -- workaround : edge driver bug..sometime device lost own supported button
+--  --for key, value in pairs(device.profile.components) do
+--  --  log.info("<<---- Moon ---->> device_added - component : ", key)
+--  --  device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "down_hold", "up_hold", "pushed_6x" }))
+--  --end
+--end
+
 local zigbee_tuya_button_driver_template = {
   supported_capabilities = {
     capabilities.button,

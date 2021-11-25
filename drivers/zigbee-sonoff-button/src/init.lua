@@ -56,14 +56,6 @@ local device_added = function(driver, device)
   end
 end
 
-local device_info_changed = function(driver, device, event, args)
-  -- workaround : edge driver bug..sometime device lost own supported button
-  for key, value in pairs(device.profile.components) do
-    log.info("<<---- Moon ---->> device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-  end
-end
-
 local do_configure = function(self, device)
   device:configure()
   device:send(device_management.build_bind_request(device, 0x0003, device.driver.environment_info.hub_zigbee_eui))
@@ -105,7 +97,6 @@ local zigbee_sonoff_button_driver_template = {
   },
   lifecycle_handlers = {
     added = device_added,
-    infoChanged = device_info_changed,
     doConfigure = do_configure,
   }
 }
