@@ -4,7 +4,10 @@ Currently, it does NOT work.!!!!
 It is the SmartThings Edge Driver for zigbee sonoff button.  
 It supports 1 buttons.  
 
-## Device UI Screen
+## Device
+![device](./readme_images/device1.jpg)
+
+## App UI Screen
 ![ui](./readme_images/app1.jpg)
 
 ## Support Device

@@ -1,8 +1,10 @@
-# Edge Driver: Zigbee Aqara Button
-It is the SmartThings Edge Driver for zigbee Aqara button.  
-It supports 1 buttons.  
+# Edge Driver: Zigbee Aqara T1 mini Button (WXKG02LM)
+It is the SmartThings Edge Driver for Zigbee Aqara T1 mini Button. 
 
-## Device UI Screen
+## Device
+![device](./readme_images/device1.jpg)
+
+## App UI Screen
 ![ui](./readme_images/app1.jpg)
 
 ## Support Device
