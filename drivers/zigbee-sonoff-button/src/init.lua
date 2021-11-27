@@ -19,31 +19,31 @@ local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 function button_handler(driver, device, zb_rx)
-  log.info("<<---- Moon ---->> button_handler")
+  log.info("<<---- Moon ---->> button_handler", zb_rx)
 
-  local ep = zb_rx.address_header.src_endpoint.value
-  -- ToDo: Check logic when end_point is not 0x01
-  local component_id = string.format("button%d", ep)
-
-  -- 02: click, 01: double click, 00: hold_release
-  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
-  if clickType == 0 then
-    local ev = capabilities.button.button.pushed()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
-
-  if clickType == 1 then
-    local ev = capabilities.button.button.double()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
-
-  if clickType == 2 then
-    local ev = capabilities.button.button.held()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
+  --local ep = zb_rx.address_header.src_endpoint.value
+  ---- ToDo: Check logic when end_point is not 0x01
+  --local component_id = string.format("button%d", ep)
+  --
+  ---- 02: click, 01: double click, 00: hold_release
+  --local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
+  --if clickType == 0 then
+  --  local ev = capabilities.button.button.pushed()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
+  --
+  --if clickType == 1 then
+  --  local ev = capabilities.button.button.double()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
+  --
+  --if clickType == 2 then
+  --  local ev = capabilities.button.button.held()
+  --  ev.state_change = true
+  --  device.profile.components[component_id]:emit_event(ev)
+  --end
 end
 
 local device_added = function(driver, device)
@@ -58,7 +58,7 @@ end
 
 local do_configure = function(self, device)
   device:configure()
-  device:send(device_management.build_bind_request(device, 0x0003, device.driver.environment_info.hub_zigbee_eui))
+  device:send(device_management.build_bind_request(device, 0x02, device.driver.environment_info.hub_zigbee_eui))
   device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
@@ -74,24 +74,13 @@ local zigbee_sonoff_button_driver_template = {
   -- ep, profile,
   --https://github.com/pablopoo/smartthings/blob/master/Sonoff-Zigbee-Button.groovy
   zigbee_handlers = {
-    attr = {
-      [0x0003] = {
-        [zcl_clusters.OnOff.attributes.OnOff.ID] = attr_handler
-      }
-    },
     cluster = {
       -- No Attr Data from zb_rx, so it should use cluster handler
       [zcl_clusters.OnOff.ID] = {
         -- ZCLCommandId
-        [0x00] = button_handler
-      },
-      [0x0003] = {
-        -- ZCLCommandId
-        [0x00] = button_handler
-      },
-      [0x0003] = {
-        -- ZCLCommandId
-        [0x01] = button_handler
+        [0x00] = button_handler,
+        [0x01] = button_handler,
+        [0x02] = button_handler
       }
     },
   },
@@ -109,3 +98,22 @@ end
 defaults.register_for_default_handlers(zigbee_sonoff_button_driver_template, zigbee_sonoff_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-sonoff-button", zigbee_sonoff_button_driver_template)
 zigbee_driver:run()
+
+--    <ZigbeeDevice: f16b75ed-d764-4bfb-84d3-c466ec5e056f [0x6D99] (SONOFF SNZB-01)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x6D99,
+--src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -32, body_length: 0x0003, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x02, ZCLCommandId: 0x02 >, < Toggle
+--||  > > >
+
+--attr:
+--ZclClusterAttributeValueHandler: cluster: PowerConfiguration, attribute: BatteryVoltage
+--ZclClusterAttributeValueHandler: cluster: PowerConfiguration, attribute: BatteryPercentageRemaining
+--global:
+--cluster:
+--ZclClusterCommandHandler: cluster: OnOff, command: On
+--ZclClusterCommandHandler: cluster: OnOff, command: Toggle
+--ZclClusterCommandHandler: cluster: OnOff, command: Off
+
+
+-- tuya
+--    <ZigbeeDevice: b3c58875-f796-46d6-b40e-2fd2c45c3e71 [0xE0EA] (커튼 리모콘)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0xE0EA, src
+--_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -32, body_length: 0x0004, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x7D, ZCLCommandId: 0xFD >, GenericBody:
+--00 > >

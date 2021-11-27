@@ -18,7 +18,7 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function button_handler (driver, device, zb_rx)
+function button_handler(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler")
 
   local ep = zb_rx.address_header.src_endpoint.value
