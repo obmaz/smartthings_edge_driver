@@ -1,4 +1,4 @@
-#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-2-presentation.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-2-deviceConfig.yaml
 mnmn: SmartThingsCommunity
 vid: 4a68f156-37cd-35f0-926b-d1b7f092be12
 version: 0.0.1
