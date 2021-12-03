@@ -58,7 +58,7 @@ end
 --  -- workaround : edge driver bug..sometime device lost own supported button
 --  --for key, value in pairs(device.profile.components) do
 --  --  log.info("<<---- Moon ---->> device_added - component : ", key)
---  --  device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "down_hold", "up_hold", "pushed_6x" }))
+--  --  device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
 --  --end
 --end
 
