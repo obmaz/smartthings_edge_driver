@@ -24,26 +24,19 @@ function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   -- ToDo: Check logic when end_point is not 0x01
   local component_id = string.format("button%d", ep)
+  local ev
 
   -- 00: click, 01: double click, 02: held
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
   if clickType == 0 then
-    local ev = capabilities.button.button.pushed()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
+    ev = capabilities.button.button.pushed()
+  elseif clickType == 1 then
+    ev = capabilities.button.button.double()
+  elseif clickType == 2 then
+    ev = capabilities.button.button.held()
   end
-
-  if clickType == 1 then
-    local ev = capabilities.button.button.double()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
-
-  if clickType == 2 then
-    local ev = capabilities.button.button.held()
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
+  ev.state_change = true
+  device.profile.components[component_id]:emit_event(ev)
 end
 
 local device_added = function(driver, device)

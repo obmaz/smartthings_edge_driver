@@ -18,32 +18,28 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function button_handler(driver, device, zb_rx)
-  log.info("<<---- Moon ---->> button_handler", zb_rx)
+--function button_handler(driver, device, zb_rx)
+--end
+function button_handler (driver, device, value, zb_rx)
+  log.info("<<---- Moon ---->> button_handler", value.value)
+  local component_id = "button1"
+  local ev
 
-  --local ep = zb_rx.address_header.src_endpoint.value
-  ---- ToDo: Check logic when end_point is not 0x01
-  --local component_id = string.format("button%d", ep)
-  --
-  ---- 02: click, 01: double click, 00: hold_release
-  --local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
-  --if clickType == 0 then
-  --  local ev = capabilities.button.button.pushed()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
-  --end
-  --
+  ---- 01: click, 02: double click, 16: hold (down_hold), 17: hold_release (up_hold), 18: shake => pushed_6x
+  --local clickType = value.value
   --if clickType == 1 then
-  --  local ev = capabilities.button.button.double()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
+  --  ev = capabilities.button.button.pushed()
+  --elseif clickType == 2 then
+  --  ev = capabilities.button.button.double()
+  --elseif clickType == 16 then
+  --  ev = capabilities.button.button.down_hold()
+  --elseif clickType == 17 then
+  --  ev = capabilities.button.button.up_hold()
+  --elseif clickType == 18 then
+  --  ev = capabilities.button.button.pushed_6x()
   --end
-  --
-  --if clickType == 2 then
-  --  local ev = capabilities.button.button.held()
-  --  ev.state_change = true
-  --  device.profile.components[component_id]:emit_event(ev)
-  --end
+  --ev.state_change = true
+  --device.profile.components[component_id]:emit_event(ev)
 end
 
 local device_added = function(driver, device)
