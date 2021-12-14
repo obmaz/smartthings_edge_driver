@@ -52,8 +52,8 @@ end
 
 local do_configure = function(self, device)
   device:configure()
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
+
 local zigbee_aqara_button_driver_template = {
   supported_capabilities = {
     capabilities.button,

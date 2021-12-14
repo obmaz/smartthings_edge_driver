@@ -55,7 +55,6 @@ end
 local do_configure = function(self, device)
   device:configure()
   device:send(device_management.build_bind_request(device, 0x02, device.driver.environment_info.hub_zigbee_eui))
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
 end
 
 local zigbee_sonoff_button_driver_template = {
