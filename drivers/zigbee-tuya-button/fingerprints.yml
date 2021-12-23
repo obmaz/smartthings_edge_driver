@@ -7,13 +7,8 @@ zigbeeManufacturer:
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_ee8nrt2l/TS0044
     deviceLabel: Zigbee Tuya 4 Button
-    manufacturer: _TZ3000_ee8nrt2l # Not Tested
+    manufacturer: _TZ3000_ee8nrt2l
     model: TS0044
-    deviceProfileName: zigbee-tuya-button-4
-  - id: _TZ3000_xabckq1v/TS004F
-    deviceLabel: Zigbee Tuya 4 Button
-    manufacturer: _TZ3000_xabckq1v
-    model: TS004F
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_vp6clf9d/TS0044
     deviceLabel: Zemismart 4 Button
