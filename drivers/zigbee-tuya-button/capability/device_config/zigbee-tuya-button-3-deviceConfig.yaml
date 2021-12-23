@@ -1,8 +1,9 @@
-#smartthings presentation:device-config:create --yaml --input zigbee-tuya-switch-3-deviceConfig.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-3-deviceConfig.yaml
 mnmn: SmartThingsCommunity
 vid: bc787364-1e72-3008-a815-af60d25cf1dd
 version: 0.0.1
 type: profile
+iconUrl: null
 dashboard:
   states:
     - component: main
@@ -11,6 +12,7 @@ dashboard:
       idx: 0
       group: main
       values: []
+      composite: false
   actions:
     - component: button1
       capability: button
@@ -23,10 +25,6 @@ detailView:
     version: 1
     values: []
     patch: []
-#    patch:
-#      - op: replace
-#        path: "/0/list/supportedValues"
-#        value: supportedButtonValues.value
   - component: button1
     capability: button
     version: 1
@@ -49,6 +47,7 @@ automation:
       version: 1
       values: []
       patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1
@@ -67,6 +66,7 @@ automation:
       version: 1
       values: []
       patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1

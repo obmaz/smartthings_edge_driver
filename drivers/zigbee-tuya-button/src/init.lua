@@ -26,15 +26,13 @@ function button_handler2(driver, device, zb_rx)
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(6))
   local component_id = "button1"
 
-  ev = capabilities.button.button.pushed()
-  ev.state_change = true
-  device.profile.components[component_id]:emit_event(ev)
-
-  ev = capabilities.button.button.double()
-  ev.state_change = true
-  device.profile.components[component_id]:emit_event(ev)
-
-  ev = capabilities.button.button.held()
+  if clickType == 0 then
+    ev = capabilities.button.button.pushed()
+  elseif clickType == 1 then
+    ev = capabilities.button.button.double()
+  elseif clickType == 2 then
+    ev = capabilities.button.button.held()
+  end
   ev.state_change = true
   device.profile.components[component_id]:emit_event(ev)
 end

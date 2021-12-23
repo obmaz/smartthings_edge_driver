@@ -1,0 +1,34 @@
+name: zigbee-tuya-button-6
+components:
+  - id: main
+    capabilities:
+      - id: battery
+        version: 1
+  - id: button1
+    capabilities:
+      - id: button
+        version: 1
+  - id: button2
+    capabilities:
+      - id: button
+        version: 1
+  - id: button3
+    capabilities:
+      - id: button
+        version: 1
+  - id: button4
+    capabilities:
+      - id: button
+        version: 1
+  - id: button5
+    capabilities:
+      - id: button
+        version: 1
+  - id: button6
+    capabilities:
+      - id: button
+        version: 1
+metadata:
+  mnmn: SmartThingsCommunity
+  ocfDeviceType: x.com.st.d.remotecontroller
+  vid: 6cb8cd15-f7bf-32d8-9d37-f6eedce4c0eb

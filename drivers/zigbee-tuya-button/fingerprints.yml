@@ -84,7 +84,7 @@ zigbeeManufacturer:
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
   - id: TS0601/_TZE200_zqtiam4u
-    deviceLabel: EF00, TS0601 4 Button Test
+    deviceLabel: Zemismart 6 Button (EF00, TS0601)
     manufacturer:  _TZE200_zqtiam4u
     model: TS0601
-    deviceProfileName: zigbee-tuya-button-4
+    deviceProfileName: zigbee-tuya-button-6

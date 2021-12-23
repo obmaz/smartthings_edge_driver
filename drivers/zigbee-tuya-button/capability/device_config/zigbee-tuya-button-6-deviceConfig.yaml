@@ -1,0 +1,134 @@
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-6-deviceConfig.yaml
+mnmn: SmartThingsCommunity
+vid: 6cb8cd15-f7bf-32d8-9d37-f6eedce4c0eb
+version: 0.0.1
+type: profile
+iconUrl: null
+dashboard:
+  states:
+    - component: main
+      capability: battery
+      version: 1
+      idx: 0
+      group: main
+      values: [ ]
+      composite: false
+  actions:
+    - component: button1
+      capability: button
+      version: 1
+      idx: 0
+      group: main
+detailView:
+  - component: main
+    capability: battery
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button1
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button2
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button3
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button4
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button5
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: button6
+    capability: button
+    version: 1
+    values: [ ]
+    patch: [ ]
+automation:
+  conditions:
+    - component: button1
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button3
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 5
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 6
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+  actions:
+    - component: button1
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button2
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button3
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button4
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button5
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: button6
+      capability: button
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+presentationId: 6cb8cd15-f7bf-32d8-9d37-f6eedce4c0eb
+manufacturerName: SmartThingsCommunity

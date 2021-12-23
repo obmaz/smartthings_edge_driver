@@ -3,6 +3,7 @@ mnmn: SmartThingsCommunity
 vid: 4a68f156-37cd-35f0-926b-d1b7f092be12
 version: 0.0.1
 type: profile
+iconUrl: null
 dashboard:
   states:
     - component: main
@@ -10,53 +11,56 @@ dashboard:
       version: 1
       idx: 0
       group: main
-      values: [ ]
+      values: []
+      composite: false
   actions:
     - component: button1
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
+      idx: 0
+      group: main
 detailView:
   - component: main
     capability: battery
     version: 1
-    values: [ ]
-    patch: [ ]
+    values: []
+    patch: []
   - component: button1
     capability: button
     version: 1
-    values: [ ]
-    patch: [ ]
+    values: []
+    patch: []
   - component: button2
     capability: button
     version: 1
-    values: [ ]
-    patch: [ ]
+    values: []
+    patch: []
 automation:
   conditions:
     - component: button1
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
+      values: []
+      patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
+      values: []
+      patch: []
+      exclusion: []
   actions:
     - component: button1
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
+      values: []
+      patch: []
+      exclusion: []
     - component: button2
       capability: button
       version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
+      values: []
+      patch: []
+      exclusion: []
 presentationId: 4a68f156-37cd-35f0-926b-d1b7f092be12
 manufacturerName: SmartThingsCommunity
