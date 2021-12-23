@@ -9,7 +9,7 @@ It supports 1,2,3 and 4 buttons.
 ![ui](./readme_images/app1.jpg)
 
 ## Support Device
-See [fingerprint.yml](./fingerprint.yml)
+See [fingerprints.yml](./fingerprints.yml)
 
 ## License
 It is released under the Apache 2.0 License.
