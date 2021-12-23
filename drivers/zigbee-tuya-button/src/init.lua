@@ -18,6 +18,27 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
+function button_handler2(driver, device, zb_rx)
+  --def buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
+  -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
+
+  -- 00: click, 01: double click, 02: held
+  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(6))
+  local component_id = "button1"
+
+  ev = capabilities.button.button.pushed()
+  ev.state_change = true
+  device.profile.components[component_id]:emit_event(ev)
+
+  ev = capabilities.button.button.double()
+  ev.state_change = true
+  device.profile.components[component_id]:emit_event(ev)
+
+  ev = capabilities.button.button.held()
+  ev.state_change = true
+  device.profile.components[component_id]:emit_event(ev)
+end
+
 function button_handler(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler")
 
@@ -66,7 +87,11 @@ local zigbee_tuya_button_driver_template = {
       -- No Attr Data from zb_rx, so it should use cluster handler
       [zcl_clusters.OnOff.ID] = {
         -- ZCLCommandId
-        [0xFD] = button_handler
+        [0xFD] = button_handler,
+      },
+      [0xEF00] = {
+        -- ZCLCommandId
+        [0x01] = button_handler2
       }
     },
   },
