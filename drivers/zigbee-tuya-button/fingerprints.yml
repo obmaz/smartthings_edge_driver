@@ -78,8 +78,13 @@ zigbeeManufacturer:
     manufacturer: _TZ3400_keyjqthh
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
-  - id: zigbee-tuya-button-1-2
+  - id: _TZ3400_tk3s5tyg/TS0041
     deviceLabel: Zigbee Tuya 1 Button
     manufacturer: _TZ3400_tk3s5tyg
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
+  - id: TS0601/_TZE200_zqtiam4u
+    deviceLabel: EF00, TS0601 4 Button Test
+    manufacturer:  _TZE200_zqtiam4u
+    model: TS0601
+    deviceProfileName: zigbee-tuya-button-4
