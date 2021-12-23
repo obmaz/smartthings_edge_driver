@@ -5,7 +5,12 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_ufhtxr59 # Main Test Device
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
-  - id: _TZ3000_xabckq1v/TS0044
+  - id: _TZ3000_ee8nrt2l/TS0044
+    deviceLabel: Zigbee Tuya 4 Button
+    manufacturer: _TZ3000_ee8nrt2l # Not Tested
+    model: TS0044
+    deviceProfileName: zigbee-tuya-button-4
+  - id: _TZ3000_xabckq1v/TS004F
     deviceLabel: Zigbee Tuya 4 Button
     manufacturer: _TZ3000_xabckq1v
     model: TS004F
