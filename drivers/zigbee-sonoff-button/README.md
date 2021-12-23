@@ -11,7 +11,7 @@ It supports 1 buttons.
 ![ui](./readme_images/app1.jpg)
 
 ## Support Device
-See fingerprint.yml in src
+See [fingerprints.yml](./fingerprints.yml)
 
 ## License
 It is released under the Apache 2.0 License.

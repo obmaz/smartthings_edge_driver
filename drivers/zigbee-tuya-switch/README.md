@@ -10,7 +10,7 @@ The general zigbee switch might work
 ![ui](./readme_images/app2.jpg)
 
 ## Support Device
-See fingerprint.yml in src
+See [fingerprints.yml](./fingerprints.yml)
 
 ## License
 It is released under the Apache 2.0 License.
