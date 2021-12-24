@@ -19,11 +19,13 @@ local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 function button_handler2(driver, device, zb_rx)
-  --def buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
+  -- DTH
+  -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
   -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
+  -- Note: groovy array start 0, lua byte start 1
 
   -- 00: click, 01: double click, 02: held
-  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(6))
+  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(7))
   local component_id = "button1"
 
   if clickType == 0 then
@@ -38,14 +40,13 @@ function button_handler2(driver, device, zb_rx)
 end
 
 function button_handler(driver, device, zb_rx)
-  log.info("<<---- Moon ---->> button_handler")
-
   local ep = zb_rx.address_header.src_endpoint.value
   -- ToDo: Check logic when end_point is not 0x01
   local component_id = string.format("button%d", ep)
   local ev
 
   -- 00: click, 01: double click, 02: held
+  -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)"
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
   if clickType == 0 then
     ev = capabilities.button.button.pushed()
