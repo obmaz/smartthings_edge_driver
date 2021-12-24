@@ -6,8 +6,8 @@ zigbeeManufacturer:
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_ee8nrt2l/TS0044
-    deviceLabel: Zigbee Tuya 4 Button
-    manufacturer: _TZ3000_ee8nrt2l
+    deviceLabel: LoraTap Zigbee 4 Button
+    manufacturer: _TZ3000_ee8nrt2l # Tested
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_vp6clf9d/TS0044
