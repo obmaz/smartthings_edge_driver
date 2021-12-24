@@ -18,6 +18,10 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
+local function get_ep_offset(device)
+  return device.fingerprinted_endpoint_id - 1
+end
+
 function button_handler2(driver, device, zb_rx)
   -- DTH
   -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
@@ -41,7 +45,9 @@ end
 
 function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
-  -- ToDo: Check logic when end_point is not 0x01
+  log.info("<<---- Moon ---->> button_handler", ep)
+
+  ep = ep - get_ep_offset(device)
   local component_id = string.format("button%d", ep)
   local ev
 
