@@ -26,11 +26,12 @@ function button_handler2(driver, device, zb_rx)
   -- DTH
   -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
   -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
-  -- Note: groovy array start 0, lua byte start 1
+  -- Note: Groovy Array start 0, Lua Index start 1
 
   -- 00: click, 01: double click, 02: held
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(7))
   local component_id = "button1"
+  local ev
 
   if clickType == 0 then
     ev = capabilities.button.button.pushed()
