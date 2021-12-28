@@ -20,8 +20,8 @@ local zcl_clusters = require "st.zigbee.zcl.clusters"
 
 --function button_handler(driver, device, zb_rx)
 --end
-function button_handler (driver, device, value, zb_rx)
-  log.info("<<---- Moon ---->> button_handler", value.value)
+function button_handler (driver, device, zb_rx)
+  log.info("<<---- Moon ---->> button_handler", zb_rx)
   local component_id = "button1"
   local ev
 
