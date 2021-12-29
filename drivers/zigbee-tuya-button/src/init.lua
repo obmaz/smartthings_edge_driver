@@ -22,9 +22,9 @@ local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
 
-function button_handler2(driver, device, zb_rx)
+function EF00_handler(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
-
+  -- https://drive.google.com/file/d/1WaoM80xPi2TMsf-Z-itKLr2p7VKFZ5xh/view
   -- maybe battery...
   -- to do: battery handling
   if zb_rx.body.zcl_body.body_bytes:byte(3) == 10 then
@@ -115,7 +115,7 @@ local zigbee_tuya_button_driver_template = {
       },
       [0xEF00] = {
         -- ZCLCommandId
-        [0x01] = button_handler2
+        [0x01] = EF00_handler
       }
     },
   },
