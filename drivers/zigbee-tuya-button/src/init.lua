@@ -23,16 +23,13 @@ local function get_ep_offset(device)
 end
 
 function button_handler2(driver, device, zb_rx)
-  -- Temp Log
   log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(1)", zb_rx.body.zcl_body.body_bytes:byte(1))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(2)", zb_rx.body.zcl_body.body_bytes:byte(2))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(3)", zb_rx.body.zcl_body.body_bytes:byte(3))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(4)", zb_rx.body.zcl_body.body_bytes:byte(4))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(5)", zb_rx.body.zcl_body.body_bytes:byte(5))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(6)", zb_rx.body.zcl_body.body_bytes:byte(6))
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(7)", zb_rx.body.zcl_body.body_bytes:byte(7))
 
+  -- maybe battery...
+  -- to do: battery handling
+  if zb_rx.body.zcl_body.body_bytes:byte(3) == 10 then
+    return
+  end
   -- DTH
   -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
   -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
@@ -68,7 +65,7 @@ function button_handler(driver, device, zb_rx)
   local ev
 
   -- 00: click, 01: double click, 02: held
-  -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)"
+  -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)" -- it will return decimal value
   local clickType = string.byte(zb_rx.body.zcl_body.body_bytes)
   if clickType == 0 then
     ev = capabilities.button.button.pushed()
