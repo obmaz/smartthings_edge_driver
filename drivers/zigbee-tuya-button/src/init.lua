@@ -23,21 +23,36 @@ local function get_ep_offset(device)
 end
 
 function button_handler2(driver, device, zb_rx)
+  -- Temp Log
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(1)", zb_rx.body.zcl_body.body_bytes:byte(1))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(2)", zb_rx.body.zcl_body.body_bytes:byte(2))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(3)", zb_rx.body.zcl_body.body_bytes:byte(3))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(4)", zb_rx.body.zcl_body.body_bytes:byte(4))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(5)", zb_rx.body.zcl_body.body_bytes:byte(5))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(6)", zb_rx.body.zcl_body.body_bytes:byte(6))
+  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes:byte(7)", zb_rx.body.zcl_body.body_bytes:byte(7))
+
   -- DTH
   -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
   -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
   -- Note: Groovy Array start 0, Lua Index start 1
 
-  -- 00: click, 01: double click, 02: held
-  local clickType = string.byte(zb_rx.body.zcl_body.body_bytes:byte(7))
-  local component_id = "button1"
-  local ev
+  local component_id = string.format("button%d", zb_rx.body.zcl_body.body_bytes:byte(3))
+  log.info("<<---- Moon ---->> button_handler component_id", component_id)
 
+  -- 00: click, 01: double click, 02: held
+  local clickType = zb_rx.body.zcl_body.body_bytes:byte(7)
+  local ev
+  log.info("<<---- Moon ---->> button_handler clickType", clickType)
   if clickType == 0 then
+    log.info("<<---- Moon ---->> button_handler clickType-0")
     ev = capabilities.button.button.pushed()
   elseif clickType == 1 then
+    log.info("<<---- Moon ---->> button_handler clickType-1")
     ev = capabilities.button.button.double()
   elseif clickType == 2 then
+    log.info("<<---- Moon ---->> button_handler clickType-2")
     ev = capabilities.button.button.held()
   end
   ev.state_change = true
@@ -48,8 +63,8 @@ function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler", ep)
 
-  ep = ep - get_ep_offset(device)
-  local component_id = string.format("button%d", ep)
+  local number = ep - get_ep_offset(device)
+  local component_id = string.format("button%d", number)
   local ev
 
   -- 00: click, 01: double click, 02: held
