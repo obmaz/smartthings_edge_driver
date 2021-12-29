@@ -36,8 +36,11 @@ function button_handler (driver, device, value, zb_rx)
   elseif clickType == 18 then
     ev = capabilities.button.button.pushed_6x()
   end
-  ev.state_change = true
-  device.profile.components[component_id]:emit_event(ev)
+
+  if ev ~= nil then
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
 end
 
 local device_added = function(driver, device)
