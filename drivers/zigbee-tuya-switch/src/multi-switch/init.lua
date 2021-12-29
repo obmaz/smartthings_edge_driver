@@ -96,8 +96,8 @@ local attr_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> attr_handler ep :", ep)
 
-  ep = ep - get_ep_offset(device)
-  local component_id = string.format("switch%d", ep)
+  local number = ep - get_ep_offset(device)
+  local component_id = string.format("switch%d", number)
   log.info("<<---- Moon ---->> attr_handler :", component_id)
 
   local clickType = OnOff.value
@@ -124,8 +124,8 @@ end
 -- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
   log.info("<<---- Moon ---->> endpoint_to_component - endpoint : ", ep)
-  ep = ep - get_ep_offset(device)
-  return string.format("switch%d", ep)
+  local number ep = ep - get_ep_offset(device)
+  return string.format("switch%d", number)
 end
 
 function syncMainComponent(device)
