@@ -24,19 +24,12 @@ end
 
 local refresh_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> refresh_handler")
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-  --Zigbee Tuya 2 Button thread encountered error: [string "st.dispatcher"]:229: Error encountered while processing event for <ZigbeeDevice: 1505117e-d370-46fc-ada4-1ac623dd5bdc
-  --[0xFFF7] (Zigbee Tuya 2 Button)>:
-  --arg1: table: 0x1485488
-
+  --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
   device:refresh()
 end
 
---function refresh_handler(driver, device, command)
---  log.info("<<---- Moon ---->> refresh_handler")
---end
-
-function button_handler(driver, device, zb_rx)
+local button_handler = function(driver, device, zb_rx)
+  --function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler", ep)
 
@@ -74,8 +67,8 @@ end
 local configure_device = function(self, device)
   log.info("<<---- Moon ---->> configure_device")
   device:configure()
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
+  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
 end
 
 local zigbee_tuya_button_driver_template = {
@@ -111,8 +104,11 @@ defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbe
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
 
-
 -- 기기의 버튼을 한번 누르면 배터리 상태 올라옴, refresh시 해당 부분 읽는 방법 필요
 --    <ZigbeeDevice: b3c58875-f796-46d6-b40e-2fd2c45c3e71 [0xE0EA] (커튼 리모콘)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0xE0EA, src
 --_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: PowerConfiguration >, lqi: 0xFF, rssi: -53, body_length: 0x0007, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x08, seqno: 0x17, ZCLCommandId: 0x0A >,
 --< ReportAttribute || < AttributeRecord || AttributeId: 0x0021, DataType: Uint8, BatteryPercentageRemaining: 0xAE > > > >
+
+--    <ZigbeeDevice: 1505117e-d370-46fc-ada4-1ac623dd5bdc [0xFFF7] (Zigbee Tuya 2 Button)> sending Zigbee message: < ZigbeeMessageTx || Uint16: 0x0000, < AddressHeader || src_addr:
+--0x0000, src_endpoint: 0x01, dest_addr: 0xFFF7, dest_endpoint: 0x01, profile: 0x0104, cluster: PowerConfiguration >, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x00, seqno: 0x00, ZCLCommandId: 0x00 >, < ReadAttribute || AttributeId
+--: 0x0021 > > >

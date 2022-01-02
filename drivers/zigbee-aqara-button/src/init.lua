@@ -18,7 +18,7 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-function button_handler (driver, device, value, zb_rx)
+local button_handler = function(driver, device, value, zb_rx)
   log.info("<<---- Moon ---->> button_handler", value.value)
   local component_id = "button1"
   local ev

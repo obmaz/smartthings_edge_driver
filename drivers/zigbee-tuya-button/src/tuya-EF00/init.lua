@@ -22,7 +22,7 @@ local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
 
-function button_handler_EF00(driver, device, zb_rx)
+local button_handler_EF00 = function(driver, device, zb_rx)
   log.info("<<---- Moon ---->> multi / button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
   -- https://drive.google.com/file/d/1WaoM80xPi2TMsf-Z-itKLr2p7VKFZ5xh/view
   -- maybe battery...
