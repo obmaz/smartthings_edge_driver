@@ -1,6 +1,6 @@
 #smartthings presentation:device-config:create --yaml --input zigbee-tuya-button-6-deviceConfig.yaml
 mnmn: SmartThingsCommunity
-vid: 6cb8cd15-f7bf-32d8-9d37-f6eedce4c0eb
+vid: 24bdb788-fc54-3650-a919-f2df44562bd0
 version: 0.0.1
 type: profile
 iconUrl: null
@@ -22,6 +22,11 @@ dashboard:
 detailView:
   - component: main
     capability: battery
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: main
+    capability: refresh
     version: 1
     values: [ ]
     patch: [ ]

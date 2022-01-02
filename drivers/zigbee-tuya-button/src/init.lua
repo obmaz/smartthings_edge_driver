@@ -22,42 +22,19 @@ local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
 
-function EF00_handler(driver, device, zb_rx)
-  log.info("<<---- Moon ---->> button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
-  -- https://drive.google.com/file/d/1WaoM80xPi2TMsf-Z-itKLr2p7VKFZ5xh/view
-  -- maybe battery...
-  -- to do: battery handling
-  if zb_rx.body.zcl_body.body_bytes:byte(3) == 10 then
-    return
-  end
-  -- DTH
-  -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
-  -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
-  -- Note: Groovy Array start 0, Lua Index start 1
+local refresh_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> refresh_handler")
+  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  --Zigbee Tuya 2 Button thread encountered error: [string "st.dispatcher"]:229: Error encountered while processing event for <ZigbeeDevice: 1505117e-d370-46fc-ada4-1ac623dd5bdc
+  --[0xFFF7] (Zigbee Tuya 2 Button)>:
+  --arg1: table: 0x1485488
 
-  local component_id = string.format("button%d", zb_rx.body.zcl_body.body_bytes:byte(3))
-  log.info("<<---- Moon ---->> button_handler component_id", component_id)
-
-  -- 00: click, 01: double click, 02: held
-  local clickType = zb_rx.body.zcl_body.body_bytes:byte(7)
-  local ev
-  log.info("<<---- Moon ---->> button_handler clickType", clickType)
-  if clickType == 0 then
-    log.info("<<---- Moon ---->> button_handler clickType-0")
-    ev = capabilities.button.button.pushed()
-  elseif clickType == 1 then
-    log.info("<<---- Moon ---->> button_handler clickType-1")
-    ev = capabilities.button.button.double()
-  elseif clickType == 2 then
-    log.info("<<---- Moon ---->> button_handler clickType-2")
-    ev = capabilities.button.button.held()
-  end
-
-  if ev ~= nil then
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
+  device:refresh()
 end
+
+--function refresh_handler(driver, device, command)
+--  log.info("<<---- Moon ---->> refresh_handler")
+--end
 
 function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
@@ -94,9 +71,10 @@ local device_added = function(driver, device)
   end
 end
 
-local do_configure = function(self, device)
+local configure_device = function(self, device)
+  log.info("<<---- Moon ---->> configure_device")
   device:configure()
-  --device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
   device:send(clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
 end
 
@@ -106,25 +84,35 @@ local zigbee_tuya_button_driver_template = {
     capabilities.battery,
     capabilities.refresh
   },
+  capability_handlers = {
+    [capabilities.refresh.ID] = {
+      [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
+    }
+  },
   zigbee_handlers = {
     cluster = {
       -- No Attr Data from zb_rx, so it should use cluster handler
       [zcl_clusters.OnOff.ID] = {
         -- ZCLCommandId
         [0xFD] = button_handler,
-      },
-      [0xEF00] = {
-        -- ZCLCommandId
-        [0x01] = EF00_handler
       }
     },
   },
   lifecycle_handlers = {
     added = device_added,
-    doConfigure = do_configure,
+    doConfigure = configure_device,
+  },
+  sub_drivers = {
+    require("tuya-EF00")
   }
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-tuya-button", zigbee_tuya_button_driver_template)
 zigbee_driver:run()
+
+
+-- 기기의 버튼을 한번 누르면 배터리 상태 올라옴, refresh시 해당 부분 읽는 방법 필요
+--    <ZigbeeDevice: b3c58875-f796-46d6-b40e-2fd2c45c3e71 [0xE0EA] (커튼 리모콘)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0xE0EA, src
+--_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: PowerConfiguration >, lqi: 0xFF, rssi: -53, body_length: 0x0007, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x08, seqno: 0x17, ZCLCommandId: 0x0A >,
+--< ReportAttribute || < AttributeRecord || AttributeId: 0x0021, DataType: Uint8, BatteryPercentageRemaining: 0xAE > > > >

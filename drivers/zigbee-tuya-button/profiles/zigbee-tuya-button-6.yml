@@ -4,6 +4,8 @@ components:
     capabilities:
       - id: battery
         version: 1
+      - id: refresh
+        version: 1
   - id: button1
     capabilities:
       - id: button
@@ -31,4 +33,4 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: x.com.st.d.remotecontroller
-  vid: 6cb8cd15-f7bf-32d8-9d37-f6eedce4c0eb
+  vid: 24bdb788-fc54-3650-a919-f2df44562bd0

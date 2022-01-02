@@ -53,7 +53,7 @@ local device_added = function(driver, device)
   end
 end
 
-local do_configure = function(self, device)
+local configure_device = function(self, device)
   device:configure()
 end
 
@@ -72,7 +72,7 @@ local zigbee_aqara_button_driver_template = {
   },
   lifecycle_handlers = {
     added = device_added,
-    doConfigure = do_configure,
+    doConfigure = configure_device,
   }
 }
 defaults.register_for_default_handlers(zigbee_aqara_button_driver_template, zigbee_aqara_button_driver_template.supported_capabilities)

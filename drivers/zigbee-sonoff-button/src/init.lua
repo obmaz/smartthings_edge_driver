@@ -54,7 +54,7 @@ local device_added = function(driver, device)
   end
 end
 
-local do_configure = function(self, device)
+local configure_device = function(self, device)
   device:configure()
   device:send(device_management.build_bind_request(device, 0x02, device.driver.environment_info.hub_zigbee_eui))
 end
@@ -83,7 +83,7 @@ local zigbee_sonoff_button_driver_template = {
   },
   lifecycle_handlers = {
     added = device_added,
-    doConfigure = do_configure,
+    doConfigure = configure_device,
   }
 }
 

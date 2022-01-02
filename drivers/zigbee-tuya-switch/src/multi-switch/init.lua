@@ -30,7 +30,7 @@ local function get_ep_offset(device)
 end
 
 local function get_remap_switch(device)
-  log.info("<<---- Moon ---->> remapSwitch")
+  log.info("<<---- Moon ---->> multi / remapSwitch")
   local remapSwitch = remapSwitchTbl[device.preferences.remapSwitch]
 
   if remapSwitch == nil then
@@ -60,8 +60,8 @@ local function send_multi_switch(device, s1, s2, s3, ev, on_off)
 end
 
 local on_off_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
+  log.info("<<---- Moon ---->> multi / on_off_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> multi / on_off_handler - command.command : ", command.command)
   local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
   local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
 
@@ -94,11 +94,11 @@ end
 -- when receive zb_rx from device
 local attr_handler = function(driver, device, OnOff, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
-  log.info("<<---- Moon ---->> attr_handler ep :", ep)
+  log.info("<<---- Moon ---->> multi / attr_handler ep :", ep)
 
   local number = ep - get_ep_offset(device)
   local component_id = string.format("switch%d", number)
-  log.info("<<---- Moon ---->> attr_handler :", component_id)
+  log.info("<<---- Moon ---->> multi / attr_handler :", component_id)
 
   local clickType = OnOff.value
   local ev = capabilities.switch.switch.off()
@@ -116,21 +116,21 @@ local attr_handler = function(driver, device, OnOff, zb_rx)
 end
 
 local component_to_endpoint = function(device, component_id)
-  log.info("<<---- Moon ---->> component_to_endpoint - component_id : ", component_id)
+  log.info("<<---- Moon ---->> multi / component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
   return ep + get_ep_offset(device)
 end
 
 -- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
-  log.info("<<---- Moon ---->> endpoint_to_component - endpoint : ", ep)
+  log.info("<<---- Moon ---->> multi / endpoint_to_component - endpoint : ", ep)
   local number ep = ep - get_ep_offset(device)
   return string.format("switch%d", number)
 end
 
 function syncMainComponent(device)
   local component_id = get_remap_switch(device)
-  log.info("<<---- Moon ---->> syncMainComponent : ", component_id)
+  log.info("<<---- Moon ---->> multi / syncMainComponent : ", component_id)
   local remapButtonStatus = device:get_latest_state(component_id, "switch", "switch", "off", nil)
   local switch1Status = device:get_latest_state("switch1", "switch", "switch", "off", nil)
   local switch2Status = device:get_latest_state("switch2", "switch", "switch", "off", nil)
@@ -170,16 +170,16 @@ function syncMainComponent(device)
 end
 
 local device_init = function(self, device)
-  log.info("<<---- Moon ---->> device_init")
+  log.info("<<---- Moon ---->> multi / device_init")
   device:set_component_to_endpoint_fn(component_to_endpoint)
   device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
 end
 
 local device_added = function(driver, device)
-  log.info("<<---- Moon ---->> device_added")
+  log.info("<<---- Moon ---->> multi / device_added")
   -- Workaround : Should emit or send to enable capabilities UI
   for key, value in pairs(device.profile.components) do
-    log.info("<<---- Moon ---->> device_added - key : ", key)
+    log.info("<<---- Moon ---->> multi / device_added - key : ", key)
     device.profile.components[key]:emit_event(capabilities.switch.switch.on())
     device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
   end
@@ -187,18 +187,21 @@ local device_added = function(driver, device)
 end
 
 local device_driver_switched = function(driver, device, event, args)
+  log.info("<<---- Moon ---->> multi / device_driver_switched")
   syncMainComponent(device)
 end
 
 local device_info_changed = function(driver, device, event, args)
+  log.info("<<---- Moon ---->> multi / device_info_changed")
   syncMainComponent(device)
 end
 
 local configure_device = function(self, device)
+  log.info("<<---- Moon ---->> multi / configure_device")
   device:configure()
 end
 
-local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
+local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
   { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
   { mfr = "_TZ3000_vjhyd6ar", model = "TS0002" },
   { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
@@ -209,16 +212,16 @@ local ZIGBEE_TUYA_SWITCH_FINGERPRINTS = {
 }
 
 local is_multi_switch = function(opts, driver, device)
-  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> device.pretty_print :", device:pretty_print())
+  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS) do
+    log.info("<<---- Moon ---->> multi / is_multi_switch :", device:pretty_print())
 
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+      log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
       return true
     end
   end
 
-  log.info("<<---- Moon ---->> is_multi_switch : false")
+  log.info("<<---- Moon ---->> multi / is_multi_switch : false")
   return false
 end
 
