@@ -24,7 +24,8 @@ end
 
 local refresh_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> refresh_handler")
-  --device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  -- device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
+  -- it does not need since device:refresh() call binding cluster (PowerConfiguration == 0x0001)
   device:refresh()
 end
 

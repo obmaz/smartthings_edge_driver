@@ -71,6 +71,8 @@ end
 
 local configure_device = function(self, device)
   log.info("<<---- Moon ---->> multi / configure_device")
+  -- todo: need to bind monitored attribute since this device don't have 0001 cluster
+  -- so there might be no default reporting cluster. It can cause health check fail or button might need to wake up
   device:configure()
 end
 
