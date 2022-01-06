@@ -1,8 +1,5 @@
 # Edge Driver: Zigbee Sonoff Button
-Currently, it does NOT work.!!!!
-
-It is the SmartThings Edge Driver for zigbee sonoff button.  
-It supports 1 buttons.  
+It is the SmartThings Edge Driver for zigbee SNZB-01 button.  
 
 ## Device
 ![device](./readme_images/device1.jpg)
