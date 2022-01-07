@@ -1,4 +1,5 @@
 zigbeeManufacturer:
+  # 0x0006 Cluster
   # 4 Button
   - id: _TZ3000_ufhtxr59/TS0044
     deviceLabel: Zigbee Tuya 4 Button
@@ -88,8 +89,9 @@ zigbeeManufacturer:
     manufacturer: _TZ3400_tk3s5tyg
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
+  # EF00 Cluster
   - id: TS0601/_TZE200_zqtiam4u
-    deviceLabel: Zemismart 6 Button (EF00, TS0601)
+    deviceLabel: Zemismart 6 Button (TS0601)
     manufacturer:  _TZE200_zqtiam4u
     model: TS0601
     deviceProfileName: zigbee-tuya-button-6
