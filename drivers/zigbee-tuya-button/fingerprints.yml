@@ -80,7 +80,7 @@ zigbeeManufacturer:
     deviceProfileName: zigbee-tuya-button-2
   - id: _TZ3000_dfgbtub0/TS0042
     deviceLabel: Zigbee Tuya 2 Button
-    manufacturer: _TZ3000_dfgbtub0
+    manufacturer: _TZ3000_dfgbtub0 # Tested, Battery Drain?
     model: TS0042
     deviceProfileName: zigbee-tuya-button-2
   # 1 Button
