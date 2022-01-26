@@ -69,7 +69,8 @@ local configure_device = function(self, device)
   log.info("<<---- Moon ---->> configure_device")
   device:configure()
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-  device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
+  -- some devices may leak battery drain
+  -- device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
 end
 
 local zigbee_tuya_button_driver_template = {
