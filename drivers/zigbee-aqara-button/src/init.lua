@@ -18,20 +18,44 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local button_handler = function(driver, device, value, zb_rx)
-  log.info("<<---- Moon ---->> button_handler", value.value)
+local button_handler_WXKG11LM = function(driver, device, value, zb_rx)
+  log.info("<<---- Moon ---->> button_handler_WXKG11LM", value.value)
   local component_id = "button1"
   local ev
 
-  -- 01: click, 02: double click, 16: hold (down_hold), 17: hold_release (up_hold), 18: shake => pushed_6x
+  -- WXKG11LM (original revision) -> 01 : press, 02 : double-click, 03 : triple-click, 04 : quad-click
   local clickType = value.value
   if clickType == 1 then
     ev = capabilities.button.button.pushed()
   elseif clickType == 2 then
     ev = capabilities.button.button.double()
-  elseif clickType == 16 then
+  elseif clickType == 3 then
     ev = capabilities.button.button.down_hold()
-  elseif clickType == 17 then
+  elseif clickType == 4 then
+    ev = capabilities.button.button.up_hold()
+  end
+
+  if ev ~= nil then
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
+end
+
+local button_handler_WXKG12LM = function(driver, device, value, zb_rx)
+  log.info("<<---- Moon ---->> button_handler_WXKG12LM", value.value)
+  local component_id = "button1"
+  local ev
+
+  -- WXKG11LM (new revision) -> 0: hold (down_hold), 01 = click, 02 = double lick, 255 = hold_release (up_hold)
+  -- WXKG12LM -> 01: click, 02: double click, 16: hold (down_hold), 17: hold_release (up_hold), 18: shake => pushed_6x
+  local clickType = value.value
+  if clickType == 1 then
+    ev = capabilities.button.button.pushed()
+  elseif clickType == 2 then
+    ev = capabilities.button.button.double()
+  elseif clickType == 16 or 0 then
+    ev = capabilities.button.button.down_hold()
+  elseif clickType == 17 or 255 then
     ev = capabilities.button.button.up_hold()
   elseif clickType == 18 then
     ev = capabilities.button.button.pushed_6x()
@@ -66,7 +90,10 @@ local zigbee_aqara_button_driver_template = {
   zigbee_handlers = {
     attr = {
       [0x0012] = {
-        [0x0055] = button_handler
+        [0x0055] = button_handler_WXKG12LM
+      },
+      [0x0006] = {
+        [0x0000] = button_handler_WXKG11LM
       },
     },
   },
