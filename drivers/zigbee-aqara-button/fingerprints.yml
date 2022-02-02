@@ -15,8 +15,8 @@ zigbeeManufacturer:
     manufacturer: LUMI # Not tested
     model: lumi.remote.b1acn01
     deviceProfileName: zigbee-aqara-button-1
-  - id: LUMI/lumi.sensor_switch.aq2 # WXKG11LM
-    deviceLabel: Aqara 1 Button
-    manufacturer: LUMI # Not tested
-    model: lumi.sensor_switch.aq2
-    deviceProfileName: zigbee-aqara-button-1
+#  - id: LUMI/lumi.sensor_switch.aq2 # WXKG11LM (original)
+#    deviceLabel: Aqara 1 Button
+#    manufacturer: LUMI
+#    model: lumi.sensor_switch.aq2
+#    deviceProfileName: zigbee-aqara-button-1

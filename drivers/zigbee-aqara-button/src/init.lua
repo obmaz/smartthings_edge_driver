@@ -18,7 +18,7 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
-local button_handler_WXKG11LM = function(driver, device, value, zb_rx)
+local button_handler_WXKG11LM_original = function(driver, device, value, zb_rx)
   log.info("<<---- Moon ---->> button_handler_WXKG11LM", value.value)
   local component_id = "button1"
   local ev
@@ -93,7 +93,7 @@ local zigbee_aqara_button_driver_template = {
         [0x0055] = button_handler_WXKG12LM
       },
       [0x0006] = {
-        [0x0000] = button_handler_WXKG11LM
+        [0x0000] = button_handler_WXKG11LM_original
       },
     },
   },
