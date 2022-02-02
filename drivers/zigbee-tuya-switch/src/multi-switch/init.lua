@@ -62,32 +62,33 @@ end
 local on_off_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> multi / on_off_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> multi / on_off_handler - command.command : ", command.command)
-  local ev = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
-  local on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
+  local capa_on_off = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+  local cluster_on_off = (command.command == "off") and zcl_clusters.OnOff.server.commands.Off(device) or zcl_clusters.OnOff.server.commands.On(device)
 
   -- Due to legacy profile and automation, remapSwitchTbl structure cannot be changed
   if command.component == "main" and get_remap_switch(device) == "all" then
-    send_multi_switch(device, true, true, true, ev, on_off)
+    send_multi_switch(device, true, true, true, capa_on_off, cluster_on_off)
   elseif command.component == "main" and get_remap_switch(device) == "switchA" then
-    send_multi_switch(device, true, true, false, ev, on_off)
+    send_multi_switch(device, true, true, false, capa_on_off, cluster_on_off)
   elseif command.component == "main" and get_remap_switch(device) == "switchB" then
-    send_multi_switch(device, true, false, true, ev, on_off)
+    send_multi_switch(device, true, false, true, capa_on_off, cluster_on_off)
   elseif command.component == "main" and get_remap_switch(device) == "switchC" then
-    send_multi_switch(device, false, true, true, ev, on_off)
+    send_multi_switch(device, false, true, true, capa_on_off, cluster_on_off)
   else
     if command.component == "main" or command.component == get_remap_switch(device) then
-      device.profile.components["main"]:emit_event(ev)
+      device.profile.components["main"]:emit_event(capa_on_off)
       command.component = get_remap_switch(device)
     end
 
     -- Note : The logic is the same, but it uses endpoint.
+    -- From hub 41.x end_point should be int (Note : Lua don't have int primitive type
     --local endpoint = device:get_endpoint_for_component_id(command.component)
-    --device:emit_event_for_endpoint(endpoint, capabilities.switch.switch.off())
-    --device:send(zcl_clusters.OnOff.server.commands.Off(device):to_endpoint(endpoint))
+    --endpoint = math.floor(endpoint)
+    --device:emit_event_for_endpoint(endpoint, capa_on_off)
+    --device:send(cluster_on_off:to_endpoint(endpoint))
 
-    device.profile.components[command.component]:emit_event(ev)
-    device:send_to_component(command.component, on_off)
-    --device.profile.components[command.component]:send(on_off)) -- 가능?
+    device.profile.components[command.component]:emit_event(capa_on_off)
+    device:send_to_component(command.component, cluster_on_off)
   end
 end
 
@@ -106,7 +107,6 @@ local attr_handler = function(driver, device, OnOff, zb_rx)
     ev = capabilities.switch.switch.on()
   end
 
-  --ev.state_change = true -- it trigger state change even if the state is the same previous
   if component_id == get_remap_switch(device) then
     device.profile.components["main"]:emit_event(ev)
   end
@@ -118,7 +118,8 @@ end
 local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> multi / component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
-  return ep + get_ep_offset(device)
+  -- From hub 41.x end_point should be int (Note : Lua don't have int primitive type
+  return math.floor(ep + get_ep_offset(device))
 end
 
 -- It will not be called due to received_handler in zigbee_handlers
@@ -251,3 +252,8 @@ local multi_switch = {
 }
 
 return multi_switch
+
+--< ZigbeeMessageTx || Uint16: 0x0000, < AddressHeader || src_addr: 0x0000
+--, src_endpoint: 0x01, dest_addr: 0x197E, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x00, ZCLCommandId: 0x00 >, < Off ||  > > >
+--    <ZigbeeDevice: f6a5018b-03df-4bd5-9e66-9023c0f261d3 [0x9F99] (옷방 조명)> received command: {"args":[],"component":"main","command":"off","positional_args":[],"capability":
+--"switch"}
