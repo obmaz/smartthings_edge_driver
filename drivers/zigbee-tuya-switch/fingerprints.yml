@@ -45,4 +45,33 @@ zigbeeManufacturer:
     model: LXN-3S27LX1.0
     deviceProfileName: zigbee-tuya-switch-3
 
-
+  - id: DAWON_DNS/PM-S350-ZB
+    deviceLabel: PM-S350-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S350-ZB
+    deviceProfileName: zigbee-tuya-switch-3
+  - id: DAWON_DNS/PM-S250-ZB
+    deviceLabel: PM-S250-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S250-ZB
+    deviceProfileName: zigbee-tuya-switch-2
+  - id: DAWON_DNS/PM-S150-ZB
+    deviceLabel: PM-S150-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S150-ZB
+    deviceProfileName: zigbee-tuya-switch-1
+  - id: DAWON_DNS/PM-S340-ZB
+    deviceLabel: PM-S340-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S340-ZB
+    deviceProfileName: zigbee-tuya-switch-3
+  - id: DAWON_DNS/PM-S240-ZB
+    deviceLabel: PM-S240-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S240-ZB
+    deviceProfileName: zigbee-tuya-switch-2
+  - id: DAWON_DNS/PM-S140-ZB
+    deviceLabel: PM-S140-ZB
+    manufacturer: DAWON_DNS # Not Tested
+    model: PM-S140-ZB
+    deviceProfileName: zigbee-tuya-switch-1
