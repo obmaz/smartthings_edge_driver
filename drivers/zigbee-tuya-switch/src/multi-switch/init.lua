@@ -111,7 +111,7 @@ local attr_handler = function(driver, device, OnOff, zb_rx)
     device.profile.components["main"]:emit_event(ev)
   end
   device.profile.components[component_id]:emit_event(ev)
-  --device:emit_event_for_endpoint(src_endpoint, ev) -- it cannot use since endpoint_to_component does not handle main button sync
+  --device:emit_event_for_endpoint(src_endpoint, ev) -- it cannot be used since endpoint_to_component does not handle main button sync
   syncMainComponent(device)
 end
 
@@ -124,7 +124,7 @@ end
 -- It will not be called due to received_handler in zigbee_handlers
 local endpoint_to_component = function(device, ep)
   log.info("<<---- Moon ---->> multi / endpoint_to_component - endpoint : ", ep)
-  local number ep = ep - get_ep_offset(device)
+  local number = ep - get_ep_offset(device)
   return string.format("switch%d", number)
 end
 
