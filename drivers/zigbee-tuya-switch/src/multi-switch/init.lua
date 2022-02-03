@@ -252,8 +252,3 @@ local multi_switch = {
 }
 
 return multi_switch
-
---< ZigbeeMessageTx || Uint16: 0x0000, < AddressHeader || src_addr: 0x0000
---, src_endpoint: 0x01, dest_addr: 0x197E, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x00, ZCLCommandId: 0x00 >, < Off ||  > > >
---    <ZigbeeDevice: f6a5018b-03df-4bd5-9e66-9023c0f261d3 [0x9F99] (옷방 조명)> received command: {"args":[],"component":"main","command":"off","positional_args":[],"capability":
---"switch"}
