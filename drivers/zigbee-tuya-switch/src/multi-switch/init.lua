@@ -119,6 +119,7 @@ local component_to_endpoint = function(device, component_id)
   log.info("<<---- Moon ---->> multi / component_to_endpoint - component_id : ", component_id)
   local ep = component_id:match("switch(%d)")
   -- From hub 41.x end_point should be int (Note : Lua don't have int primitive type)
+  -- Use math.floor or tonumber to remove decimal point
   return math.floor(ep + get_ep_offset(device))
 end
 
