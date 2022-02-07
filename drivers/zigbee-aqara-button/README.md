@@ -1,4 +1,4 @@
-# Edge Driver: Zigbee Aqara Mini Button (WXKG12LM)
+# Edge Driver: Zigbee Aqara Mini Button (WXKG12LM New Version, WXKG12LM)
 It is the SmartThings Edge Driver for Zigbee Aqara T1 mini Button. 
 
 ## Device

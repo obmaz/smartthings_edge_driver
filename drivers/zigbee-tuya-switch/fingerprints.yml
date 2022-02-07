@@ -44,7 +44,6 @@ zigbeeManufacturer:
     manufacturer: 3A Smart Home DE # Tested
     model: LXN-3S27LX1.0
     deviceProfileName: zigbee-tuya-switch-3
-
   - id: DAWON_DNS/PM-S350-ZB
     deviceLabel: PM-S350-ZB
     manufacturer: DAWON_DNS # Not Tested
