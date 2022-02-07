@@ -139,35 +139,26 @@ function syncMainComponent(device)
   local switch3Status = device:get_latest_state("switch3", "switch", "switch", "off", nil)
   local ev = capabilities.switch.switch.on()
 
-  if component_id == "all" or component_id == "switchA" or component_id == "switchB" or component_id == "switchC" then
-    if component_id == "all" then
-      if switch1Status == "off" or switch2Status == "off" or switch3Status == "off" then
-        ev = capabilities.switch.switch.off()
-      end
-    end
-
-    if component_id == "switchA" then
-      if switch1Status == "off" or switch2Status == "off" then
-        ev = capabilities.switch.switch.off()
-      end
-    end
-
-    if component_id == "switchB" then
-      if switch1Status == "off" or switch3Status == "off" then
-        ev = capabilities.switch.switch.off()
-      end
-    end
-
-    if component_id == "switchC" then
-      if switch2Status == "off" or switch3Status == "off" then
-        ev = capabilities.switch.switch.off()
-      end
-    end
-  else
-    if remapButtonStatus == "off" then
+  if component_id == "all" then
+    if switch1Status == "off" or switch2Status == "off" or switch3Status == "off" then
       ev = capabilities.switch.switch.off()
     end
+  elseif component_id == "switchA" then
+    if switch1Status == "off" or switch2Status == "off" then
+      ev = capabilities.switch.switch.off()
+    end
+  elseif component_id == "switchB" then
+    if switch1Status == "off" or switch3Status == "off" then
+      ev = capabilities.switch.switch.off()
+    end
+  elseif component_id == "switchC" then
+    if switch2Status == "off" or switch3Status == "off" then
+      ev = capabilities.switch.switch.off()
+    end
+  elseif remapButtonStatus == "off" then
+    ev = capabilities.switch.switch.off()
   end
+
   device.profile.components["main"]:emit_event(ev)
 end
 
