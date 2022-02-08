@@ -31,16 +31,6 @@ zigbeeManufacturer:
     manufacturer: _TYZB01_cnlmkhbk
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
-  - id: _TY3000_wkai4ga5/TS0044
-    deviceLabel: Tuya Base 4 Button
-    manufacturer: _TY3000_wkai4ga5
-    model: TS0044
-    deviceProfileName: zigbee-tuya-button-4
-  - id: _TZ3000_wkai4ga5/TS0044
-    deviceLabel: Tuya Base 4 Button
-    manufacturer: _TZ3000_wkai4ga5
-    model: TS0044
-    deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_xabckq1v/TS004F
     deviceLabel: Hejhome Smart 4 Button
     manufacturer: _TZ3000_xabckq1v # Not Tested
