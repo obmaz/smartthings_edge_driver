@@ -74,3 +74,7 @@ zigbeeManufacturer:
     manufacturer: DAWON_DNS # Not Tested
     model: PM-S140-ZB
     deviceProfileName: zigbee-tuya-switch-1
+  - id: _TZ3000_ybaprszv/TS0011
+    deviceLabel: Tuya Base Switch 1
+    manufacturer: _TZ3000_ybaprszv # Tested
+    model: TS0011
