@@ -78,3 +78,4 @@ zigbeeManufacturer:
     deviceLabel: Tuya Base Switch 1
     manufacturer: _TZ3000_ybaprszv # Tested
     model: TS0011
+    deviceProfileName: zigbee-tuya-switch-1
