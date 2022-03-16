@@ -219,6 +219,7 @@ local is_multi_switch = function(opts, driver, device)
       log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
       return true
     end
+    return true
   end
 
   log.info("<<---- Moon ---->> multi / is_multi_switch : false")
