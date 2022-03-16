@@ -79,6 +79,7 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_ybaprszv # Tested
     model: TS0011
     deviceProfileName: zigbee-tuya-switch-1
+
   - id: _TZ3000_jl7qyupf/TS0012
     deviceLabel: GIRIER Switch 2
     manufacturer: _TZ3000_jl7qyupf

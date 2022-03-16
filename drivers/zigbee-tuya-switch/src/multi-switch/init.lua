@@ -202,6 +202,13 @@ local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
   { mfr = "_TZ3000_tbfw3xj0", model = "TS0003" },
   { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
   { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
+  { mfr = "DAWON_DNS", model = "PM-S350-ZB" },
+  { mfr = "DAWON_DNS", model = "PM-S250-ZB" },
+  { mfr = "DAWON_DNS", model = "PM-S340-ZB" },
+  { mfr = "DAWON_DNS", model = "PM-S240-ZB" },
+  { mfr = "_TZ3000_jl7qyupf", model = "TS0012" },
+  { mfr = "_TZ3000_k008kbls", model = "TS0012" },
+  { mfr = "_TZ3000_wu0shw0i", model = "TS0013" },
 }
 
 local is_multi_switch = function(opts, driver, device)
