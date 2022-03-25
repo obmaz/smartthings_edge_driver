@@ -208,6 +208,7 @@ local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
   { mfr = "DAWON_DNS", model = "PM-S240-ZB" },
   { mfr = "_TZ3000_jl7qyupf", model = "TS0012" },
   { mfr = "_TZ3000_k008kbls", model = "TS0012" },
+  { mfr = "_TZ3000_wu0shw0i", model = "FNB56-ZSW03LX2.0" },
   { mfr = "FeiBit", model = "FNB56-ZSW03LX2.0" },
 }
 
