@@ -100,4 +100,9 @@ zigbeeManufacturer:
     manufacturer: FeiBit
     model: FNB56-ZSW03LX2
     deviceProfileName: zigbee-tuya-switch-3
+  - id: _TYZB01_mqel1whf/TS0013
+    deviceLabel: Tuya Switch 3
+    manufacturer: _TYZB01_mqel1whf
+    model: TS0013
+    deviceProfileName: zigbee-tuya-switch-3
 

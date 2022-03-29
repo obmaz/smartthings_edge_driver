@@ -210,6 +210,7 @@ local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
   { mfr = "_TZ3000_k008kbls", model = "TS0012" },
   { mfr = "_TZ3000_wu0shw0i", model = "TS0013" },
   { mfr = "FeiBit", model = "FNB56-ZSW03LX2.0" },
+  { mfr = "_TYZB01_mqel1whf", model = "TS0013" },
 }
 
 local is_multi_switch = function(opts, driver, device)
