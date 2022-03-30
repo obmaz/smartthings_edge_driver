@@ -11,6 +11,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_wkai4ga5
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
+  - id: _TZ3000_abci1hiu/TS0044
+    deviceLabel: Zigbee 4 Button
+    manufacturer: _TZ3000_abci1hiu
+    model: TS0044
+    deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_ee8nrt2l/TS0044
     deviceLabel: LoraTap Zigbee 4 Button
     manufacturer: _TZ3000_ee8nrt2l # Tested
@@ -37,6 +42,10 @@ zigbeeManufacturer:
     model: TS004F
     deviceProfileName: zigbee-tuya-button-4
   # 3 Button
+  - id: _TYZB02_key8kk7r/TS0043
+    deviceLabel: zigbee 3 button
+    manufacturer: _TYZB02_key8kk7r
+    model: TS0043
   - id: TZ3000_w8jwkczz/TS0043
     deviceLabel: MOES zigbee 3 button
     manufacturer: _TZ3000_w8jwkczz
