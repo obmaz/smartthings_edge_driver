@@ -46,6 +46,7 @@ zigbeeManufacturer:
     deviceLabel: zigbee 3 button
     manufacturer: _TYZB02_key8kk7r
     model: TS0043
+    deviceProfileName: zigbee-tuya-button-3
   - id: TZ3000_w8jwkczz/TS0043
     deviceLabel: MOES zigbee 3 button
     manufacturer: _TZ3000_w8jwkczz
