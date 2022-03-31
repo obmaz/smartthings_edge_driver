@@ -42,6 +42,11 @@ zigbeeManufacturer:
     model: TS004F
     deviceProfileName: zigbee-tuya-button-4
   # 3 Button
+  - id: _TZ3000_gbm10jnj/TS0043
+    deviceLabel: zigbee 3 button
+    manufacturer: _TZ3000_gbm10jnj
+    model: TS0043
+    deviceProfileName: zigbee-tuya-button-3
   - id: _TYZB02_key8kk7r/TS0043
     deviceLabel: zigbee 3 button
     manufacturer: _TYZB02_key8kk7r
