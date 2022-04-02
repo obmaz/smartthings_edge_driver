@@ -95,7 +95,7 @@ zigbeeManufacturer:
     model: TS0013
     deviceProfileName: zigbee-tuya-switch-3
   - id: FeiBit/FNB56-ZSW03LX2.0
-    deviceLabel: Switch 3
+    deviceLabel: FeiBit Switch 3
     manufacturer: FeiBit
     model: FNB56-ZSW03LX2.0
     deviceProfileName: zigbee-tuya-switch-3
@@ -110,7 +110,12 @@ zigbeeManufacturer:
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
   - id: FeiBit/FNB56-ZSW02LX2.0
-    deviceLabel: Tuya Switch 3
+    deviceLabel: FeiBit Switch 3
     manufacturer: FeiBit
     model: FNB56-ZSW02LX2.0
     deviceProfileName: zigbee-tuya-switch-2
+  - id: FeiBit/FNB56-ZSW01LX2.0
+    deviceLabel: FeiBit Switch 1
+    manufacturer: FeiBit
+    model: FNB56-ZSW01LX2.0
+    deviceProfileName: zigbee-tuya-switch-1
