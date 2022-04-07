@@ -26,7 +26,7 @@ zigbeeManufacturer:
     deviceProfileName: zigbee-tuya-switch-3
   - id: _TZ3000_tbfw3xj0/TS0003
     deviceLabel: Zemismart Switch 3
-    manufacturer: _TZ3000_tbfw3xj0
+    manufacturer: _TZ3000_tbfw3xj0 # Tested
     model: TS0003
     deviceProfileName: zigbee-tuya-switch-3
   - id: 3A-Smart-Home-DE-1/LXN-1S27LX1.0
