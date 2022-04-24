@@ -119,3 +119,18 @@ zigbeeManufacturer:
     manufacturer: FeiBit # Tested
     model: FNB56-ZSW01LX2.0
     deviceProfileName: zigbee-tuya-switch-1
+  - id: _TZ3000_ecgiiid3/TS0003
+    deviceLabel: Tuya Switch 3
+    manufacturer: _TZ3000_ecgiiid3
+    model: TS0003
+    deviceProfileName: zigbee-tuya-switch-3
+  - id: _TZ3000_odzoiovu/TS0003
+    deviceLabel: Tuya Switch 3
+    manufacturer: _TZ3000_odzoiovu
+    model: TS0003
+    deviceProfileName: zigbee-tuya-switch-3
+  - id: 3A Smart Home DE/LXN59-2S7LX1.0
+    deviceLabel: Tuya Switch 2
+    manufacturer: 3A Smart Home DE
+    model: LXN59-2S7LX1.0
+    deviceProfileName: zigbee-tuya-switch-2
