@@ -82,6 +82,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_rrjr1q0u
     model: TS0043
     deviceProfileName: zigbee-tuya-button-3
+  - id: _TZ3000_w4thianr/TS0043
+    deviceLabel: Zigbee Tuya 3 Button
+    manufacturer: _TZ3000_w4thianr
+    model: TS0043
+    deviceProfileName: zigbee-tuya-button-3
    # 2 Button
   - id: _TZ3000_t8hzpgnd/TS0042
     deviceLabel: Zigbee Tuya 2 Button
@@ -101,6 +106,11 @@ zigbeeManufacturer:
   - id: _TZ3000_dfgbtub0/TS0042
     deviceLabel: Zigbee Tuya 2 Button
     manufacturer: _TZ3000_dfgbtub0 # Tested, Battery Drain?
+    model: TS0042
+    deviceProfileName: zigbee-tuya-button-2
+  - id: _TZ3000_h1c2eamp/TS0042
+    deviceLabel: Zigbee Tuya 2 Button
+    manufacturer: _TZ3000_h1c2eamp
     model: TS0042
     deviceProfileName: zigbee-tuya-button-2
   # 1 Button
