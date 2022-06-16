@@ -185,6 +185,7 @@ local device_init = function(self, device)
   device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
 
   -- source from : https://github.com/Mariano-Github/Edge-Drivers-Beta/blob/main/zigbee-multi-switch-v3.5/src/init.lua
+  -- https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-multi-switch.src/zigbee-multi-switch.groovy#L259
   --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
   if is_120sec_issue(device) then
     --- Configure basic cluster, attributte 0x0099 to 0x1
