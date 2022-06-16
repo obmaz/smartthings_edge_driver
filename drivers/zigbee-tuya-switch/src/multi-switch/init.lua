@@ -162,10 +162,96 @@ function syncMainComponent(device)
   device.profile.components["main"]:emit_event(ev)
 end
 
+
+local IS_120SEC_ISSUE_FINGERPRINTS = {
+  { mfr = "_TZ3000_fvh3pjaz", model = "TS0012" },
+  { mfr = "_TZ3000_9hpxg80k", model = "TS0011" },
+}
+
+function is_120sec_issue(device)
+  for _, fingerprint in ipairs(IS_120SEC_ISSUE_FINGERPRINTS) do
+    log.info("<<---- Moon ---->> multi / is_120sec_issue :", device:pretty_print())
+
+    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      log.info("<<---- Moon ---->> multi / is_120sec_issue : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+      return true
+    end
+  end
+end
+
 local device_init = function(self, device)
   log.info("<<---- Moon ---->> multi / device_init")
   device:set_component_to_endpoint_fn(component_to_endpoint)
   device:set_endpoint_to_component_fn(endpoint_to_component) -- emit_event_for_endpoint
+
+  -- source from : https://github.com/Mariano-Github/Edge-Drivers-Beta/blob/main/zigbee-multi-switch-v3.5/src/init.lua
+  --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
+  if is_120sec_issue(device) then
+    --- Configure basic cluster, attributte 0x0099 to 0x1
+    local cluster_id = {value = 0x0000}
+    local attr_id = 0x0099
+    local data_value = {value = 0x01, ID = 0x20}
+    write_attribute_function(device, cluster_id, attr_id, data_value)
+
+    --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
+    device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
+    -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
+    -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
+    for key, value in pairs(device.profile.components) do
+      log.info("<<---- Moon ---->> multi / device_init - key1 : ", key)
+      device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
+    end
+
+    ---- Timers Cancel ------
+    for timer in pairs(device.thread.timers) do
+      print("<<<<< cancel timer >>>>>")
+      device.thread:cancel_timer(timer)
+    end
+
+    device.thread:call_on_schedule(
+        120,
+        function ()
+          if device:get_manufacturer() == "_TZ3000_fvh3pjaz" then
+            print("<<< Timer read attribute >>>")
+            -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
+            -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
+
+            for key, value in pairs(device.profile.components) do
+              log.info("<<---- Moon ---->> multi / device_init - key2 : ", key)
+              device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
+            end
+          end
+        end,
+        'Refresh schedule')]]
+  end
+end
+
+local function write_attribute_function(device, cluster_id, attr_id, data_value)
+  local write_body = write_attribute.WriteAttribute({
+    write_attribute.WriteAttribute.AttributeRecord(attr_id, data_types.ZigbeeDataType(data_value.ID), data_value.value)})
+
+  local zclh = zcl_messages.ZclHeader({
+    cmd = data_types.ZCLCommandId(write_attribute.WriteAttribute.ID)
+  })
+
+  local addrh = messages.AddressHeader(
+      zb_const.HUB.ADDR,
+      zb_const.HUB.ENDPOINT,
+      device:get_short_address(),
+      device:get_endpoint(cluster_id.value),
+      zb_const.HA_PROFILE_ID,
+      cluster_id.value
+  )
+
+  local message_body = zcl_messages.ZclMessageBody({
+    zcl_header = zclh,
+    zcl_body = write_body
+  })
+
+  device:send(messages.ZigbeeMessageTx({
+    address_header = addrh,
+    body = message_body
+  }))
 end
 
 local device_added = function(driver, device)
