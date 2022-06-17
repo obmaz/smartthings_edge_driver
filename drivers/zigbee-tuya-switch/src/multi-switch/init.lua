@@ -25,6 +25,23 @@ local remapSwitchTbl = {
   ["two_three"] = "switchC",
   ["all"] = "all",
 }
+
+local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
+  { mfr = "", model = "TS0002" },
+  { mfr = "", model = "TS0003" },
+  { mfr = "", model = "TS0012" },
+  { mfr = "", model = "TS0013" },
+  { mfr = "", model = "LXN-2S27LX1.0" },
+  { mfr = "", model = "LXN-3S27LX1.0" },
+  { mfr = "", model = "LXN59-2S7LX1.0" },
+  { mfr = "", model = "PM-S350-ZB" },
+  { mfr = "", model = "PM-S250-ZB" },
+  { mfr = "", model = "PM-S340-ZB" },
+  { mfr = "", model = "PM-S240-ZB" },
+  { mfr = "", model = "FNB56-ZSW03LX2.0" },
+  { mfr = "", model = "FNB56-ZSW02LX2.0" },
+}
+
 local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
@@ -162,23 +179,6 @@ function syncMainComponent(device)
   device.profile.components["main"]:emit_event(ev)
 end
 
-
-local IS_120SEC_ISSUE_FINGERPRINTS = {
-  { mfr = "_TZ3000_fvh3pjaz", model = "TS0012" },
-  { mfr = "_TZ3000_9hpxg80k", model = "TS0011" },
-}
-
-function is_120sec_issue(device)
-  for _, fingerprint in ipairs(IS_120SEC_ISSUE_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> multi / is_120sec_issue :", device:pretty_print())
-
-    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> multi / is_120sec_issue : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
-      return true
-    end
-  end
-end
-
 local device_init = function(self, device)
   log.info("<<---- Moon ---->> multi / device_init")
   device:set_component_to_endpoint_fn(component_to_endpoint)
@@ -187,13 +187,8 @@ local device_init = function(self, device)
   -- source from : https://github.com/Mariano-Github/Edge-Drivers-Beta/blob/main/zigbee-multi-switch-v3.5/src/init.lua
   -- https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-multi-switch.src/zigbee-multi-switch.groovy#L259
   --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
-  if is_120sec_issue(device) then
-    --- Configure basic cluster, attributte 0x0099 to 0x1
-    local cluster_id = {value = 0x0000}
-    local attr_id = 0x0099
-    local data_value = {value = 0x01, ID = 0x20}
-    write_attribute_function(device, cluster_id, attr_id, data_value)
-
+  check_120sec_issue(device)
+  --if check_120sec_issue(device) then
     --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
     device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
     -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
@@ -224,35 +219,7 @@ local device_init = function(self, device)
           end
         end,
         'Refresh schedule')]]
-  end
-end
-
-local function write_attribute_function(device, cluster_id, attr_id, data_value)
-  local write_body = write_attribute.WriteAttribute({
-    write_attribute.WriteAttribute.AttributeRecord(attr_id, data_types.ZigbeeDataType(data_value.ID), data_value.value)})
-
-  local zclh = zcl_messages.ZclHeader({
-    cmd = data_types.ZCLCommandId(write_attribute.WriteAttribute.ID)
-  })
-
-  local addrh = messages.AddressHeader(
-      zb_const.HUB.ADDR,
-      zb_const.HUB.ENDPOINT,
-      device:get_short_address(),
-      device:get_endpoint(cluster_id.value),
-      zb_const.HA_PROFILE_ID,
-      cluster_id.value
-  )
-
-  local message_body = zcl_messages.ZclMessageBody({
-    zcl_header = zclh,
-    zcl_body = write_body
-  })
-
-  device:send(messages.ZigbeeMessageTx({
-    address_header = addrh,
-    body = message_body
-  }))
+  --end
 end
 
 local device_added = function(driver, device)
@@ -281,38 +248,11 @@ local configure_device = function(self, device)
   device:configure()
 end
 
-local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
-  { mfr = "_TZ3000_7hp93xpr", model = "TS0002" },
-  { mfr = "_TZ3000_vjhyd6ar", model = "TS0002" },
-  { mfr = "_TZ3000_c0wbnbbf", model = "TS0003" },
-  { mfr = "_TZ3000_wqfdvxen", model = "TS0003" },
-  { mfr = "_TZ3000_tbfw3xj0", model = "TS0003" },
-  { mfr = "3A Smart Home DE", model = "LXN-2S27LX1.0" },
-  { mfr = "3A Smart Home DE", model = "LXN-3S27LX1.0" },
-  { mfr = "DAWON_DNS", model = "PM-S350-ZB" },
-  { mfr = "DAWON_DNS", model = "PM-S250-ZB" },
-  { mfr = "DAWON_DNS", model = "PM-S340-ZB" },
-  { mfr = "DAWON_DNS", model = "PM-S240-ZB" },
-  { mfr = "_TZ3000_jl7qyupf", model = "TS0012" },
-  { mfr = "_TZ3000_k008kbls", model = "TS0012" },
-  { mfr = "_TZ3000_wu0shw0i", model = "TS0013" },
-  { mfr = "FeiBit", model = "FNB56-ZSW03LX2.0" },
-  { mfr = "_TYZB01_mqel1whf", model = "TS0013" },
-  { mfr = "_TYZB01_8gqspaab", model = "TS0003" },
-  { mfr = "FeiBit", model = "FNB56-ZSW02LX2.0" },
-  { mfr = "_TZ3000_ecgiiid3", model = "TS0003" },
-  { mfr = "_TZ3000_odzoiovu", model = "TS0003" },
-  { mfr = "3A Smart Home DE", model = "LXN59-2S7LX1.0" },
-  { mfr = "_TZ3000_qewo8dlz", model = "TS0013" },
-  { mfr = "_TZ3000_fvh3pjaz", model = "TS0012" },
-  { mfr = "_TZ3000_wyhuocal", model = "TS0013" },
-}
-
 local is_multi_switch = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS) do
     log.info("<<---- Moon ---->> multi / is_multi_switch :", device:pretty_print())
 
-    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+    if device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
       return true
     end
