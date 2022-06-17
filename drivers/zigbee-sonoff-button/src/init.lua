@@ -55,7 +55,7 @@ local configure_device = function(self, device)
   device:configure()
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
-  -- FP :	01 0104 0000 00 03 0000 0003 0001 02 0006 0003
+  -- FP : 01 0104 0000 00 03 0000 0003 0001 02 0006 0003
   -- it bind 0x0006 (OnOff cluster) manually due to no 0x0006 in FP
   device:send(device_management.build_bind_request(device, 0x0006, device.driver.environment_info.hub_zigbee_eui))
 end
@@ -91,7 +91,3 @@ end
 defaults.register_for_default_handlers(zigbee_sonoff_button_driver_template, zigbee_sonoff_button_driver_template.supported_capabilities)
 local zigbee_driver = ZigbeeDriver("zigbee-sonoff-button", zigbee_sonoff_button_driver_template)
 zigbee_driver:run()
-
---    <ZigbeeDevice: f16b75ed-d764-4bfb-84d3-c466ec5e056f [0x6D99] (SONOFF SNZB-01)> received Zigbee message: < ZigbeeMessageRx || type: 0x00, < AddressHeader || src_addr: 0x6D99,
---src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0x01, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -32, body_length: 0x0003, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x02, ZCLCommandId: 0x02 >, < Toggle
---||  > > >
