@@ -46,6 +46,11 @@ function write_attribute_function(device, cluster_id, attr_id, data_value)
 end
 
 function check_120sec_issue(device)
+  log.info("<<---- Moon ---->> is_120sec_issue : test device:get_manufacturer() : ", device:get_manufacturer())
+  log.info("<<---- Moon ---->> is_120sec_issue : test device:get_model() :", device:get_model())
+  log.info("<<---- Moon ---->> is_120sec_issue : test fingerprint.mfr : ", fingerprint.mfr)
+  log.info("<<---- Moon ---->> is_120sec_issue : test fingerprint.mfr : ", fingerprint.model)
+
   for _, fingerprint in ipairs(IS_120SEC_ISSUE_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
       log.info("<<---- Moon ---->> is_120sec_issue : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
