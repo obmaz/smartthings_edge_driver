@@ -12,6 +12,7 @@
 ---- See the License for the specific language governing permissions and
 ---- limitations under the License.
 
+local log = require "log"
 local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
