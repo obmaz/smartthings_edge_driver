@@ -156,6 +156,6 @@ zigbeeManufacturer:
     deviceProfileName: zigbee-tuya-switch-2
   - id: _TZ3000_wyhuocal/TS0013
     deviceLabel: Lonsonho Switch 3
-    manufacturer: _TZ3000_wyhuocal
+    manufacturer: _TZ3000_wyhuocal # issue of OFF after 2 minutes
     model: TS0013
     deviceProfileName: zigbee-tuya-switch-3
