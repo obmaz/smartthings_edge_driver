@@ -13,6 +13,7 @@
 ---- limitations under the License.
 
 local IS_120SEC_ISSUE_FINGERPRINTS = {
+  { mfr = "_TZ3000_wyhuocal", model = "TS0013" },
   { mfr = "_TZ3000_fvh3pjaz", model = "TS0012" },
   { mfr = "_TZ3000_9hpxg80k", model = "TS0011" },
 }
