@@ -12,13 +12,16 @@
 ---- See the License for the specific language governing permissions and
 ---- limitations under the License.
 
+local log = require "log"
+local util = {}
+
 local IS_120SEC_ISSUE_FINGERPRINTS = {
   { mfr = "_TZ3000_wyhuocal", model = "TS0013" },
   { mfr = "_TZ3000_fvh3pjaz", model = "TS0012" },
   { mfr = "_TZ3000_9hpxg80k", model = "TS0011" },
 }
 
-function write_attribute_function(device, cluster_id, attr_id, data_value)
+local function write_attribute_function(device, cluster_id, attr_id, data_value)
   local write_body = write_attribute.WriteAttribute({
     write_attribute.WriteAttribute.AttributeRecord(attr_id, data_types.ZigbeeDataType(data_value.ID), data_value.value)})
 
@@ -46,11 +49,11 @@ function write_attribute_function(device, cluster_id, attr_id, data_value)
   }))
 end
 
-function check_120sec_issue(device)
+util.check_120sec_issue = function(device)
   log.info("<<---- Moon ---->> is_120sec_issue : test device:get_manufacturer() : ", device:get_manufacturer())
   log.info("<<---- Moon ---->> is_120sec_issue : test device:get_model() :", device:get_model())
-  log.info("<<---- Moon ---->> is_120sec_issue : test fingerprint.mfr : ", fingerprint.mfr)
-  log.info("<<---- Moon ---->> is_120sec_issue : test fingerprint.mfr : ", fingerprint.model)
+  log.info("<<---- Moon ---->> is_120sec_issue : test IS_120SEC_ISSUE_FINGERPRINTS.mfr : ", IS_120SEC_ISSUE_FINGERPRINTS.mfr)
+  log.info("<<---- Moon ---->> is_120sec_issue : test IS_120SEC_ISSUE_FINGERPRINTS.mfr : ", IS_120SEC_ISSUE_FINGERPRINTS.model)
 
   for _, fingerprint in ipairs(IS_120SEC_ISSUE_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
@@ -62,8 +65,11 @@ function check_120sec_issue(device)
       local data_value = {value = 0x01, ID = 0x20}
       write_attribute_function(device, cluster_id, attr_id, data_value)
       log.info("<<---- Moon ---->> is_120sec_issue : true", device:pretty_print())
-      return
+      return true
     end
   end
   log.info("<<---- Moon ---->> is_120sec_issue : false", device:pretty_print())
+  return false
 end
+
+return util

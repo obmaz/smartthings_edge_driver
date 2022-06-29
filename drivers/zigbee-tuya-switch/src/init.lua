@@ -12,6 +12,7 @@
 ---- See the License for the specific language governing permissions and
 ---- limitations under the License.
 
+local util = require "util"
 local log = require "log"
 local capabilities = require "st.capabilities"
 local ZigbeeDriver = require "st.zigbee"
@@ -19,7 +20,7 @@ local defaults = require "st.zigbee.defaults"
 
 local device_init = function(self, device)
   log.info("<<---- Moon ---->> single / device_init")
-  check_120sec_issue(device)
+  util.check_120sec_issue(device)
 end
 
 local zigbee_tuya_switch_driver_template = {

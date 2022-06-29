@@ -12,6 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+local util = require "util"
 local log = require "log"
 local capabilities = require "st.capabilities"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
@@ -48,6 +49,7 @@ end
 
 local function get_remap_switch(device)
   log.info("<<---- Moon ---->> multi / remapSwitch")
+  util.check_120sec_issue(device)
   local remapSwitch = remapSwitchTbl[device.preferences.remapSwitch]
 
   if remapSwitch == nil then
@@ -187,7 +189,7 @@ local device_init = function(self, device)
   -- source from : https://github.com/Mariano-Github/Edge-Drivers-Beta/blob/main/zigbee-multi-switch-v3.5/src/init.lua
   -- https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-multi-switch.src/zigbee-multi-switch.groovy#L259
   --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
-  check_120sec_issue(device)
+  util.check_120sec_issue(device)
   --if check_120sec_issue(device) then
     --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
     device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
