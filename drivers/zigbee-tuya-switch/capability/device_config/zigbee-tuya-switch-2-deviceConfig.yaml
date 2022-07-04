@@ -1,7 +1,4 @@
 #smartthings presentation:device-config:create --yaml --input zigbee-tuya-switch-2-deviceConfig.yaml
-mnmn: SmartThingsCommunity
-vid: e72801a8-0ebf-36ad-a270-80004e8bfcaa
-version: 0.0.1
 type: profile
 dashboard:
   states:
@@ -77,5 +74,3 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-presentationId: e72801a8-0ebf-36ad-a270-80004e8bfcaa
-manufacturerName: SmartThingsCommunity
