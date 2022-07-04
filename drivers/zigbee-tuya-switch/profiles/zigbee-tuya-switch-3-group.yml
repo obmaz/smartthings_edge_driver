@@ -1,4 +1,4 @@
-name: zigbee-tuya-switch-3
+name: zigbee-tuya-switch-3-group
 components:
   - id: main
     capabilities:
