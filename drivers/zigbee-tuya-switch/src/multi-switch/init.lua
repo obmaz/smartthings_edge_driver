@@ -243,6 +243,16 @@ end
 local device_info_changed = function(driver, device, event, args)
   log.info("<<---- Moon ---->> multi / device_info_changed")
   syncMainComponent(device)
+  
+  -- Did preference value change
+  if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
+    profileName = 'zigbee-tuya-switch-2'
+    
+    if device.preferences.dashBoardStyle == "multi" then
+      profileName = 'zigbee-tuya-switch-2-group'
+    end  
+    local success, msg = pcall(device.try_update_metadata, device, {profile=profileName, vendor_provided_label='zambobmaz'})
+  end
 end
 
 local configure_device = function(self, device)
