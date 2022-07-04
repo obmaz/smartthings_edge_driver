@@ -1,4 +1,4 @@
-name: zigbee-tuya-switch-2
+name: zigbee-tuya-switch-3
 components:
   - id: main
     capabilities:
@@ -14,10 +14,14 @@ components:
     capabilities:
       - id: switch
         version: 1
+  - id: switch3
+    capabilities:
+      - id: switch
+        version: 1
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 11a4fcd3-27e3-3059-a96e-f79c7a6316eb
+  vid: e077aef5-f29a-3b4d-9aa2-3c9c751896d3
 preferences:
   - title: "Remap Main Button"
     description: "Select a button to map to the main button"
@@ -28,5 +32,9 @@ preferences:
       options:
         one: Switch 1
         two: Switch 2
+        three: Switch 3
+        one_two: Switch 1 and 2
+        one_three: Switch 1 and 3
+        two_three: Switch 2 and 3
         all: All
       default: one

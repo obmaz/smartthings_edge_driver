@@ -1,4 +1,4 @@
-#smartthings presentation:device-config:create --yaml --input zigbee-tuya-switch-3-deviceConfig.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-tuya-switch-2-deviceConfig.yaml
 type: profile
 dashboard:
   states:
@@ -8,12 +8,34 @@ dashboard:
       idx: 0
       group: main
       values: [ ]
+    - component: switch1
+      capability: switch
+      version: 1
+      idx: 0
+      group: switch1
+      values: [ ]
+    - component: switch2
+      capability: switch
+      version: 1
+      idx: 0
+      group: switch2
+      values: [ ]
   actions:
     - component: main
       capability: switch
       version: 1
       idx: 0
       group: main
+    - component: switch1
+      capability: switch
+      version: 1
+      idx: 0
+      group: switch1
+    - component: switch2
+      capability: switch
+      version: 1
+      idx: 0
+      group: switch2
 detailView:
   - component: main
     capability: switch
@@ -31,11 +53,6 @@ detailView:
     values: [ ]
     patch: [ ]
   - component: switch2
-    capability: switch
-    version: 1
-    values: [ ]
-    patch: [ ]
-  - component: switch3
     capability: switch
     version: 1
     values: [ ]
@@ -60,12 +77,6 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: switch3
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
   actions:
     - component: main
       capability: switch
@@ -85,11 +96,5 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: switch3
-      capability: switch
-      version: 1
-      values: [ ]
-      patch: [ ]
-      exclusion: [ ]
-presentationId: 06a53b41-8190-3568-879e-fe6987c62533
+presentationId: e72801a8-0ebf-36ad-a270-80004e8bfcaa
 manufacturerName: SmartThingsCommunity
