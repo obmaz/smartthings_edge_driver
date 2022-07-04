@@ -37,16 +37,6 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        main: main
-        multi: multi
-      default: main
-  - title: "Dashboard Switch Style"
-    description: "Select the dashboard card stryle"
-    name: dashBoardStyle
-    required: true
-    preferenceType: enumeration
-    definition:
-      options:
         main: Main Switch Only
         multi: All Swithches
       default: main
