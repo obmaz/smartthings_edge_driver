@@ -13,14 +13,14 @@ dashboard:
       capability: switch
       version: 1
       idx: 0
-      group: switch1
+      group: Switch1
       composite: true
       values: [ ]
     - component: switch2
       capability: switch
       version: 1
       idx: 0
-      group: switch2
+      group: Switch2
       composite: true      
       values: [ ]
   actions:
@@ -33,12 +33,12 @@ dashboard:
       capability: switch
       version: 1
       idx: 0
-      group: switch1
+      group: Switch1
     - component: switch2
       capability: switch
       version: 1
       idx: 0
-      group: switch2
+      group: Switch2
 detailView:
   - component: main
     capability: switch
