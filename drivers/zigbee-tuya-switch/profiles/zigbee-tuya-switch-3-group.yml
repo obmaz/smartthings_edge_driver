@@ -45,6 +45,6 @@ preferences:
     preferenceType: enumeration
     definition:
       options:
-        main: main
-        multi: multi
+        main: Main Switch Only
+        multi: All Swithches
       default: main
