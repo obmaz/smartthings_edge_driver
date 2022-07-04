@@ -30,3 +30,13 @@ preferences:
         two: Switch 2
         all: All
       default: one
+  - title: "Dashboard Switch Style"
+    description: "Select the dashboard card stryle"
+    name: dashBoardStyle
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        main: main
+        multi: multi
+      default: main
