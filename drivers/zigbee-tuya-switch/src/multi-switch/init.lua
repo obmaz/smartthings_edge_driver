@@ -49,7 +49,6 @@ end
 
 local function get_remap_switch(device)
   log.info("<<---- Moon ---->> multi / remapSwitch")
-  util.check_120sec_issue(device)
   local remapSwitch = remapSwitchTbl[device.preferences.remapSwitch]
 
   if remapSwitch == nil then
@@ -243,15 +242,22 @@ end
 local device_info_changed = function(driver, device, event, args)
   log.info("<<---- Moon ---->> multi / device_info_changed")
   syncMainComponent(device)
-  
-  -- Did preference value change
-  if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
+
+  if device:get_model() == "TS0002" or device:get_model() == "TS0012" or device:get_model() == "LXN-2S27LX1.0" or device:get_model() == "PM-S350-ZB" or device:get_model() == "PM-S340-ZB" or device:get_model() == "FNB56-ZSW03LX2.0" then
     profileName = 'zigbee-tuya-switch-2'
-    
     if device.preferences.dashBoardStyle == "multi" then
       profileName = 'zigbee-tuya-switch-2-group'
-    end  
-    local success, msg = pcall(device.try_update_metadata, device, {profile=profileName, vendor_provided_label='zambobmaz'})
+    end
+  else
+    profileName = 'zigbee-tuya-switch-3'
+    if device.preferences.dashBoardStyle == "multi" then
+      profileName = 'zigbee-tuya-switch-3-group'
+    end
+  end
+  local success, msg = pcall(device.try_update_metadata, device, {profile=profileName, vendor_provided_label='zambobmaz'})
+
+  -- Did preference value change
+  if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
   end
 end
 
