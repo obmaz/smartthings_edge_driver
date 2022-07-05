@@ -23,7 +23,7 @@ local IS_120SEC_ISSUE_FINGERPRINTS = {
 
 local function write_attribute_function(device, cluster_id, attr_id, data_value)
   local write_body = write_attribute.WriteAttribute({
-    write_attribute.WriteAttribute.AttributeRecord(attr_id, data_types.ZigbeeDataType(data_value.ID), data_value.value)})
+    write_attribute.WriteAttribute.AttributeRecord(attr_id, data_types.ZigbeeDataType(data_value.ID), data_value.value) })
 
   local zclh = zcl_messages.ZclHeader({
     cmd = data_types.ZCLCommandId(write_attribute.WriteAttribute.ID)
@@ -60,9 +60,9 @@ util.check_120sec_issue = function(device)
       log.info("<<---- Moon ---->> is_120sec_issue : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
 
       --- Configure basic cluster, attributte 0x0099 to 0x1
-      local cluster_id = {value = 0x0000}
+      local cluster_id = { value = 0x0000 }
       local attr_id = 0x0099
-      local data_value = {value = 0x01, ID = 0x20}
+      local data_value = { value = 0x01, ID = 0x20 }
       write_attribute_function(device, cluster_id, attr_id, data_value)
       log.info("<<---- Moon ---->> is_120sec_issue : true", device:pretty_print())
       return true

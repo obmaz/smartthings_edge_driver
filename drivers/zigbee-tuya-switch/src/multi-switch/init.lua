@@ -190,36 +190,36 @@ local device_init = function(self, device)
   --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
   util.check_120sec_issue(device)
   --if check_120sec_issue(device) then
-    --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
-    device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
-    -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
-    -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
-    for key, value in pairs(device.profile.components) do
-      log.info("<<---- Moon ---->> multi / device_init - key1 : ", key)
-      device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
-    end
+  --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
+  device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
+  -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
+  -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
+  for key, value in pairs(device.profile.components) do
+    log.info("<<---- Moon ---->> multi / device_init - key1 : ", key)
+    device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
+  end
 
-    ---- Timers Cancel ------
-    for timer in pairs(device.thread.timers) do
-      print("<<<<< cancel timer >>>>>")
-      device.thread:cancel_timer(timer)
-    end
+  ---- Timers Cancel ------
+  for timer in pairs(device.thread.timers) do
+    print("<<<<< cancel timer >>>>>")
+    device.thread:cancel_timer(timer)
+  end
 
-    device.thread:call_on_schedule(
-        120,
-        function ()
-          if device:get_manufacturer() == "_TZ3000_fvh3pjaz" then
-            print("<<< Timer read attribute >>>")
-            -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
-            -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
+  device.thread:call_on_schedule(
+      120,
+      function ()
+        if device:get_manufacturer() == "_TZ3000_fvh3pjaz" then
+          print("<<< Timer read attribute >>>")
+          -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
+          -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
 
-            for key, value in pairs(device.profile.components) do
-              log.info("<<---- Moon ---->> multi / device_init - key2 : ", key)
-              device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
-            end
+          for key, value in pairs(device.profile.components) do
+            log.info("<<---- Moon ---->> multi / device_init - key2 : ", key)
+            device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
           end
-        end,
-        'Refresh schedule')]]
+        end
+      end,
+      'Refresh schedule')]]
   --end
 end
 
@@ -254,7 +254,7 @@ local device_info_changed = function(driver, device, event, args)
       profileName = 'zigbee-tuya-switch-3-group'
     end
   end
-  local success, msg = pcall(device.try_update_metadata, device, {profile=profileName, vendor_provided_label='zambobmaz'})
+  local success, msg = pcall(device.try_update_metadata, device, { profile = profileName, vendor_provided_label = 'zambobmaz' })
 
   -- Did preference value change
   if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
