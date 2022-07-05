@@ -189,38 +189,6 @@ local device_init = function(self, device)
   -- https://github.com/SmartThingsCommunity/SmartThingsPublic/blob/master/devicetypes/smartthings/zigbee-multi-switch.src/zigbee-multi-switch.groovy#L259
   --- special cofigure for this device, read attribute on-off every 120 sec and not configure reports
   util.check_120sec_issue(device)
-  --if check_120sec_issue(device) then
-  --[[print("<<<<<<<<<<< read attribute 0xFF, 1 & 2 >>>>>>>>>>>>>")
-  device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (0xFF))
-  -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
-  -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
-  for key, value in pairs(device.profile.components) do
-    log.info("<<---- Moon ---->> multi / device_init - key1 : ", key)
-    device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
-  end
-
-  ---- Timers Cancel ------
-  for timer in pairs(device.thread.timers) do
-    print("<<<<< cancel timer >>>>>")
-    device.thread:cancel_timer(timer)
-  end
-
-  device.thread:call_on_schedule(
-      120,
-      function ()
-        if device:get_manufacturer() == "_TZ3000_fvh3pjaz" then
-          print("<<< Timer read attribute >>>")
-          -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (1))
-          -- device:send(zcl_clusters.OnOff.attributes.OnOff:read(device):to_endpoint (2))
-
-          for key, value in pairs(device.profile.components) do
-            log.info("<<---- Moon ---->> multi / device_init - key2 : ", key)
-            device:send_to_component(key, zcl_clusters.OnOff.attributes.OnOff:read(device))
-          end
-        end
-      end,
-      'Refresh schedule')]]
-  --end
 end
 
 local device_added = function(driver, device)
@@ -239,25 +207,21 @@ local device_driver_switched = function(driver, device, event, args)
   syncMainComponent(device)
 end
 
+local getGangCount = function(device)
+  return device:component_count() - 1
+end
+
 local device_info_changed = function(driver, device, event, args)
   log.info("<<---- Moon ---->> multi / device_info_changed")
   syncMainComponent(device)
 
-  if device:get_model() == "TS0002" or device:get_model() == "TS0012" or device:get_model() == "LXN-2S27LX1.0" or device:get_model() == "PM-S350-ZB" or device:get_model() == "PM-S340-ZB" or device:get_model() == "FNB56-ZSW03LX2.0" then
-    profileName = 'zigbee-tuya-switch-2'
-    if device.preferences.dashBoardStyle == "multi" then
-      profileName = 'zigbee-tuya-switch-2-group'
-    end
-  else
-    profileName = 'zigbee-tuya-switch-3'
-    if device.preferences.dashBoardStyle == "multi" then
-      profileName = 'zigbee-tuya-switch-3-group'
-    end
-  end
-  local success, msg = pcall(device.try_update_metadata, device, { profile = profileName, vendor_provided_label = 'zambobmaz' })
-
   -- Did preference value change
   if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
+    profileName = 'zigbee-tuya-switch-'..tostring(getGangCount(device))
+    if device.preferences.dashBoardStyle == "multi" then
+      profileName = profileName..'-group'
+    end
+    local success, msg = pcall(device.try_update_metadata, device, { profile = profileName, vendor_provided_label = 'zambobmaz' })
   end
 end
 
@@ -267,7 +231,7 @@ local configure_device = function(self, device)
 end
 
 local is_multi_switch = function(opts, driver, device)
-  for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS) do
+  --[[for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS) do
     log.info("<<---- Moon ---->> multi / is_multi_switch :", device:pretty_print())
 
     if device:get_model() == fingerprint.model then
@@ -277,7 +241,15 @@ local is_multi_switch = function(opts, driver, device)
   end
 
   log.info("<<---- Moon ---->> multi / is_multi_switch : false")
-  return false
+  return false]]
+
+  if getGangCount(device) > 1 then
+    log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+    return true
+  else
+    log.info("<<---- Moon ---->> multi / is_multi_switch : false")
+    return false
+  end
 end
 
 local multi_switch = {
