@@ -30,6 +30,16 @@ preferences:
         two: Switch 2
         all: All
       default: one
+  - title: "Main Button Priority"
+    description: "Select a main button priority"
+    name: mainPriority
+    required: true
+    preferenceType: enumeration
+    definition:
+      options:
+        anyOn: Any On
+        anyOff: Any Off
+      default: anyOff
   - title: "Dashboard Switch Style"
     description: "Select the dashboard card stryle"
     name: dashBoardStyle

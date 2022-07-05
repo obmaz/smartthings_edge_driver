@@ -157,6 +157,13 @@ function syncMainComponent(device)
   local switch3Status = device:get_latest_state("switch3", "switch", "switch", "off", nil)
   local ev = capabilities.switch.switch.on()
 
+  -- Preference option name does not allow on/off keyword
+  if device.preferences.mainPriority == "anyOn" then
+    mainPriority = "on"
+  else
+    mainPriority = "off"
+  end
+
   if component_id == "all" and get_gang_count(device) == 3 then
     if switch1Status == "off" or switch2Status == "off" or switch3Status == "off" then
       ev = capabilities.switch.switch.off()
