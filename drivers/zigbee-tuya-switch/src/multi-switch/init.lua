@@ -71,7 +71,7 @@ local function send_multi_switch(device, s1, s2, s3, ev, on_off)
     device:send_to_component("switch2", on_off)
   end
 
-  if s3 == true then
+  if s3 == true and get_gang_count(device) >= 3 then
     device.profile.components["switch3"]:emit_event(ev)
     device:send_to_component("switch3", on_off)
   end
@@ -157,8 +157,12 @@ function syncMainComponent(device)
   local switch3Status = device:get_latest_state("switch3", "switch", "switch", "off", nil)
   local ev = capabilities.switch.switch.on()
 
-  if component_id == "all" then
+  if component_id == "all" and get_gang_count(device) == 3 then
     if switch1Status == "off" or switch2Status == "off" or switch3Status == "off" then
+      ev = capabilities.switch.switch.off()
+    end
+  elseif component_id == "all" and get_gang_count(device) == 2 then
+    if switch1Status == "off" or switch2Status == "off" then
       ev = capabilities.switch.switch.off()
     end
   elseif component_id == "switchA" then
@@ -207,19 +211,20 @@ local device_driver_switched = function(driver, device, event, args)
   syncMainComponent(device)
 end
 
-local getGangCount = function(device)
+function get_gang_count(device)
   return device:component_count() - 1
 end
 
 local device_info_changed = function(driver, device, event, args)
   log.info("<<---- Moon ---->> multi / device_info_changed")
-  syncMainComponent(device)
+  if args.old_st_store.preferences.remapSwitch ~= device.preferences.remapSwitch then
+    syncMainComponent(device)
+  end
 
-  -- Did preference value change
   if args.old_st_store.preferences.dashBoardStyle ~= device.preferences.dashBoardStyle then
-    profileName = 'zigbee-tuya-switch-'..tostring(getGangCount(device))
+    profileName = 'zigbee-tuya-switch-' .. tostring(get_gang_count(device))
     if device.preferences.dashBoardStyle == "multi" then
-      profileName = profileName..'-group'
+      profileName = profileName .. '-group'
     end
     local success, msg = pcall(device.try_update_metadata, device, { profile = profileName, vendor_provided_label = 'zambobmaz' })
   end
@@ -243,7 +248,7 @@ local is_multi_switch = function(opts, driver, device)
   log.info("<<---- Moon ---->> multi / is_multi_switch : false")
   return false]]
 
-  if getGangCount(device) > 1 then
+  if get_gang_count(device) >= 2 then
     log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
     return true
   else
