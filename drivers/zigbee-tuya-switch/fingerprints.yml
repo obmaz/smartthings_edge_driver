@@ -104,6 +104,11 @@ zigbeeManufacturer:
     manufacturer: _TYZB01_mqel1whf
     model: TS0013
     deviceProfileName: zigbee-tuya-switch-3
+  - id: _TYZB01_stv9a4gy/TS0013
+    deviceLabel: Tuya Switch 3
+    manufacturer: _TYZB01_stv9a4gy
+    model: TS0013
+    deviceProfileName: zigbee-tuya-switch-3
   - id: _TYZB01_8gqspaab/TS0003
     deviceLabel: Tuya Switch 3
     manufacturer: _TYZB01_8gqspaab

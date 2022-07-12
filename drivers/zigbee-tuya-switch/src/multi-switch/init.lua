@@ -27,22 +27,6 @@ local remapSwitchTbl = {
   ["all"] = "all",
 }
 
-local ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS = {
-  { mfr = "", model = "TS0002" },
-  { mfr = "", model = "TS0003" },
-  { mfr = "", model = "TS0012" },
-  { mfr = "", model = "TS0013" },
-  { mfr = "", model = "LXN-2S27LX1.0" },
-  { mfr = "", model = "LXN-3S27LX1.0" },
-  { mfr = "", model = "LXN59-2S7LX1.0" },
-  { mfr = "", model = "PM-S350-ZB" },
-  { mfr = "", model = "PM-S250-ZB" },
-  { mfr = "", model = "PM-S340-ZB" },
-  { mfr = "", model = "PM-S240-ZB" },
-  { mfr = "", model = "FNB56-ZSW03LX2.0" },
-  { mfr = "", model = "FNB56-ZSW02LX2.0" },
-}
-
 local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
@@ -155,37 +139,43 @@ function syncMainComponent(device)
   local switch1Status = device:get_latest_state("switch1", "switch", "switch", "off", nil)
   local switch2Status = device:get_latest_state("switch2", "switch", "switch", "off", nil)
   local switch3Status = device:get_latest_state("switch3", "switch", "switch", "off", nil)
-  local ev = capabilities.switch.switch.on()
+  local ev
 
   -- Preference option name does not allow on/off keyword
-  if device.preferences.mainPriority == "anyOn" then
+  -- on1 is the legacy value due to cache
+  -- if on1, off1 이 더이상 로그에서 보여지지 않으면, 코드에서 삭제해도 무방
+  if device.preferences.mainPriority == "anyOn" or device.preferences.mainPriority == "on1"then
     mainPriority = "on"
+    ev = capabilities.switch.switch.off()
   else
     mainPriority = "off"
+    ev = capabilities.switch.switch.on()
   end
 
   if component_id == "all" and get_gang_count(device) == 3 then
-    if switch1Status == "off" or switch2Status == "off" or switch3Status == "off" then
-      ev = capabilities.switch.switch.off()
+    if switch1Status == mainPriority or switch2Status == mainPriority or switch3Status == mainPriority then
+      ev = (mainPriority == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
     end
   elseif component_id == "all" and get_gang_count(device) == 2 then
-    if switch1Status == "off" or switch2Status == "off" then
-      ev = capabilities.switch.switch.off()
+    if switch1Status == mainPriority or switch2Status == mainPriority then
+      ev = (mainPriority == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+      log.info("<<---- Moon ---->> multi / ev : ", ev)
+
     end
   elseif component_id == "switchA" then
-    if switch1Status == "off" or switch2Status == "off" then
-      ev = capabilities.switch.switch.off()
+    if switch1Status == mainPriority or switch2Status == mainPriority then
+      ev = (mainPriority == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
     end
   elseif component_id == "switchB" then
-    if switch1Status == "off" or switch3Status == "off" then
-      ev = capabilities.switch.switch.off()
+    if switch1Status == mainPriority or switch3Status == mainPriority then
+      ev = (mainPriority == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
     end
   elseif component_id == "switchC" then
-    if switch2Status == "off" or switch3Status == "off" then
-      ev = capabilities.switch.switch.off()
+    if switch2Status == mainPriority or switch3Status == mainPriority then
+      ev = (mainPriority == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
     end
-  elseif remapButtonStatus == "off" then
-    ev = capabilities.switch.switch.off()
+  else
+    ev = (remapButtonStatus == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
   end
 
   device.profile.components["main"]:emit_event(ev)
@@ -224,7 +214,9 @@ end
 
 local device_info_changed = function(driver, device, event, args)
   log.info("<<---- Moon ---->> multi / device_info_changed")
-  if args.old_st_store.preferences.remapSwitch ~= device.preferences.remapSwitch then
+
+  if args.old_st_store.preferences.remapSwitch ~= device.preferences.remapSwitch or
+      args.old_st_store.preferences.mainPriority ~= device.preferences.mainPriority then
     syncMainComponent(device)
   end
 
@@ -243,18 +235,6 @@ local configure_device = function(self, device)
 end
 
 local is_multi_switch = function(opts, driver, device)
-  --[[for _, fingerprint in ipairs(ZIGBEE_TUYA_SWITCH_MULTI_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> multi / is_multi_switch :", device:pretty_print())
-
-    if device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
-      return true
-    end
-  end
-
-  log.info("<<---- Moon ---->> multi / is_multi_switch : false")
-  return false]]
-
   if get_gang_count(device) >= 2 then
     log.info("<<---- Moon ---->> multi / is_multi_switch : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
     return true
