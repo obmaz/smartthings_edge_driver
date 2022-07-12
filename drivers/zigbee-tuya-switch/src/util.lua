@@ -11,7 +11,8 @@
 ---- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ---- See the License for the specific language governing permissions and
 ---- limitations under the License.
-
+---
+local write_attribute = require "st.zigbee.zcl.global_commands.write_attribute"
 local log = require "log"
 local util = {}
 
@@ -52,11 +53,11 @@ end
 util.check_120sec_issue = function(device)
   log.info("<<---- Moon ---->> is_120sec_issue : test device:get_manufacturer() : ", device:get_manufacturer())
   log.info("<<---- Moon ---->> is_120sec_issue : test device:get_model() :", device:get_model())
-  log.info("<<---- Moon ---->> is_120sec_issue : test IS_120SEC_ISSUE_FINGERPRINTS.mfr : ", IS_120SEC_ISSUE_FINGERPRINTS.mfr)
-  log.info("<<---- Moon ---->> is_120sec_issue : test IS_120SEC_ISSUE_FINGERPRINTS.mfr : ", IS_120SEC_ISSUE_FINGERPRINTS.model)
 
   for _, fingerprint in ipairs(IS_120SEC_ISSUE_FINGERPRINTS) do
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
+      log.info("<<---- Moon ---->> is_120sec_issue : true / fingerprint.mfr :", fingerprint.mfr)
+      log.info("<<---- Moon ---->> is_120sec_issue : true / fingerprint.model :", fingerprint.model)
       log.info("<<---- Moon ---->> is_120sec_issue : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
 
       --- Configure basic cluster, attributte 0x0099 to 0x1
