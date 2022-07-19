@@ -104,6 +104,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_k008kbls
     model: TS0012
     deviceProfileName: zigbee-tuya-switch-2
+  - id: _TYZB01_gvackgwu/TS0013
+    deviceLabel: Zemismart Switch 3
+    manufacturer: _TYZB01_gvackgwu
+    model: TS0013
+    deviceProfileName: zigbee-tuya-switch-3
   - id: _TZ3000_wu0shw0i/TS0013
     deviceLabel: Zemismart Switch 3
     manufacturer: _TZ3000_wu0shw0i
