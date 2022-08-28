@@ -1,0 +1,21 @@
+name: lan-divoom64
+components:
+  - id: main
+    capabilities:
+      - id: switch
+        version: 1
+      - id: refresh
+        version: 1
+  - id: switch1
+    capabilities:
+      - id: switch
+        version: 1
+  - id: switch2
+    capabilities:
+      - id: switch
+        version: 1
+metadata:
+  mnmn: SmartThingsCommunity
+  ocfDeviceType: oic.d.switch
+  vid: 11a4fcd3-27e3-3059-a96e-f79c7a6316eb
+

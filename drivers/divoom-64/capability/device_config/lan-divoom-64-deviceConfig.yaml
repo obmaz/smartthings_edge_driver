@@ -1,0 +1,76 @@
+#smartthings presentation:device-config:create --yaml --input lan-divoom-64-deviceConfig.yaml
+type: profile
+dashboard:
+  states:
+    - component: main
+      capability: switch
+      version: 1
+      idx: 0
+      group: main
+      values: [ ]
+  actions:
+    - component: main
+      capability: switch
+      version: 1
+      idx: 0
+      group: main
+detailView:
+  - component: main
+    capability: switch
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: main
+    capability: refresh
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: switch1
+    capability: switch
+    version: 1
+    values: [ ]
+    patch: [ ]
+  - component: switch2
+    capability: switch
+    version: 1
+    values: [ ]
+    patch: [ ]
+automation:
+  conditions:
+    - component: main
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: switch1
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: switch2
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+  actions:
+    - component: main
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: switch1
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: switch2
+      capability: switch
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
