@@ -1,38 +1,74 @@
----- Zigbee Tuya Switch
-----
----- Licensed under the Apache License, Version 2.0 (the "License");
----- you may not use this file except in compliance with the License.
----- You may obtain a copy of the License at
-----
-----     http://www.apache.org/licenses/LICENSE-2.0
-----
----- Unless required by applicable law or agreed to in writing, software
----- distributed under the License is distributed on an "AS IS" BASIS,
----- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
----- See the License for the specific language governing permissions and
----- limitations under the License.
+local Driver = require('st.driver')
+local caps = require('st.capabilities')
 
-local util = require "util"
-local log = require "log"
-local capabilities = require "st.capabilities"
-local ZigbeeDriver = require "st.zigbee"
-local defaults = require "st.zigbee.defaults"
+-- local imports
+local discovery = require('discovery')
+local lifecycles = require('lifecycles')
+local commands = require('commands')
+local server = require('server')
 
-local device_init = function(self, device)
-  log.info("<<---- Moon ---->> single / device_init")
-  util.check_120sec_issue(device)
+--------------------
+-- Driver definition
+local driver =
+Driver(
+    'LAN-LightBulb',
+    {
+      discovery = discovery.start,
+      lifecycle_handlers = lifecycles,
+      supported_capabilities = {
+        caps.switch,
+        caps.switchLevel,
+        caps.colorControl,
+        caps.refresh
+      },
+      capability_handlers = {
+        -- Switch command handler
+        [caps.switch.ID] = {
+          [caps.switch.commands.on.NAME] = commands.on_off,
+          [caps.switch.commands.off.NAME] = commands.on_off
+        },
+        -- Switch Level command handler
+        [caps.switchLevel.ID] = {
+          [caps.switchLevel.commands.setLevel.NAME] = commands.set_level
+        },
+        -- Color Control command handler
+        [caps.colorControl.ID] = {
+          [caps.colorControl.commands.setColor.NAME] = commands.set_color
+        },
+        -- Refresh command handler
+        [caps.refresh.ID] = {
+          [caps.refresh.commands.refresh.NAME] = commands.refresh
+        }
+      }
+    }
+)
+
+---------------------------------------
+-- Switch control for external commands
+function driver:on_off(device, on_off)
+  if on_off == 'off' then
+    return device:emit_event(caps.switch.switch.off())
+  end
+  return device:emit_event(caps.switch.switch.on())
 end
 
-local zigbee_tuya_switch_driver_template = {
-  supported_capabilities = {
-    capabilities.switch,
-    capabilities.refresh
-  },
-  lifecycle_handlers = {
-    init = device_init,
-  }
-}
+---------------------------------------------
+-- Switch level control for external commands
+function driver:set_level(device, lvl)
+  if lvl == 0 then
+    device:emit_event(caps.switch.switch.off())
+  else
+    device:emit_event(caps.switch.switch.on())
+  end
+  return device:emit_event(caps.switchLevel.level(lvl))
+end
 
-defaults.register_for_default_handlers(zigbee_tuya_switch_driver_template, zigbee_tuya_switch_driver_template.supported_capabilities)
-local zigbee_driver = ZigbeeDriver("zigbee-tuya-switch", zigbee_tuya_switch_driver_template)
-zigbee_driver:run()
+-----------------------------
+-- Initialize Hub server
+-- that will open port to
+-- allow bidirectional comms.
+server.start(driver)
+
+--------------------
+-- Initialize Driver
+driver:run()
