@@ -85,16 +85,16 @@ end
 
 local function create_device(driver, device)
   log.info('===== CREATING DEVICE...')
-  log.info('===== DEVICE DESTINATION ADDRESS: '..device.location)
+  --log.info('===== DEVICE DESTINATION ADDRESS: '..device.location)
   -- device metadata table
   local metadata = {
     type = config.DEVICE_TYPE,
-    device_network_id = device.location,
-    label = device.name,
+    device_network_id = "device.location",
+    label = "device.name",
     profile = config.DEVICE_PROFILE,
-    manufacturer = device.mn,
-    model = device.model,
-    vendor_provided_label = device.UDN
+    manufacturer = "device.mn",
+    model = "device.model",
+    vendor_provided_label = "device.UDN"
   }
   return driver:try_create_device(metadata)
 end
@@ -117,7 +117,7 @@ function disco.start(driver, opts, cons)
     --local device_res = find_device()
       --device_res = parse_ssdp(device_res)
       log.info('===== DEVICE FOUND IN NETWORK...')
-      log.info('===== DEVICE DESCRIPTION AT: '..device_res.location)
+      --log.info('===== DEVICE DESCRIPTION AT: '..device_res.location)
 
       --local device = fetch_device_info(device_res.location)
       return create_device(driver, device)
