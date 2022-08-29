@@ -30,9 +30,6 @@ local zigbee_tuya_switch_driver_template = {
   },
   lifecycle_handlers = {
     init = device_init,
-  },
-  sub_drivers = {
-    require("multi-switch")
   }
 }
 

@@ -1,5 +1,5 @@
-name: 'LAN LightBulb'
-packageKey: 'LAN-LightBulb'
+name: 'LAN Divoom64'
+packageKey: 'LAN-Divoom64'
 permissions:
   lan: {}
   discovery: {}
