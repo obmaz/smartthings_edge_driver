@@ -1,4 +1,4 @@
-name: lan-divoom64
+name: LAN-Divoom64
 components:
   - id: main
     capabilities:
@@ -18,4 +18,14 @@ metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
   vid: 11a4fcd3-27e3-3059-a96e-f79c7a6316eb
+preferences:
+  - title: "Server Address"
+    name: divoom64_addr
+    description: "IP:port"
+    required: true
+    preferenceType: string
+    definition:
+    stringType: text
+    minLength: 17
+    default: "http://192.168.0.87"
 

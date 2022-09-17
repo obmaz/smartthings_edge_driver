@@ -17,7 +17,7 @@
 @REM smartthings edge:drivers:package ./
 @REM smartthings edge:drivers:uninstall --hub %hub%
 
-@REM packageKey: 'zigbee-aqara-button'
+@REM packageKey: 'LAN-Divoom64'
 set driverId=6632bf69-ee83-4097-a8e2-da6c344d9fa6
 set channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 set hub=37d997a3-7579-47f2-8ae9-804fce729f7b
