@@ -158,9 +158,12 @@ end
 
 -- Called when device was just created in SmartThings
 local function device_added (driver, device)
-  log.info(device.id .. ": " .. device.device_network_id .. "> ADDED")
-  --device:emit_component_event(device.profile.components.main, capabilities.temperatureMeasurement.temperature({ value = 20, unit = 'C' }))
-  --device:emit_component_event(device.profile.components.main, capabilities.relativeHumidityMeasurement.humidity(50))
+  for key, value in pairs(device.profile.components) do
+    log.info("<<---- Moon ---->> multi / device_added - key : ", key)
+  device.profile.components[key]:emit_event(capabilities.switch.switch.on())
+  device:send_to_component(key, zcl_clusters.OnOff.server.commands.On(device))
+  end
+  device:refresh()
 end
 
 -- Called when SmartThings thinks the device needs provisioning

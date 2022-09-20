@@ -19,13 +19,12 @@ metadata:
   ocfDeviceType: oic.d.switch
   vid: 11a4fcd3-27e3-3059-a96e-f79c7a6316eb
 preferences:
-  - title: "Server Address"
-    name: divoom64_addr
+  - title: "Divoom 64 IP Address"
+    name: divoom64IP
     description: "IP:port"
     required: true
     preferenceType: string
     definition:
-    stringType: text
-    minLength: 17
-    default: "http://192.168.0.87"
-
+      stringType: text
+      minLength: 17
+      default: "http://192.168.0.87"
