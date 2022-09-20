@@ -50,7 +50,7 @@ local device_added = function(driver, device)
   end
 end
 
-local configure_device = function(self, device)
+local device_doconfigure = function(self, device)
   log.info("<<---- Moon ---->> configure_device")
   device:configure()
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
@@ -79,7 +79,7 @@ local zigbee_sonoff_button_driver_template = {
   },
   lifecycle_handlers = {
     added = device_added,
-    doConfigure = configure_device,
+    doConfigure = device_doconfigure,
   }
 }
 

@@ -21,10 +21,10 @@ metadata:
 preferences:
   - title: "Divoom 64 IP Address"
     name: divoom64IP
-    description: "IP:port"
+    description: "IP"
     required: true
     preferenceType: string
     definition:
       stringType: text
-      minLength: 17
+      minLength: 15
       default: "http://192.168.0.87"

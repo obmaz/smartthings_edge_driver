@@ -231,7 +231,7 @@ local device_info_changed = function(driver, device, event, args)
   end
 end
 
-local configure_device = function(self, device)
+local device_doconfigure = function(self, device)
   log.info("<<---- Moon ---->> multi / configure_device")
   device:configure()
 end
@@ -266,7 +266,7 @@ local multi_switch = {
     added = device_added,
     driverSwitched = device_driver_switched,
     infoChanged = device_info_changed,
-    doConfigure = configure_device
+    doConfigure = device_doconfigure
   },
   can_handle = is_multi_switch,
 }
