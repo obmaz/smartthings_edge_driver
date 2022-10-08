@@ -214,8 +214,8 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_qcgw8qfa
     model: TS0002
     deviceProfileName: zigbee-tuya-switch-2
-  - id: _3A Smart Home DE/LXN59-1S7LX1.0
-    deviceLabel: Zemismart 1
+  - id: 3A-Smart-Home-DE/LXN59-1S7LX1.0
+    deviceLabel: 3A Smart Home DE
     manufacturer: 3A Smart Home DE
     model: LXN59-1S7LX1.0
     deviceProfileName: zigbee-tuya-switch-1
