@@ -6,8 +6,6 @@ It is the SmartThings Edge Drivers.
 You can enroll the channel and install edge drivers by using invitation url   
 https://api.smartthings.com/invitation-web/accept?id=2d6da83b-ae22-4fda-8af5-bbb8890872d4
 
-Note : ST Edge Driver is in Beta stage, so it can be removed without any notice.  
-
 ### Developer
 The source code required for installation can be found in each directory.  
 If necessary, you can manually install it by adding a fingerprinter.  
