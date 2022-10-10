@@ -10,14 +10,14 @@ components:
     capabilities:
       - id: switch
         version: 1
-  - id: switch2
+  - id: Device Sensor
     capabilities:
-      - id: switch
+      - id: temperatureMeasurement
         version: 1
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 11a4fcd3-27e3-3059-a96e-f79c7a6316eb
+  vid: 991f387b-7e7e-3095-8a02-5f137c57c3c2
 preferences:
   - title: "Divoom 64 IP Address"
     name: divoom64IP

@@ -30,7 +30,6 @@ local refresh_handler = function(driver, device, command)
 end
 
 local button_handler = function(driver, device, zb_rx)
-  --function button_handler(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler", ep)
 

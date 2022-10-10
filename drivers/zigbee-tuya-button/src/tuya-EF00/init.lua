@@ -82,15 +82,15 @@ local ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS = {
 
 local is_tuya_ef00 = function(opts, driver, device)
   for _, fingerprint in ipairs(ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> multi / is_tuya_ef00 :", device:pretty_print())
+    log.info("<<---- Moon ---->> is_tuya_ef00 :", device:pretty_print())
 
     if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> multi / is_tuya_ef00 : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
+      log.info("<<---- Moon ---->> is_tuya_ef00 : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
       return true
     end
   end
 
-  log.info("<<---- Moon ---->> multi / is_tuya_ef00 : false")
+  log.info("<<---- Moon ---->> is_tuya_ef00 : false")
   return false
 end
 

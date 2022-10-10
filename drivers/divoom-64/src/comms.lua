@@ -7,7 +7,7 @@ https.TIMEOUT = 3
 local ltn12 = require "ltn12"
 local log = require "log"
 
-local function issue_request(device, req_method, req_url, sendbody)
+local function issue_request(req_method, req_url, sendbody)
     local responsechunks = {}
 
     local content_length = 0
@@ -82,5 +82,5 @@ local function issue_request(device, req_method, req_url, sendbody)
 end
 
 return {
-    issue_request = issue_request,
+    request = issue_request,
 }

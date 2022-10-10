@@ -30,8 +30,8 @@ detailView:
     version: 1
     values: [ ]
     patch: [ ]
-  - component: switch2
-    capability: switch
+  - component: Device Sensor
+    capability: temperatureMeasurement
     version: 1
     values: [ ]
     patch: [ ]
@@ -49,8 +49,8 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: switch2
-      capability: switch
+    - component: Device Sensor
+      capability: temperatureMeasurement
       version: 1
       values: [ ]
       patch: [ ]
@@ -68,9 +68,11 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: switch2
-      capability: switch
+    - component: Device Sensor
+      capability: temperatureMeasurement
       version: 1
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+presentationId: 991f387b-7e7e-3095-8a02-5f137c57c3c2
+manufacturerName: SmartThingsCommunity
