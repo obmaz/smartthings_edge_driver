@@ -17,7 +17,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 991f387b-7e7e-3095-8a02-5f137c57c3c2
+  vid: 9f82b634-c7be-3888-905f-f6047a9197df
 preferences:
   - title: "Divoom 64 IP Address"
     name: divoom64IP

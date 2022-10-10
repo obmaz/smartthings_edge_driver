@@ -30,7 +30,7 @@ detailView:
     version: 1
     values: [ ]
     patch: [ ]
-  - component: Device Sensor
+  - component: temperatureMeasurement
     capability: temperatureMeasurement
     version: 1
     values: [ ]
@@ -49,7 +49,7 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: Device Sensor
+    - component: temperatureMeasurement
       capability: temperatureMeasurement
       version: 1
       values: [ ]
@@ -68,11 +68,11 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: Device Sensor
+    - component: temperatureMeasurement
       capability: temperatureMeasurement
       version: 1
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-presentationId: 991f387b-7e7e-3095-8a02-5f137c57c3c2
+presentationId: 9f82b634-c7be-3888-905f-f6047a9197df
 manufacturerName: SmartThingsCommunity
