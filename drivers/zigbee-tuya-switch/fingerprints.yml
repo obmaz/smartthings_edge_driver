@@ -219,6 +219,11 @@ zigbeeManufacturer:
     manufacturer: 3A Smart Home DE
     model: LXN59-1S7LX1.0
     deviceProfileName: zigbee-tuya-switch-1
+  - id: _TZ3000_tonrapsk/TS0002
+    deviceLabel: Tuya Switch 2
+    manufacturer: _TZ3000_tonrapsk
+    model: TS0002
+    deviceProfileName: zigbee-tuya-switch-2
   - id: _TZ3000_9hpxg80k/TS0011
     deviceLabel: Lonsonho Switch 1
     manufacturer: _TZ3000_9hpxg80k # issue of OFF after 2 minutes
