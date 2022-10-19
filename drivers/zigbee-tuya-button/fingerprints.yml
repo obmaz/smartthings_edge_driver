@@ -87,6 +87,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_w4thianr
     model: TS0043
     deviceProfileName: zigbee-tuya-button-3
+  - id: _TZ3000_a7ouggvs/TS0043
+    deviceLabel: Zigbee Lonsonho 3 Button
+    manufacturer: _TZ3000_a7ouggvs
+    model: TS0043
+    deviceProfileName: zigbee-tuya-button-3
    # 2 Button
   - id: _TZ3000_t8hzpgnd/TS0042
     deviceLabel: Zigbee Tuya 2 Button
@@ -113,6 +118,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_h1c2eamp
     model: TS0042
     deviceProfileName: zigbee-tuya-button-2
+  - id: _TZ3000_owgcnkrh/TS0042
+    deviceLabel: Zigbee Lonsonho 2 Button
+    manufacturer: _TZ3000_owgcnkrh
+    model: TS0042
+    deviceProfileName: zigbee-tuya-button-2
   # 1 Button
   - id: _TZ3400_keyjqthh/TS0041
     deviceLabel: Zigbee Tuya 1 Button
@@ -132,6 +142,11 @@ zigbeeManufacturer:
   - id: _TZ3000_tk3s5tyg/TS0041
     deviceLabel: Zigbee Tuya 1 Button
     manufacturer: _TZ3000_tk3s5tyg
+    model: TS0041
+    deviceProfileName: zigbee-tuya-button-1
+  - id: _TZ3000_peszejy7/TS0041
+    deviceLabel: Zigbee Lonsonho 1 Button
+    manufacturer: _TZ3000_peszejy7
     model: TS0041
     deviceProfileName: zigbee-tuya-button-1
   - id: _TZ3000_adkvzooy/TS0042
