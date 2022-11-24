@@ -147,6 +147,10 @@ local lanDriver = Driver("lanDriver", {
       [capabilities.switch.commands.on.NAME] = switch_handler,
       [capabilities.switch.commands.off.NAME] = switch_handler,
     },
+    [capabilities.switch.ID] = {
+      [capabilities.switch.commands.on.NAME] = switch_handler,
+      [capabilities.switch.commands.off.NAME] = switch_handler,
+    },
   }
 })
 
