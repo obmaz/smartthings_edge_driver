@@ -11,20 +11,19 @@
 # VID is a set of Capabilities
 ######################################################################################
 # Creating Custom Capabilities
-# $smartthings capabilities:create -n imageafter45121
-# $smartthings capabilities:create -n imageafter45121 --input divoom-channel.yaml
 # It generates the uid like "imageafter45121.divoomChannel"
+#  $smartthings capabilities:create -n imageafter45121
+#  $smartthings capabilities:create -n imageafter45121 --input divoom-channel.yaml
 #-------------------------------------------------------------------------------------
 # Show capabilities
-# $smartthings capabilities
+#  $smartthings capabilities
 #-------------------------------------------------------------------------------------
 # Delete capability
-# $smartthings capabilities:delete {id}
+#  $smartthings capabilities:delete {id}
 ######################################################################################
 # Creating Capabilities Presentations
 # it might register custom capability to smartthings server
-#
-# $smartthings capabilities:presentation:create imageafter45121.divoomChannel 1 --yaml --input=divoom-presentation.yaml
+#  $smartthings capabilities:presentation:create imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
 #-------------------------------------------------------------------------------------
 # Update Presentation custom capability
-# $smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=divoom-presentation.yaml
+#  $smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
