@@ -1,4 +1,4 @@
-#smartthings presentation:device-config:create --yaml --input lan-divoom-64-deviceConfig.yaml
+#smartthings presentation:device-config:create --yaml --input lan-divoom-deviceConfig.yaml
 type: profile
 dashboard:
   states:

@@ -1,8 +1,7 @@
-#smartthings capabilities:create -n imageafter45121 --input divoom64Channel.yaml
-id: imageafter45121.divoom64Channel
+id: imageafter45121.divoomChannel
 version: 1
 status: proposed
-name: Divoom64 Channel
+name: Divoom Channel
 ephemeral: false
 attributes:
   channel:

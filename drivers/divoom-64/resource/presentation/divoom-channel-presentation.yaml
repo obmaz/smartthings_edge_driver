@@ -1,8 +1,9 @@
-#smartthings capabilities:presentation:create imageafter45121.divoom64Channel 1 --yaml --input=divoom64Channel_presentation.yaml
+#smartthings capabilities:presentation:create imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
+#smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
 ---
 dashboard:
   states:
-    - label: "{{divoom64Channel.value}}"
+    - label: "{{channel.value}}"
   actions: []
   basicPlus: []
 detailView:
@@ -26,7 +27,7 @@ detailView:
             value: 청정 냉방
         supportedValues: supportedDivoomChannels.value
       state:
-        value: divoomChannel.value
+        value: channel.value
         alternatives:
           - key: Auto
             value: 아열대 쾌적
@@ -45,7 +46,7 @@ automation:
     - label: Channel 설정
       displayType: list
       list:
-        value: acOpMode.value
+        value: channel.value
         alternatives:
           - key: Auto
             value: 아열대 쾌적
@@ -77,6 +78,6 @@ automation:
             value: 청정 제습
           - key: CoolClean
             value: 청정 냉방
-        supportedValues: supportedDivoomChannels.value
-id: imageafter45121.divoom64Channel
+        supportedValues: supportedChannels.value
+id: imageafter45121.divoomChannel
 version: 1

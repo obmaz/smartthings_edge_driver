@@ -1,4 +1,4 @@
-name: LAN-Divoom64
+name: LAN-Divoom
 components:
   - id: main
     capabilities:
@@ -19,8 +19,8 @@ metadata:
   ocfDeviceType: oic.d.switch
   vid: 9f82b634-c7be-3888-905f-f6047a9197df
 preferences:
-  - title: "Divoom 64 IP Address"
-    name: divoom64IP
+  - title: "Divoom IP Address"
+    name: divoomIP
     description: "IP"
     required: true
     preferenceType: string
