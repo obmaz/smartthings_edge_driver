@@ -8,6 +8,7 @@ local comms = require "comms"
 
 local initialized = false
 local base_url
+local divoomChannel = capabilities['imageafter45121.divoomChannel']
 
 -- Divoom API http://doc.divoom-gz.com/web/#/12?page_id=241
 local function request(body)
@@ -30,18 +31,27 @@ local function request(body)
   end
 end
 
--- android app에서는 호출이 안됨 2022-10-10
--- https://my.smartthings.com 웹에서는 호출됨
-local function refresh_handler(driver, device, command)
-  log.info("<<---- Moon ---->> refresh_handler")
-
+local function get_channel(device)
   status, response = request('{"Command": "Channel/GetIndex"}');
   if status == true then
     local SelectIndex = response.SelectIndex;
     log.info("<<---- Moon ---->> Channel/GetIndex: ", SelectIndex)
-    device.profile.components['divoomChannel']:emit_event(capabilities.imageafter45121.divoomChannel.channel({ value = "SelectIndex"}))
+    if SelectIndex == 0 then
+      selectIndexValue = "Faces"
+    elseif SelectIndex == 1 then
+      selectIndexValue = "Cloud Channel"
+    elseif SelectIndex == 2 then
+      selectIndexValue = "Visualizer"
+    elseif SelectIndex == 3 then
+      selectIndexValue = "Custom"
+    elseif SelectIndex == 4 then
+      selectIndexValue = "Black Screen"
+    end
+    device.profile.components['channel']:emit_event(divoomChannel.channel({ value = selectIndexValue }))
   end
+end
 
+local function get_all_conf(device)
   status, response = request('{"Command": "Channel/GetAllConf"}');
   if status == true then
     local Brightness = response.Brightness;
@@ -60,16 +70,23 @@ local function refresh_handler(driver, device, command)
     local GyrateAngle = response.GyrateAngle;
     local MirrorFlag = response.MirrorFlag;
     local LightSwitch = response.LightSwitch;
-
   end
+end
 
+local function get_weather_info(device)
   status, response = request('{"Command": "Device/GetWeatherInfo"}');
   if status == true then
     local CurTemp = response.CurTemp;
     log.info("<<---- Moon ---->> Device/GetWeatherInfo: ", CurTemp)
     device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = 'C' }))
   end
+end
 
+local function refresh_handler(driver, device, command)
+  log.info("<<---- Moon ---->> refresh_handler")
+  get_channel(device)
+  get_all_conf(device)
+  get_weather_info(device)
 end
 
 local function device_init(driver, device)
@@ -80,10 +97,6 @@ end
 
 local function device_added (driver, device)
   log.info("<<---- Moon ---->> device_added - key")
-  device.profile.components['main']:emit_event(capabilities.switch.switch.on())
-  device.profile.components['switch1']:emit_event(capabilities.switch.switch.on())
-  local properties = '{"Command": "Device/GetDeviceTime"}'
-  device.profile.components['temperatureMeasurement']:emit_event(capabilities.temperatureMeasurement.temperature({ value = 20, unit = 'C' }))
 end
 
 local function device_doconfigure (_, device)
@@ -135,19 +148,18 @@ local function discovery_handler(driver, _, should_continue)
   end
 end
 
-local switch_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
-  local capa_on_off = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+local bright_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> bright_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> bright_handler - command.args.level : ", command.args.level)
+  status, response = request(string.format('{"Command": "Channel/SetBrightness", "Brightness": %s}', command.args.level));
+  refresh_handler(driver, device, command)
+end
 
-  --if command.component == "main" then
-  --elseif command.component == "switch1" then
-  --  local body = '{"Command": "Device/GetDeviceTime"}'
-  --  status, responseTable = request(body);
-  --  if status == true then
-  --    device.profile.components[command.component]:emit_event(capa_on_off)
-  --  end
-  --end
+local channel_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> channel_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> channel_handler - command.command : ", command.args.value)
+  status, response = request(string.format('{"Command": "Channel/SetIndex", "SelectIndex": %d}', command.args.value));
+  refresh_handler(driver, device, command)
 end
 
 local lanDriver = Driver("lanDriver", {
@@ -170,14 +182,12 @@ local lanDriver = Driver("lanDriver", {
     [capabilities.refresh.ID] = {
       [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
     },
-    [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = switch_handler,
-      [capabilities.switch.commands.off.NAME] = switch_handler,
+    [capabilities.switchLevel.ID] = {
+      [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
     },
-    --[capabilities.imageafter45121.divoomChannel.ID] = {
-    --  [capabilities.imageafter45121.divoomChannel.commands.on.NAME] = switch_handler,
-    --  [capabilities.imageafter45121.divoomChannel.commands.off.NAME] = switch_handler,
-    --},
+    [divoomChannel.ID] = {
+      [divoomChannel.commands.setChannel.NAME] = channel_handler,
+    },
   }
 })
 

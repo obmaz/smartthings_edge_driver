@@ -16,10 +16,17 @@ components:
         version: 1
       - id: temperatureMeasurement
         version: 1
+#    visibleCondition:
+#      capability: myBooleanCapability
+#      version: 1
+#      component: main
+#      value: enabled.value
+#      operator: EQUALS
+#      operand: true
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 764c01a6-1175-388c-b60a-b0ab6f09ac28
+  vid: 5cc9d768-1705-30a9-8119-373dec5ffc2a
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP

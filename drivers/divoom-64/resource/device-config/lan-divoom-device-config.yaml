@@ -53,7 +53,7 @@ automation:
       values: []
       patch: []
       exclusion: []
-    - component: divoomChannel
+    - component: channel
       capability: imageafter45121.divoomChannel
       version: 1
       values: []
@@ -78,7 +78,7 @@ automation:
       values: []
       patch: []
       exclusion: []
-    - component: divoomChannel
+    - component: channel
       capability: imageafter45121.divoomChannel
       version: 1
       values: []

@@ -6,7 +6,8 @@ hub_address=192.168.0.119
 
 #smartthings edge:drivers:uninstall $driverId --hub $hub
 smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=./resource/presentation/divoom-channel-presentation.yaml
-vid=`smartthings presentation:device-config:create --yaml --input lan-divoom-device-config.yaml | sponge lan-divoom-device-config.yaml | grep presentationId | awk '{print $2}'`smartthings edge:drivers:package ./
+vid=`smartthings presentation:device-config:create --yaml --input lan-divoom-device-config.yaml | sponge lan-divoom-device-config.yaml | grep presentationId | awk '{print $2}'`
+smartthings edge:drivers:package ./
 smartthings edge:channels:assign $driverId --channel $channel
 smartthings edge:drivers:install $driverId --channel $channel --hub $hub
 smartthings edge:drivers:logcat $driverId --hub-address=$hub_address
