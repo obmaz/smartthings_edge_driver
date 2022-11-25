@@ -34,21 +34,48 @@ end
 -- https://my.smartthings.com 웹에서는 호출됨
 local function refresh_handler(driver, device, command)
   log.info("<<---- Moon ---->> refresh_handler")
-  --local device_list = lanDriver:get_devices()
-  --log.info("<<---- Moon ---->> refresh_data device_list:", device_list)
-  local body = '{"Command": "Device/GetWeatherInfo"}'
-  status, response = request(body);
+
+  status, response = request('{"Command": "Channel/GetIndex"}');
+  if status == true then
+    local SelectIndex = response.SelectIndex;
+    log.info("<<---- Moon ---->> Channel/GetIndex: ", SelectIndex)
+    device.profile.components['divoomChannel']:emit_event(capabilities.imageafter45121.divoomChannel.channel({ value = "SelectIndex"}))
+  end
+
+  status, response = request('{"Command": "Channel/GetAllConf"}');
+  if status == true then
+    local Brightness = response.Brightness;
+    log.info("<<---- Moon ---->> Channel/GetAllConf Brightness : ", Brightness)
+    device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Brightness }))
+
+    local RotationFlag = response.RotationFlag;
+    local ClockTime = response.ClockTime;
+    local GalleryTime = response.GalleryTime;
+    local SingleGalleyTime = response.SingleGalleyTime;
+    local PowerOnChannelId = response.PowerOnChannelId;
+    local GalleryShowTimeFlag = response.GalleryShowTimeFlag;
+    local CurClockId = response.CurClockId;
+    local Time24Flag = response.Time24Flag;
+    local TemperatureMode = response.TemperatureMode;
+    local GyrateAngle = response.GyrateAngle;
+    local MirrorFlag = response.MirrorFlag;
+    local LightSwitch = response.LightSwitch;
+
+  end
+
+  status, response = request('{"Command": "Device/GetWeatherInfo"}');
   if status == true then
     local CurTemp = response.CurTemp;
-    log.info("<<---- Moon ---->> refresh_data CurTemp:", CurTemp)
-    device.profile.components['temperatureMeasurement']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = 'C' }))
+    log.info("<<---- Moon ---->> Device/GetWeatherInfo: ", CurTemp)
+    device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = 'C' }))
   end
+
 end
 
 local function device_init(driver, device)
   log.info("<<---- Moon ---->> device_init")
   initialized = true
-  base_url = device.preferences.divoom64IP
+  base_url = device.preferences.divoomIP
 end
 
 local function device_added (driver, device)
@@ -78,8 +105,8 @@ end
 
 local function device_info_changed (driver, device, event, args)
   log.info("<<---- Moon ---->> device_info_changed")
-  if args.old_st_store.preferences.divoom64IP ~= device.preferences.divoom64IP then
-    base_url = device.preferences.divoom64IP;
+  if args.old_st_store.preferences.divoomIP ~= device.preferences.divoomIP then
+    base_url = device.preferences.divoomIP;
   end
 end
 
@@ -87,10 +114,10 @@ local function discovery_handler(driver, _, should_continue)
   if not initialized then
     log.info("Creating Web Request device")
     local MFG_NAME = 'SmartThings Community'
-    local VEND_LABEL = 'Edge Divoom64'
-    local MODEL = 'divoom64'
-    local ID = 'divoom64' .. '_' .. socket.gettime()
-    local PROFILE = 'LAN-Divoom64'
+    local VEND_LABEL = 'Edge Divoom'
+    local MODEL = 'divoom'
+    local ID = 'divoom' .. '_' .. socket.gettime()
+    local PROFILE = 'LAN-Divoom'
 
     local create_device_msg = {
       type = "LAN",
@@ -101,10 +128,10 @@ local function discovery_handler(driver, _, should_continue)
       model = MODEL,
       vendor_provided_label = VEND_LABEL,
     }
-    assert(driver:try_create_device(create_device_msg), "failed to create divoom64 device")
+    assert(driver:try_create_device(create_device_msg), "failed to create divoom device")
     log.debug("Exiting device creation")
   else
-    log.info('divoom64 device already created')
+    log.info('divoom device already created')
   end
 end
 
@@ -113,14 +140,14 @@ local switch_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local capa_on_off = (command.command == "off") and capabilities.switch.switch.off() or capabilities.switch.switch.on()
 
-  if command.component == "main" then
-  elseif command.component == "switch1" then
-    local body = '{"Command": "Device/GetDeviceTime"}'
-    status, responseTable = request(body);
-    if status == true then
-      device.profile.components[command.component]:emit_event(capa_on_off)
-    end
-  end
+  --if command.component == "main" then
+  --elseif command.component == "switch1" then
+  --  local body = '{"Command": "Device/GetDeviceTime"}'
+  --  status, responseTable = request(body);
+  --  if status == true then
+  --    device.profile.components[command.component]:emit_event(capa_on_off)
+  --  end
+  --end
 end
 
 local lanDriver = Driver("lanDriver", {
@@ -147,12 +174,12 @@ local lanDriver = Driver("lanDriver", {
       [capabilities.switch.commands.on.NAME] = switch_handler,
       [capabilities.switch.commands.off.NAME] = switch_handler,
     },
-    [capabilities.switch.ID] = {
-      [capabilities.switch.commands.on.NAME] = switch_handler,
-      [capabilities.switch.commands.off.NAME] = switch_handler,
-    },
+    --[capabilities.imageafter45121.divoomChannel.ID] = {
+    --  [capabilities.imageafter45121.divoomChannel.commands.on.NAME] = switch_handler,
+    --  [capabilities.imageafter45121.divoomChannel.commands.off.NAME] = switch_handler,
+    --},
   }
 })
 
-log.info('LAN-Divoom64 Started')
+log.info('LAN-Divoom Started')
 lanDriver:run()

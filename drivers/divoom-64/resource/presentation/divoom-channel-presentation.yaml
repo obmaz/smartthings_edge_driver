@@ -7,77 +7,69 @@ dashboard:
   actions: []
   basicPlus: []
 detailView:
-  - label: Channel 설정
+  - label: Channel Select
     displayType: list
     list:
       command:
         name: setChannel
         alternatives:
-          - key: Auto
-            value: 아열대 쾌적
-          - key: Wind
-            value: 청정
-          - key: Cool
-            value: 냉방
-          - key: Dry
-            value: 제습
-          - key: DryClean
-            value: 청정 제습
-          - key: CoolClean
-            value: 청정 냉방
-        supportedValues: supportedDivoomChannels.value
+          - key: 0
+            value: Faces
+          - key: 1
+            value: Cloud Channel
+          - key: 2
+            value: Visualizer
+          - key: 3
+            value: Custom
+          - key: 4
+            value: Black Screen
+        supportedValues: supportedChannels.value
       state:
         value: channel.value
         alternatives:
-          - key: Auto
-            value: 아열대 쾌적
-          - key: Wind
-            value: 청정
-          - key: Cool
-            value: 냉방
-          - key: Dry
-            value: 제습
-          - key: DryClean
-            value: 청정 제습
-          - key: CoolClean
-            value: 청정 냉방
+          - key: 0
+            value: Faces
+          - key: 1
+            value: Cloud Channel
+          - key: 2
+            value: Visualizer
+          - key: 3
+            value: Custom
+          - key: 4
+            value: Black Screen
 automation:
   conditions:
-    - label: Channel 설정
+    - label: Channel Select
       displayType: list
       list:
         value: channel.value
         alternatives:
-          - key: Auto
-            value: 아열대 쾌적
-          - key: Wind
-            value: 청정
-          - key: Cool
-            value: 냉방
-          - key: Dry
-            value: 제습
-          - key: DryClean
-            value: 청정 제습
-          - key: CoolClean
-            value: 청정 냉방
+          - key: 0
+            value: Faces
+          - key: 1
+            value: Cloud Channel
+          - key: 2
+            value: Visualizer
+          - key: 3
+            value: Custom
+          - key: 4
+            value: Black Screen
   actions:
-    - label: Channel 설정
+    - label: Channel Select
       displayType: list
       list:
         command: setChannel
         alternatives:
-          - key: Auto
-            value: 아열대 쾌적
-          - key: Wind
-            value: 청정
-          - key: Cool
-            value: 냉방
-          - key: Dry
-            value: 제습
-          - key: DryClean
-            value: 청정 제습
-          - key: CoolClean
-            value: 청정 냉방
+          - key: 0
+            value: Faces
+          - key: 1
+            value: Cloud Channel
+          - key: 2
+            value: Visualizer
+          - key: 3
+            value: Custom
+          - key: 4
+            value: Black Screen
         supportedValues: supportedChannels.value
 id: imageafter45121.divoomChannel
 version: 1

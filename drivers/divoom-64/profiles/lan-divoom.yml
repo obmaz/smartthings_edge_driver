@@ -6,18 +6,20 @@ components:
         version: 1
       - id: refresh
         version: 1
-  - id: switch1
+  - id: channel
     capabilities:
-      - id: switch
+      - id: imageafter45121.divoomChannel
         version: 1
-  - id: Device Sensor
+  - id: system
     capabilities:
+      - id: switchLevel
+        version: 1
       - id: temperatureMeasurement
         version: 1
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 9f82b634-c7be-3888-905f-f6047a9197df
+  vid: 764c01a6-1175-388c-b60a-b0ab6f09ac28
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP
