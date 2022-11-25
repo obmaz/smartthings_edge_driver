@@ -1,4 +1,4 @@
-#smartthings presentation:device-config:create --yaml --input zigbee-sonoff-button-1-deviceConfig.yaml
+#smartthings presentation:device-config:create --yaml --input zigbee-aqara-button-1-device-config.yaml
 mnmn: SmartThingsCommunity
 vid: d9b2945c-d203-3257-9cdb-4d7f6f403220
 version: 0.0.1
