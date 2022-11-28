@@ -1,5 +1,5 @@
 mnmn: SmartThingsCommunity
-vid: ff76d55f-8c2e-3356-89ab-09fc6985a2e0
+vid: 0217e65e-2c22-326c-8e2e-ef9ea830b74f
 version: 0.0.1
 type: profile
 dashboard:
@@ -96,5 +96,5 @@ automation:
       values: []
       patch: []
       exclusion: []
-presentationId: ff76d55f-8c2e-3356-89ab-09fc6985a2e0
+presentationId: 0217e65e-2c22-326c-8e2e-ef9ea830b74f
 manufacturerName: SmartThingsCommunity

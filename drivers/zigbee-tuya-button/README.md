@@ -9,7 +9,7 @@ It supports 1,2,3 and 4 buttons.
 ![ui](resource/readme-images/app1.jpg)
 
 ## Support Device
-See [fingerprints.yml](./fingerprints.yml)
+See [fingerprints.yml](./fingerprints.yaml)
 
 ### Known Issue
 #### TS004F

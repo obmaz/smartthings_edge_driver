@@ -7,7 +7,7 @@ local zigbee_test_utils = require "integration_test.zigbee_test_utils"
 
 local mock_device = test.mock_device.build_test_zigbee_device(
     {
-      profile = t_utils.get_profile_definition("zigbee-tuya-switch-3.yml"),
+      profile = t_utils.get_profile_definition("zigbee-tuya-switch-3.yaml"),
       zigbee_endpoints = {
         [1] = {
           id = 1,
