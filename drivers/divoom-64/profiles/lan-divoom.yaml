@@ -2,8 +2,6 @@ name: LAN-Divoom
 components:
   - id: main
     capabilities:
-      - id: switch
-        version: 1
       - id: refresh
         version: 1
   - id: channel
@@ -16,6 +14,11 @@ components:
         version: 1
       - id: temperatureMeasurement
         version: 1
+  - id: fan
+    capabilities:
+      - id: fanSpeed
+        key: fanSpeed
+        version: 1
 #    visibleCondition:
 #      capability: myBooleanCapability
 #      version: 1
@@ -26,7 +29,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 0217e65e-2c22-326c-8e2e-ef9ea830b74f
+  vid: 136c5d35-9299-313b-8a48-d4e387176f8b
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP

@@ -1,4 +1,4 @@
 name: 'zigbee-aqara-button'
 packageKey: 'zigbee-aqara-button'
 permissions:
-  zigbee: {}
+  zigbee: { }

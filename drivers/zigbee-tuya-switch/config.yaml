@@ -1,4 +1,4 @@
 name: 'zigbee-tuya-switch'
 packageKey: 'zigbee-tuya-switch'
 permissions:
-  zigbee: {}
+  zigbee: { }

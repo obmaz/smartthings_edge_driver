@@ -59,17 +59,52 @@ local function get_all_conf(device)
     device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Brightness }))
 
     local RotationFlag = response.RotationFlag;
+    log.info("<<---- Moon ---->> Channel/GetAllConf RotationFlag : ", RotationFlag)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = RotationFlag }))
+
     local ClockTime = response.ClockTime;
+    log.info("<<---- Moon ---->> Channel/GetAllConf ClockTime : ", ClockTime)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = ClockTime }))
+
     local GalleryTime = response.GalleryTime;
+    log.info("<<---- Moon ---->> Channel/GetAllConf GalleryTime : ", GalleryTime)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GalleryTime }))
+
     local SingleGalleyTime = response.SingleGalleyTime;
+    log.info("<<---- Moon ---->> Channel/GetAllConf SingleGalleyTime : ", SingleGalleyTime)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = SingleGalleyTime }))
+
     local PowerOnChannelId = response.PowerOnChannelId;
+    log.info("<<---- Moon ---->> Channel/GetAllConf PowerOnChannelId : ", PowerOnChannelId)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = PowerOnChannelId }))
+
     local GalleryShowTimeFlag = response.GalleryShowTimeFlag;
+    log.info("<<---- Moon ---->> Channel/GetAllConf GalleryShowTimeFlag : ", GalleryShowTimeFlag)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GalleryShowTimeFlag }))
+
     local CurClockId = response.CurClockId;
+    log.info("<<---- Moon ---->> Channel/GetAllConf CurClockId : ", CurClockId)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = CurClockId }))
+
     local Time24Flag = response.Time24Flag;
+    log.info("<<---- Moon ---->> Channel/GetAllConf Time24Flag : ", Time24Flag)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Time24Flag }))
+
     local TemperatureMode = response.TemperatureMode;
+    log.info("<<---- Moon ---->> Channel/GetAllConf TemperatureMode : ", TemperatureMode)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = TemperatureMode }))
+
     local GyrateAngle = response.GyrateAngle;
+    log.info("<<---- Moon ---->> Channel/GetAllConf GyrateAngle : ", GyrateAngle)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GyrateAngle }))
+
     local MirrorFlag = response.MirrorFlag;
+    log.info("<<---- Moon ---->> Channel/GetAllConf MirrorFlag : ", MirrorFlag)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = MirrorFlag }))
+
     local LightSwitch = response.LightSwitch;
+    log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
+    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = LightSwitch }))
   end
 end
 

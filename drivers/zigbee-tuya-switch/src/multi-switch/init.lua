@@ -146,7 +146,7 @@ function syncMainComponent(device)
   -- if on1, off1 이 더이상 로그에서 보여지지 않으면, 코드에서 삭제해도 무방
   log.info("<<---- Moon ---->> multi / mainPriority : ", device.preferences.mainPriority)
 
-  if device.preferences.mainPriority == "anyOn" or device.preferences.mainPriority == "on1"then
+  if device.preferences.mainPriority == "anyOn" or device.preferences.mainPriority == "on1" then
     mainPriority = "on"
     ev = capabilities.switch.switch.off()
   else

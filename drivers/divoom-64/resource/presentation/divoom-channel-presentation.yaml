@@ -1,11 +1,10 @@
 #smartthings capabilities:presentation:create imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
-#smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
 ---
 dashboard:
   states:
     - label: "{{channel.value}}"
-  actions: []
-  basicPlus: []
+  actions: [ ]
+  basicPlus: [ ]
 detailView:
   - label: Channel Select
     displayType: list

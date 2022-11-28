@@ -11,7 +11,7 @@ dashboard:
       version: 1
       idx: 0
       group: main
-      values: []
+      values: [ ]
       composite: false
   actions:
     - component: button1
@@ -23,8 +23,8 @@ detailView:
   - component: main
     capability: battery
     version: 1
-    values: []
-    patch: []
+    values: [ ]
+    patch: [ ]
   - component: main
     capability: refresh
     version: 1
@@ -33,56 +33,56 @@ detailView:
   - component: button1
     capability: button
     version: 1
-    values: []
-    patch: []
+    values: [ ]
+    patch: [ ]
   - component: button2
     capability: button
     version: 1
-    values: []
-    patch: []
+    values: [ ]
+    patch: [ ]
   - component: button3
     capability: button
     version: 1
-    values: []
-    patch: []
+    values: [ ]
+    patch: [ ]
 automation:
   conditions:
     - component: button1
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
     - component: button2
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
     - component: button3
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
   actions:
     - component: button1
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
     - component: button2
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
     - component: button3
       capability: button
       version: 1
-      values: []
-      patch: []
-      exclusion: []
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
 presentationId: bc787364-1e72-3008-a815-af60d25cf1dd
 manufacturerName: SmartThingsCommunity

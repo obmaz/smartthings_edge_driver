@@ -1,5 +1,5 @@
 name: 'LAN Divoom'
 packageKey: 'LAN-Divoom'
 permissions:
-  lan: {}
-  discovery: {}
+  lan: { }
+  discovery: { }

@@ -14,21 +14,21 @@ dashboard:
       version: 1
       idx: 0
       group: Switch1
-      composite: true      
+      composite: true
       values: [ ]
     - component: switch2
       capability: switch
       version: 1
       idx: 0
       group: Switch2
-      composite: true     
+      composite: true
       values: [ ]
     - component: switch3
       capability: switch
       version: 1
       idx: 0
       group: Switch3
-      composite: true      
+      composite: true
       values: [ ]
   actions:
     - component: main

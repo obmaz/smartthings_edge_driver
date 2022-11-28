@@ -8,79 +8,79 @@ local ltn12 = require "ltn12"
 local log = require "log"
 
 local function issue_request(req_method, req_url, sendbody)
-    local responsechunks = {}
+  local responsechunks = {}
 
-    local content_length = 0
-    if sendbody then
-        content_length = string.len(sendbody)
-    end
+  local content_length = 0
+  if sendbody then
+    content_length = string.len(sendbody)
+  end
 
-    local protocol = req_url:match('^(%a+):')
-    local body, code, headers, status
-    local sethost
+  local protocol = req_url:match('^(%a+):')
+  local body, code, headers, status
+  local sethost
 
-    sethost = req_url
+  sethost = req_url
 
-    log.debug('sethost:', sethost)
-    sethost = (sethost .. '/'):match('://([^/]+)/')
-    log.debug('Host=', sethost)
+  log.debug('sethost:', sethost)
+  sethost = (sethost .. '/'):match('://([^/]+)/')
+  log.debug('Host=', sethost)
 
-    local sendheaders = {
-        ["Acccept"] = '*/*',
-        ["Host"] = sethost,
-        ["Content-Length"] = content_length,
-    }
+  local sendheaders = {
+    ["Acccept"] = '*/*',
+    ["Host"] = sethost,
+    ["Content-Length"] = content_length,
+  }
 
-    body, code, headers, status = http.request {
-        method = req_method,
-        url = req_url,
-        headers = sendheaders,
-        source = ltn12.source.string(sendbody),
-        sink = ltn12.sink.table(responsechunks)
-    }
+  body, code, headers, status = http.request {
+    method = req_method,
+    url = req_url,
+    headers = sendheaders,
+    source = ltn12.source.string(sendbody),
+    sink = ltn12.sink.table(responsechunks)
+  }
 
-    local response = table.concat(responsechunks)
+  local response = table.concat(responsechunks)
 
-    log.info(string.format("response code=<%s>, status=<%s>", code, status))
+  log.info(string.format("response code=<%s>, status=<%s>", code, status))
 
-    local httpcode_str
-    local httpcode_num
+  local httpcode_str
+  local httpcode_num
 
-    if type(code) == 'number' then
-        httpcode_num = code
+  if type(code) == 'number' then
+    httpcode_num = code
+  else
+    httpcode_str = code
+  end
+
+  if httpcode_num then
+    if (httpcode_num >= 200) and (httpcode_num < 300) then
+      if response then
+        return true, response
+      else
+        return false
+      end
     else
-        httpcode_str = code
+      log.warn(string.format("HTTP %s request to %s failed with http code %s, status: %s", req_method, req_url, tostring(httpcode_num), status))
+      return false
     end
-
-    if httpcode_num then
-        if (httpcode_num >= 200) and (httpcode_num < 300) then
-            if response then
-                return true, response
-            else
-                return false
-            end
-        else
-            log.warn(string.format("HTTP %s request to %s failed with http code %s, status: %s", req_method, req_url, tostring(httpcode_num), status))
-            return false
-        end
+  else
+    if httpcode_str then
+      if string.find(httpcode_str, "closed") then
+        log.warn("Socket closed unexpectedly")
+      elseif string.find(httpcode_str, "refused") then
+        log.warn("Connection refused: ", req_url)
+      elseif string.find(httpcode_str, "timeout") then
+        log.warn("HTTP request timed out: ", req_url)
+      else
+        log.error(string.format("HTTP %s request to %s failed with code: %s, status: %s", req_method, req_url, httpcode_str, status))
+      end
     else
-        if httpcode_str then
-            if string.find(httpcode_str, "closed") then
-                log.warn("Socket closed unexpectedly")
-            elseif string.find(httpcode_str, "refused") then
-                log.warn("Connection refused: ", req_url)
-            elseif string.find(httpcode_str, "timeout") then
-                log.warn("HTTP request timed out: ", req_url)
-            else
-                log.error(string.format("HTTP %s request to %s failed with code: %s, status: %s", req_method, req_url, httpcode_str, status))
-            end
-        else
-            log.warn("No response code returned")
-        end
+      log.warn("No response code returned")
     end
-    return false
+  end
+  return false
 end
 
 return {
-    request = issue_request,
+  request = issue_request,
 }

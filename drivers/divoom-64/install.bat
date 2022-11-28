@@ -26,9 +26,7 @@ set hub_address=192.168.0.119
 @REM smartthings edge:drivers:uninstall %driverId% --hub %hub%
 smartthings capabilities:presentation:update imageafter45121.divoomChannel 1 --yaml --input=./resource/presentation/divoom-channel-presentation.yaml
 smartthings presentation:device-config:create --yaml --input ./resource/device-config/lan-divoom-device-config.yaml
-@REM set srcVid=`type ./resource/device-config/lan-divoom-device-config.yaml | grep presentationId | awk '{print $2}'`
-@REM set tarVid=`type ./profiles/lan-divoom.yaml | grep vid | awk '{print $2}'`
-@REM set sed -e "s/$tarVid/$srcVid/g" ./profiles/lan-divoom.yaml | sponge ./profiles/lan-divoom.yaml
+@REM sed -e "s/vid.*/$vid/g" ./profiles/lan-divoom.yaml | sponge ./profiles/lan-divoom.yaml
 smartthings edge:drivers:package ./
 smartthings edge:channels:assign %driverId% --channel %channel%
 smartthings edge:drivers:install %driverId% --channel %channel% --hub %hub%

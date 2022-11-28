@@ -21,7 +21,7 @@ dashboard:
       version: 1
       idx: 0
       group: Switch2
-      composite: true      
+      composite: true
       values: [ ]
   actions:
     - component: main
