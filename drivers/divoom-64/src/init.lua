@@ -228,9 +228,9 @@ local message_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> message_handler - command.args.value : ", command.args.value)
   local payload = string.format(
       '{"Command":"Draw/SendHttpText", "TextId":4, "x":20, "y":20, "dir":0, "font":4, "TextWidth":32, "speed":10, "TextString": "%s", "color":"#FFFF00", "align":1 }', command.args.value)
+  --local payload = string.format('{"Command":"Draw/ClearHttpText"}')
   status, response = request(payload);
   log.info("<<---- Moon ---->> message_handler - status : ", status)
-  log.info("<<---- Moon ---->> message_handler - response : ", response.error_code)
   if status == true then
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
   else
