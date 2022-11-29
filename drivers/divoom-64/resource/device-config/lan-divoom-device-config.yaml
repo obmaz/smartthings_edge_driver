@@ -30,7 +30,7 @@ detailView:
     values: [ ]
     patch: [ ]
   - component: main
-    capability: imageafter45121.divoomChannel
+    capability: imageafter45121.channel
     version: 1
     values: [ ]
     patch: [ ]
@@ -53,6 +53,10 @@ detailView:
 #      - key: temperature.value
 #        label : 99
     patch: [ ]
+  - component: system
+    capability: imageafter45121.weather
+    version: 1
+    values: []
 automation:
   conditions:
     - component: main
@@ -62,7 +66,7 @@ automation:
       patch: [ ]
       exclusion: [ ]
     - component: system
-      capability: imageafter45121.divoomChannel
+      capability: imageafter45121.channel
       version: 1
       values: [ ]
       patch: [ ]
@@ -70,13 +74,7 @@ automation:
     - component: system
       capability: switchLevel
       version: 1
-      values:
-        - key: level
-          enabledValues: [ ]
-          range:
-            - 10
-            - 80
-          step: 1
+      values: []
       patch: [ ]
       exclusion: [ ]
     - component: system
@@ -85,8 +83,8 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: fan
-      capability: fanSpeed
+    - component: system
+      capability: imageafter45121.weather
       version: 1
       values: [ ]
       patch: [ ]
@@ -98,7 +96,7 @@ automation:
       patch: [ ]
       exclusion: [ ]
     - component: main
-      capability: imageafter45121.divoomChannel
+      capability: imageafter45121.channel
       version: 1
       values: [ ]
       patch: [ ]
@@ -115,9 +113,4 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: system
-      capability: fanSpeed
-      version: 1
-      values: [ ]
-      patch: [ ]
 manufacturerName: SmartThingsCommunity

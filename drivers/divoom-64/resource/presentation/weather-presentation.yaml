@@ -1,0 +1,27 @@
+dashboard:
+  states:
+    - label: "{{weather.value}}"
+  actions: [ ]
+  basicPlus: [ ]
+detailView:
+  - label: Weather
+    displayType: state
+    state:
+      label: "{{weather.value}}"
+automation:
+  conditions:
+    - label: Weather
+      displayType: list
+      list:
+        value: weather.value
+        alternatives:
+          - key: 0
+            value: Sunny
+          - key: 1
+            value: Cloudy
+          - key: 2
+            value: Rainy
+          - key: 3
+            value: Frog
+id: imageafter45121.weather
+version: 1

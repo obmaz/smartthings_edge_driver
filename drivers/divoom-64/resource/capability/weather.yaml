@@ -1,0 +1,15 @@
+id: imageafter45121.weather
+version: 1
+status: proposed
+name: Weather
+ephemeral: false
+attributes:
+  weather:
+    schema:
+      type: object
+      properties:
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - value

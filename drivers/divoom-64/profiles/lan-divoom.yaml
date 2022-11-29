@@ -6,7 +6,7 @@ components:
         version: 1
       - id: refresh
         version: 1
-      - id: imageafter45121.divoomChannel
+      - id: imageafter45121.channel
         version: 1
   - id: system
     capabilities:
@@ -16,6 +16,7 @@ components:
         version: 1
       - id: temperatureMeasurement
         version: 1
+      - id: imageafter45121.weather
 #    visibleCondition:
 #      capability: myBooleanCapability
 #      version: 1
@@ -26,7 +27,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: ffebc77e-769b-3a91-aa6e-95cb075ef523
+  vid: e9d563b4-89a9-3549-a570-3696fc30f8ae
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP

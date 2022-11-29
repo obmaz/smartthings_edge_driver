@@ -68,5 +68,5 @@ automation:
           - key: 4
             value: Black Screen
         supportedValues: supportedChannels.value
-id: imageafter45121.divoomChannel
+id: imageafter45121.channel
 version: 1

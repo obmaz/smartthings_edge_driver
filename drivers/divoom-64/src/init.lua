@@ -5,10 +5,10 @@ local socket = require "cosock.socket"          -- just for time
 local json = require "dkjson"
 local log = require "log"
 local comms = require "comms"
-
 local initialized = false
 local base_url
-local divoomChannel = capabilities['imageafter45121.divoomChannel']
+local capavility_channel = capabilities['imageafter45121.channel']
+local capavility_weather = capabilities['imageafter45121.weather']
 
 -- Divoom API http://doc.divoom-gz.com/web/#/12?page_id=241
 local function request(body)
@@ -47,13 +47,13 @@ local function get_channel(device)
     elseif SelectIndex == 4 then
       selectIndexValue = "Black Screen"
     end
-    device.profile.components['main']:emit_event(divoomChannel.channel({ value = selectIndexValue }))
+    device.profile.components['main']:emit_event(capavility_channel.channel({ value = selectIndexValue }))
   end
 end
 
 local function get_all_conf(device)
   status, response = request('{"Command": "Channel/GetAllConf"}');
---  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
+  --  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
   if status == true then
     local LightSwitch = response.LightSwitch;
     log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
@@ -96,7 +96,7 @@ local function get_all_conf(device)
     log.info("<<---- Moon ---->> Channel/GetAllConf Time24Flag : ", Time24Flag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Time24Flag }))
 
-    local TemperatureMode = response.TemperatureMode;
+    TemperatureMode = response.TemperatureMode;
     log.info("<<---- Moon ---->> Channel/GetAllConf TemperatureMode : ", TemperatureMode)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = TemperatureMode }))
 
@@ -115,8 +115,11 @@ local function get_weather_info(device)
   --{ "error_code": 0, "Weather":"Sunny", "CurTemp":8.080000, "MinTemp":7.140000, "MaxTemp":11.050000, "Pressure":1015, "Humidity":84, "Visibility":10000, "WindSpeed":5.140000 }
   if status == true then
     local CurTemp = response.CurTemp;
+    local Weather = response.Weather;
+    local CelsiusOrFahrenheit = (TemperatureMode == 0) and 'C' or 'F'
     log.info("<<---- Moon ---->> Device/GetWeatherInfo: ", CurTemp)
-    device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = 'C' }))
+    device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = CelsiusOrFahrenheit }))
+    device.profile.components['system']:emit_event(capavility_weather.weather({ value = Weather }))
   end
 end
 
@@ -131,6 +134,7 @@ local function device_init(driver, device)
   log.info("<<---- Moon ---->> device_init")
   initialized = true
   base_url = device.preferences.divoomIP
+  refresh_handler(driver, device, null)
 end
 
 local function device_added (driver, device)
@@ -235,8 +239,8 @@ local lanDriver = Driver("lanDriver", {
     [capabilities.switchLevel.ID] = {
       [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
     },
-    [divoomChannel.ID] = {
-      [divoomChannel.commands.setChannel.NAME] = channel_handler,
+    [capavility_channel.ID] = {
+      [capavility_channel.commands.setChannel.NAME] = channel_handler,
     },
   }
 })
