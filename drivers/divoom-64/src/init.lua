@@ -231,7 +231,11 @@ local message_handler = function(driver, device, command)
   status, response = request(payload);
   log.info("<<---- Moon ---->> message_handler - status : ", status)
   log.info("<<---- Moon ---->> message_handler - response : ", response.error_code)
-
+  if status == true then
+    device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
+  else
+    device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Fail" }))
+  end
 
   refresh_handler(driver, device, command)
 end
