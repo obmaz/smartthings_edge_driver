@@ -2,12 +2,16 @@ name: LAN-Divoom
 components:
   - id: main
     capabilities:
+      - id: switch
+        version: 1
       - id: refresh
         version: 1
       - id: imageafter45121.divoomChannel
         version: 1
   - id: system
     capabilities:
+      - id: switch
+        version: 1
       - id: switchLevel
         version: 1
       - id: temperatureMeasurement
@@ -22,7 +26,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 165fb4fe-7d38-3cba-ada8-6a43a3c93ece
+  vid: ffebc77e-769b-3a91-aa6e-95cb075ef523
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP

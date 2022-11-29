@@ -4,7 +4,7 @@ type: profile
 dashboard:
   states:
     - component: main
-      capability: imageafter45121.divoomChannel
+      capability: switch
       version: 1
       idx: 0
       group: main
@@ -12,13 +12,18 @@ dashboard:
       composite: false
   actions:
     - component: main
-      capability: imageafter45121.divoomChannel
+      capability: switch
       version: 1
       idx: 0
       group: main
       inline: null
   basicPlus: [ ]
 detailView:
+  - component: main
+    capability: switch
+    version: 1
+    values: [ ]
+    patch: [ ]
   - component: main
     capability: refresh
     version: 1

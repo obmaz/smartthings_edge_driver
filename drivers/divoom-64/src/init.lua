@@ -55,6 +55,11 @@ local function get_all_conf(device)
   status, response = request('{"Command": "Channel/GetAllConf"}');
 --  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
   if status == true then
+    local LightSwitch = response.LightSwitch;
+    log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
+    local on_off = (LightSwitch == 0) and capabilities.switch.switch.off() or capabilities.switch.switch.on()
+    device.profile.components['main']:emit_event(on_off)
+
     local Brightness = response.Brightness;
     log.info("<<---- Moon ---->> Channel/GetAllConf Brightness : ", Brightness)
     device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Brightness }))
@@ -102,10 +107,6 @@ local function get_all_conf(device)
     local MirrorFlag = response.MirrorFlag;
     log.info("<<---- Moon ---->> Channel/GetAllConf MirrorFlag : ", MirrorFlag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = MirrorFlag }))
-
-    local LightSwitch = response.LightSwitch;
-    log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
-    --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = LightSwitch }))
   end
 end
 
@@ -185,6 +186,14 @@ local function discovery_handler(driver, _, should_continue)
   end
 end
 
+local switch_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
+  local on_off = (command.command == "off") and 0 or 1
+  status, response = request(string.format('{"Command": "Channel/OnOffScreen", "OnOff": %d}', on_off));
+  refresh_handler(driver, device, command)
+end
+
 local bright_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> bright_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> bright_handler - command.args.level : ", command.args.level)
@@ -218,6 +227,10 @@ local lanDriver = Driver("lanDriver", {
   capability_handlers = {
     [capabilities.refresh.ID] = {
       [capabilities.refresh.commands.refresh.NAME] = refresh_handler,
+    },
+    [capabilities.switch.ID] = {
+      [capabilities.switch.commands.on.NAME] = switch_handler,
+      [capabilities.switch.commands.off.NAME] = switch_handler,
     },
     [capabilities.switchLevel.ID] = {
       [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
