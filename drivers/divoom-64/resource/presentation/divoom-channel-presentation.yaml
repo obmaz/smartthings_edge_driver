@@ -1,5 +1,3 @@
-#smartthings capabilities:presentation:create imageafter45121.divoomChannel 1 --yaml --input=divoom-channel-presentation.yaml
----
 dashboard:
   states:
     - label: "{{channel.value}}"

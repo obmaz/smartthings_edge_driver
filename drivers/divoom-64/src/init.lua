@@ -47,12 +47,13 @@ local function get_channel(device)
     elseif SelectIndex == 4 then
       selectIndexValue = "Black Screen"
     end
-    device.profile.components['channel']:emit_event(divoomChannel.channel({ value = selectIndexValue }))
+    device.profile.components['main']:emit_event(divoomChannel.channel({ value = selectIndexValue }))
   end
 end
 
 local function get_all_conf(device)
   status, response = request('{"Command": "Channel/GetAllConf"}');
+--  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
   if status == true then
     local Brightness = response.Brightness;
     log.info("<<---- Moon ---->> Channel/GetAllConf Brightness : ", Brightness)
@@ -110,6 +111,7 @@ end
 
 local function get_weather_info(device)
   status, response = request('{"Command": "Device/GetWeatherInfo"}');
+  --{ "error_code": 0, "Weather":"Sunny", "CurTemp":8.080000, "MinTemp":7.140000, "MaxTemp":11.050000, "Pressure":1015, "Humidity":84, "Visibility":10000, "WindSpeed":5.140000 }
   if status == true then
     local CurTemp = response.CurTemp;
     log.info("<<---- Moon ---->> Device/GetWeatherInfo: ", CurTemp)

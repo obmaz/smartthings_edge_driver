@@ -1,7 +1,7 @@
 id: imageafter45121.divoomChannel
 version: 1
 status: proposed
-name: Divoom Channel
+#name: Divoom Channel
 ephemeral: false
 attributes:
   channel:

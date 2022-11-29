@@ -3,7 +3,7 @@ version: 0.0.1
 type: profile
 dashboard:
   states:
-    - component: channel
+    - component: main
       capability: imageafter45121.divoomChannel
       version: 1
       idx: 0
@@ -11,7 +11,7 @@ dashboard:
       values: [ ]
       composite: false
   actions:
-    - component: channel
+    - component: main
       capability: imageafter45121.divoomChannel
       version: 1
       idx: 0
@@ -24,7 +24,7 @@ detailView:
     version: 1
     values: [ ]
     patch: [ ]
-  - component: channel
+  - component: main
     capability: imageafter45121.divoomChannel
     version: 1
     values: [ ]
@@ -32,23 +32,21 @@ detailView:
   - component: system
     capability: switchLevel
     version: 1
-    values:
-      - key: level
-        enabledValues: [ ]
-        range:
-          - 10
-          - 80
-        step: 1
-    patch: [ ]
+    values: []
+#      - key: level.value
+#        enabledValues: [ ]
+#        range:
+#          - 10
+#          - 80
+#        step: 1
+#    patch: [ ]
   - component: system
     capability: temperatureMeasurement
     version: 1
-    values: [ ]
-    patch: [ ]
-  - component: fan
-    capability: fanSpeed
-    version: 1
-    values: [ ]
+    values: []
+#    values:
+#      - key: temperature.value
+#        label : 99
     patch: [ ]
 automation:
   conditions:
@@ -58,7 +56,7 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: channel
+    - component: system
       capability: imageafter45121.divoomChannel
       version: 1
       values: [ ]
@@ -67,7 +65,13 @@ automation:
     - component: system
       capability: switchLevel
       version: 1
-      values: [ ]
+      values:
+        - key: level
+          enabledValues: [ ]
+          range:
+            - 10
+            - 80
+          step: 1
       patch: [ ]
       exclusion: [ ]
     - component: system
@@ -76,6 +80,11 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+    - component: fan
+      capability: fanSpeed
+      version: 1
+      values: [ ]
+      patch: [ ]
   actions:
     - component: main
       capability: switch
@@ -83,7 +92,7 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
-    - component: channel
+    - component: main
       capability: imageafter45121.divoomChannel
       version: 1
       values: [ ]
@@ -101,4 +110,9 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+    - component: system
+      capability: fanSpeed
+      version: 1
+      values: [ ]
+      patch: [ ]
 manufacturerName: SmartThingsCommunity

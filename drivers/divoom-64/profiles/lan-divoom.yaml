@@ -4,8 +4,6 @@ components:
     capabilities:
       - id: refresh
         version: 1
-  - id: channel
-    capabilities:
       - id: imageafter45121.divoomChannel
         version: 1
   - id: system
@@ -13,11 +11,6 @@ components:
       - id: switchLevel
         version: 1
       - id: temperatureMeasurement
-        version: 1
-  - id: fan
-    capabilities:
-      - id: fanSpeed
-        key: fanSpeed
         version: 1
 #    visibleCondition:
 #      capability: myBooleanCapability
@@ -29,7 +22,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 136c5d35-9299-313b-8a48-d4e387176f8b
+  vid: 165fb4fe-7d38-3cba-ada8-6a43a3c93ece
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP
