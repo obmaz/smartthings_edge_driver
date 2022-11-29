@@ -17,6 +17,9 @@ components:
       - id: temperatureMeasurement
         version: 1
       - id: imageafter45121.weather
+        version: 1
+      - id: imageafter45121.message
+        version: 1
 #    visibleCondition:
 #      capability: myBooleanCapability
 #      version: 1
@@ -27,7 +30,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: e9d563b4-89a9-3549-a570-3696fc30f8ae
+  vid: 7b09247b-f35e-30e9-956c-3936303b8445
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP

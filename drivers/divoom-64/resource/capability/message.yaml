@@ -1,0 +1,25 @@
+id: imageafter45121.message
+version: 1
+status: proposed
+name: Message
+ephemeral: false
+attributes:
+  message:
+    schema:
+      type: object
+      properties:
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - value
+    setter: setMessage
+    enumCommands: [ ]
+commands:
+  setMessage:
+    name: setMessage
+    arguments:
+      - name: value
+        optional: false
+        schema:
+          type: string

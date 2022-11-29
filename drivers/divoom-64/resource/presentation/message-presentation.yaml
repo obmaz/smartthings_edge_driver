@@ -1,0 +1,24 @@
+dashboard:
+  states:
+    - label: "{{message.value}}"
+  actions: [ ]
+  basicPlus: [ ]
+detailView:
+  - label: Message
+    displayType: textField
+    textField:
+      command: setMessage
+      value: message.value
+automation:
+  conditions:
+    - label: Message
+      displayType: textField
+      textField:
+        value: message.value
+  actions:
+    - label: Message
+      displayType: textField
+      textField:
+        command: setMessage
+id: imageafter45121.message
+version: 1

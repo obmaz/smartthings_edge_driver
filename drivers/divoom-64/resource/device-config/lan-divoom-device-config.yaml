@@ -57,6 +57,10 @@ detailView:
     capability: imageafter45121.weather
     version: 1
     values: []
+  - component: system
+    capability: imageafter45121.message
+    version: 1
+    values: [ ]
 automation:
   conditions:
     - component: main
@@ -88,6 +92,12 @@ automation:
       version: 1
       values: [ ]
       patch: [ ]
+    - component: main
+      capability: imageafter45121.message
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
   actions:
     - component: main
       capability: switch
@@ -109,6 +119,12 @@ automation:
       exclusion: [ ]
     - component: system
       capability: temperatureMeasurement
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: main
+      capability: imageafter45121.message
       version: 1
       values: [ ]
       patch: [ ]

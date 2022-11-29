@@ -4,7 +4,7 @@ dashboard:
   actions: [ ]
   basicPlus: [ ]
 detailView:
-  - label: Channel Select
+  - label: Channel
     displayType: list
     list:
       command:

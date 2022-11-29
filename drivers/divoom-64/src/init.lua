@@ -9,6 +9,7 @@ local initialized = false
 local base_url
 local capavility_channel = capabilities['imageafter45121.channel']
 local capavility_weather = capabilities['imageafter45121.weather']
+local capavility_message = capabilities['imageafter45121.message']
 
 -- Divoom API http://doc.divoom-gz.com/web/#/12?page_id=241
 local function request(body)
@@ -32,7 +33,9 @@ local function request(body)
 end
 
 local function get_channel(device)
-  status, response = request('{"Command": "Channel/GetIndex"}');
+  local payload = string.format('{"Command": "Channel/GetIndex"}')
+  status, response = request(payload);
+
   if status == true then
     local SelectIndex = response.SelectIndex;
     log.info("<<---- Moon ---->> Channel/GetIndex: ", SelectIndex)
@@ -52,8 +55,9 @@ local function get_channel(device)
 end
 
 local function get_all_conf(device)
-  status, response = request('{"Command": "Channel/GetAllConf"}');
   --  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
+  local payload = string.format('{"Command": "Channel/GetAllConf"}')
+  status, response = request(payload);
   if status == true then
     local LightSwitch = response.LightSwitch;
     log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
@@ -111,7 +115,8 @@ local function get_all_conf(device)
 end
 
 local function get_weather_info(device)
-  status, response = request('{"Command": "Device/GetWeatherInfo"}');
+  local payload = string.format('{"Command": "Device/GetWeatherInfo"}')
+  status, response = request(payload);
   --{ "error_code": 0, "Weather":"Sunny", "CurTemp":8.080000, "MinTemp":7.140000, "MaxTemp":11.050000, "Pressure":1015, "Humidity":84, "Visibility":10000, "WindSpeed":5.140000 }
   if status == true then
     local CurTemp = response.CurTemp;
@@ -194,21 +199,40 @@ local switch_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local on_off = (command.command == "off") and 0 or 1
-  status, response = request(string.format('{"Command": "Channel/OnOffScreen", "OnOff": %d}', on_off));
+  local payload = string.format('{"Command": "Channel/OnOffScreen", "OnOff": %d}', on_off)
+  status, response = request(payload);
+
   refresh_handler(driver, device, command)
 end
 
 local bright_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> bright_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> bright_handler - command.args.level : ", command.args.level)
-  status, response = request(string.format('{"Command": "Channel/SetBrightness", "Brightness": %s}', command.args.level));
+  local payload = string.format('{"Command": "Channel/SetBrightness", "Brightness": %s}', command.args.level)
+  status, response = request(payload);
+
   refresh_handler(driver, device, command)
 end
 
 local channel_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> channel_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> channel_handler - command.command : ", command.args.value)
-  status, response = request(string.format('{"Command": "Channel/SetIndex", "SelectIndex": %d}', command.args.value));
+  log.info("<<---- Moon ---->> channel_handler - command.args.value : ", command.args.value)
+  local payload = string.format('{"Command": "Channel/SetIndex", "SelectIndex": %d}', command.args.value)
+  status, response = request(payload);
+
+  refresh_handler(driver, device, command)
+end
+
+local message_handler = function(driver, device, command)
+  log.info("<<---- Moon ---->> message_handler - command.component : ", command.component)
+  log.info("<<---- Moon ---->> message_handler - command.args.value : ", command.args.value)
+  local payload = string.format(
+      '{"Command":"Draw/SendHttpText", "TextId":4, "x":20, "y":20, "dir":0, "font":4, "TextWidth":32, "speed":10, "TextString": "%s", "color":"#FFFF00", "align":1 }', command.args.value)
+  status, response = request(payload);
+  log.info("<<---- Moon ---->> message_handler - status : ", status)
+  log.info("<<---- Moon ---->> message_handler - response : ", response.error_code)
+
+
   refresh_handler(driver, device, command)
 end
 
@@ -241,6 +265,9 @@ local lanDriver = Driver("lanDriver", {
     },
     [capavility_channel.ID] = {
       [capavility_channel.commands.setChannel.NAME] = channel_handler,
+    },
+    [capavility_message.ID] = {
+      [capavility_message.commands.setMessage.NAME] = message_handler,
     },
   }
 })

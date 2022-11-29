@@ -23,7 +23,7 @@
 ######################################################################################
 # Creating Capabilities Presentations
 # it might register custom capability to smartthings server
-#  $smartthings capabilities:presentation:create imageafter45121.channel 1 --yaml --input=divoom-channel-presentation.yaml
+#  $smartthings capabilities:presentation:create imageafter45121.channel 1 --yaml --input=channel-presentation.yaml
 #-------------------------------------------------------------------------------------
 # Update Presentation custom capability
-#  $smartthings capabilities:presentation:update imageafter45121.channel 1 --yaml --input=divoom-channel-presentation.yaml
+#  $smartthings capabilities:presentation:update imageafter45121.channel 1 --yaml --input=channel-presentation.yaml
