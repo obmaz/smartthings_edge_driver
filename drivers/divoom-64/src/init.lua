@@ -15,7 +15,7 @@ local capavility_message = capabilities['imageafter45121.message']
 local function request(body)
   log.info("<<---- Moon ---->> request : ", body)
   -- Divoom 64 has only one endpoint and use POST
-  status, response = comms.request('POST', base_url .. '/post', body)
+  local status, response = comms.request('POST', base_url .. '/post', body)
 
   log.info("<<---- Moon ---->> request, status : ", status)
   log.info("<<---- Moon ---->> request, response : ", response)
@@ -34,7 +34,7 @@ end
 
 local function get_channel(device)
   local payload = string.format('{"Command": "Channel/GetIndex"}')
-  status, response = request(payload);
+  local status, response = request(payload);
 
   if status == true then
     local SelectIndex = response.SelectIndex;
@@ -57,7 +57,7 @@ end
 local function get_all_conf(device)
   --  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
   local payload = string.format('{"Command": "Channel/GetAllConf"}')
-  status, response = request(payload);
+  local status, response = request(payload);
   if status == true then
     local LightSwitch = response.LightSwitch;
     log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
@@ -116,7 +116,7 @@ end
 
 local function get_weather_info(device)
   local payload = string.format('{"Command": "Device/GetWeatherInfo"}')
-  status, response = request(payload);
+  local status, response = request(payload);
   --{ "error_code": 0, "Weather":"Sunny", "CurTemp":8.080000, "MinTemp":7.140000, "MaxTemp":11.050000, "Pressure":1015, "Humidity":84, "Visibility":10000, "WindSpeed":5.140000 }
   if status == true then
     local CurTemp = response.CurTemp;
@@ -200,7 +200,7 @@ local switch_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
   local on_off = (command.command == "off") and 0 or 1
   local payload = string.format('{"Command": "Channel/OnOffScreen", "OnOff": %d}', on_off)
-  status, response = request(payload);
+  local status, response = request(payload);
 
   refresh_handler(driver, device, command)
 end
@@ -209,7 +209,7 @@ local bright_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> bright_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> bright_handler - command.args.level : ", command.args.level)
   local payload = string.format('{"Command": "Channel/SetBrightness", "Brightness": %s}', command.args.level)
-  status, response = request(payload);
+  local status, response = request(payload);
 
   refresh_handler(driver, device, command)
 end
@@ -218,7 +218,7 @@ local channel_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> channel_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> channel_handler - command.args.value : ", command.args.value)
   local payload = string.format('{"Command": "Channel/SetIndex", "SelectIndex": %d}', command.args.value)
-  status, response = request(payload);
+  local status, response = request(payload);
 
   refresh_handler(driver, device, command)
 end
@@ -226,12 +226,20 @@ end
 local message_handler = function(driver, device, command)
   log.info("<<---- Moon ---->> message_handler - command.component : ", command.component)
   log.info("<<---- Moon ---->> message_handler - command.args.value : ", command.args.value)
-  local payload = string.format(
-      '{"Command":"Draw/SendHttpText", "TextId":4, "x":20, "y":20, "dir":0, "font":4, "TextWidth":32, "speed":10, "TextString": "%s", "color":"#FFFF00", "align":1 }', command.args.value)
-  --local payload = string.format('{"Command":"Draw/ClearHttpText"}')
-  status, response = request(payload);
+
+  local payload1 = string.format('{"Command":"Draw/ResetHttpGifId"}')
+  local status1, response1 = request(payload1)
+
+  local payload2 = string.format('{"Command":"Draw/SendHttpGif","PicNum":1,"PicWidth":64,"PicOffset":0,"PicID":1,"PicSpeed":10,"PicData":""}')
+  local status2, response2 = request(payload2)
+
+  local payload3 = string.format(
+      '{"Command":"Draw/SendHttpText", "TextId":1, "x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":5, "TextString": "%s", "color":"#FFFFFF", "align":2 }', command.args.value)
+  local status3, response3 = request(payload3)
+  -- Note: Draw/CommandList로 같이 보내면 작동이 잘 안됨
+
   log.info("<<---- Moon ---->> message_handler - status : ", status)
-  if status == true then
+  if status1 == true and status2 == true and status3 == true then
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
   else
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Fail" }))
