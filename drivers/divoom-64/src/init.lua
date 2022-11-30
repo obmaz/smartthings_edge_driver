@@ -234,7 +234,7 @@ local message_handler = function(driver, device, command)
   local status2, response2 = request(payload2)
 
   local payload3 = string.format(
-      '{"Command":"Draw/SendHttpText", "TextId":1, "x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":5, "TextString": "%s", "color":"#FFFFFF", "align":2 }', command.args.value)
+      '{"Command":"Draw/SendHttpText", "TextId":1, "x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":100, "TextString": "%s", "color":"#FFFFFF", "align":2 }', command.args.value)
   local status3, response3 = request(payload3)
   -- Note: Draw/CommandList로 같이 보내면 작동이 잘 안됨
 
