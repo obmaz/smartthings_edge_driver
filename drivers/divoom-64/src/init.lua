@@ -233,12 +233,16 @@ local message_handler = function(driver, device, command)
   local payload2 = string.format('{"Command":"Draw/SendHttpGif","PicNum":1,"PicWidth":64,"PicOffset":0,"PicID":1,"PicSpeed":10,"PicData":""}')
   local status2, response2 = request(payload2)
 
-  local payload3 = string.format(
-      '{"Command":"Draw/SendHttpText", "TextId":1, "x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":100, "TextString": "%s", "color":"#FFFFFF", "align":2 }', command.args.value)
+  local item1 = string.format(
+      '{"TextId":1, "type":22,"x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":50, "TextString": "Sending Time: %s", "color":"#DDDDDD", "align":2}', os.date())
+  local item2 = string.format(
+      '{"TextId":2, "type":22,"x":0, "y":64, "dir":0, "font":2, "TextWidth":64, "Textheight":64, "speed":50, "TextString": "%s", "color":"#FFFFFF", "align":2}', command.args.value)
+  local payload3 = string.format('{"Command":"Draw/SendHttpItemList", "ItemList":[%s,%s]}', item1, item2)
+
   local status3, response3 = request(payload3)
   -- Note: Draw/CommandList로 같이 보내면 작동이 잘 안됨
 
-  log.info("<<---- Moon ---->> message_handler - status : ", status)
+  log.info("<<---- Moon ---->> message_handler - status : ", status3)
   if status1 == true and status2 == true and status3 == true then
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
   else
