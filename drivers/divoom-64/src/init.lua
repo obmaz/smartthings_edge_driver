@@ -234,9 +234,9 @@ local message_handler = function(driver, device, command)
   local status2, response2 = request(payload2)
 
   local item1 = string.format(
-      '{"TextId":1, "type":22,"x":0, "y":0, "dir":0, "font":2, "TextWidth":64, "Textheight":16, "speed":50, "TextString": "Sending Time: %s", "color":"#DDDDDD", "align":2}', os.date())
+      '{"TextId":1, "type":22,"x":0, "y":0, "dir":0, "font":112, "TextWidth":64, "Textheight":16, "speed":100, "TextString": "Sending Time: %s", "color":"#FF00000", "align":2}', os.date())
   local item2 = string.format(
-      '{"TextId":2, "type":22,"x":0, "y":16, "dir":0, "font":2, "TextWidth":64, "Textheight":16, "speed":50, "TextString": "%s", "color":"#FFFFFF", "align":2}', command.args.value)
+      '{"TextId":2, "type":22,"x":0, "y":7, "dir":0, "font":2, "TextWidth":64, "Textheight":16, "speed":100, "TextString": "%s", "color":"#FFFFFF", "align":2}', command.args.value)
   local payload3 = string.format('{"Command":"Draw/SendHttpItemList", "ItemList":[%s,%s]}', item1, item2)
 
   local status3, response3 = request(payload3)
