@@ -1,0 +1,24 @@
+dashboard:
+  states:
+    - label: "{{visualizerChannel.value}}"
+  actions: [ ]
+  basicPlus: [ ]
+detailView:
+  - label: Visualizer Channel
+    displayType: numberField
+    numberField:
+      command: setVisualizerChannel
+      value: visualizerChannel.value
+automation:
+  conditions:
+    - label: Visualizer Channel
+      displayType: numberField
+      numberField:
+        value: visualizerChannel.value
+  actions:
+    - label: Visualizer Channel
+      displayType: numberField
+      numberField:
+        command: setVisualizerChannel
+id: imageafter45121.visualizerChannel
+version: 1

@@ -1,0 +1,25 @@
+id: imageafter45121.cloudChannel
+version: 1
+status: proposed
+name: Cloud Channel2
+ephemeral: false
+attributes:
+  cloudChannel:
+    schema:
+      type: object
+      properties:
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - value
+    setter: setCloudChannel
+    enumCommands: []
+commands:
+  setCloudChannel:
+    name: setCloudChannel
+    arguments:
+      - name: value
+        optional: false
+        schema:
+          type: string

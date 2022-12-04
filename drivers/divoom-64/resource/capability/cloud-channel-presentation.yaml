@@ -1,0 +1,64 @@
+dashboard:
+  states:
+    - label: "{{cloudChannel.value}}"
+  actions: [ ]
+  basicPlus: [ ]
+detailView:
+  - label: Cloud Channel
+    displayType: list
+    list:
+      command:
+        name: setCloudChannel
+        alternatives:
+          - key: 0
+            value: Recommend Gallery
+          - key: 1
+            value: Favourite
+          - key: 2
+            value: Subscribe Artist
+          - key: 3
+            value: Album
+        supportedValues: supportedCloudChannels.value
+      state:
+        value: cloudChannel.value
+        alternatives:
+          - key: 0
+            value: Recommend Gallery
+          - key: 1
+            value: Favourite
+          - key: 2
+            value: Subscribe Artist
+          - key: 3
+            value: Album
+automation:
+  conditions:
+    - label: Cloud Channel
+      displayType: list
+      list:
+        value: cloudChannel.value
+        alternatives:
+          - key: 0
+            value: Recommend Gallery
+          - key: 1
+            value: Favourite
+          - key: 2
+            value: Subscribe Artist
+          - key: 3
+            value: Album
+  actions:
+    - label: Cloud Channel
+      displayType: list
+      list:
+        command: setCloudChannel
+        alternatives:
+          - key: 0
+            value: Recommend Gallery
+          - key: 1
+            value: Favourite
+          - key: 2
+            value: Subscribe Artist
+          - key: 3
+            value: Album
+        supportedValues: supportedCloudChannels.value
+id: imageafter45121.cloudChannel
+version: 1

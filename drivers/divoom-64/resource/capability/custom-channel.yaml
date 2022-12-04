@@ -1,0 +1,25 @@
+id: imageafter45121.customChannel
+version: 1
+status: proposed
+name: Custom Channel
+ephemeral: false
+attributes:
+  customChannel:
+    schema:
+      type: object
+      properties:
+        value:
+          type: string
+      additionalProperties: false
+      required:
+        - value
+    setter: setCustomChannel
+    enumCommands: [ ]
+commands:
+  setCustomChannel:
+    name: setCustomChannel
+    arguments:
+      - name: value
+        optional: false
+        schema:
+          type: string

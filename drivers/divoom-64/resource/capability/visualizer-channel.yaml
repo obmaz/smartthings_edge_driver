@@ -1,0 +1,27 @@
+id: imageafter45121.visualizerChannel
+version: 1
+status: proposed
+name: visualizerChannel
+ephemeral: false
+attributes:
+  visualizerChannel:
+    schema:
+      type: object
+      properties:
+        value:
+          type: number
+          minimum: 0
+      additionalProperties: false
+      required:
+        - value
+    setter: setVisualizerChannel
+    enumCommands: []
+commands:
+  setVisualizerChannel:
+    name: setVisualizerChannel
+    arguments:
+      - name: value
+        optional: false
+        schema:
+          type: number
+          minimum: 0

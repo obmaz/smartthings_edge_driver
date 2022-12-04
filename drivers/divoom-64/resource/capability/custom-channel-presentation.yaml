@@ -1,0 +1,56 @@
+dashboard:
+  states:
+    - label: "{{customChannel.value}}"
+  actions: [ ]
+  basicPlus: [ ]
+detailView:
+  - label: Custom Channel
+    displayType: list
+    list:
+      command:
+        name: setCustomChannel
+        alternatives:
+          - key: 0
+            value: First
+          - key: 1
+            value: Second
+          - key: 2
+            value: Third
+        supportedValues: supportedCustomChannels.value
+      state:
+        value: customChannel.value
+        alternatives:
+          - key: 0
+            value: First
+          - key: 1
+            value: Second
+          - key: 2
+            value: Third
+automation:
+  conditions:
+    - label: Custom Channel
+      displayType: list
+      list:
+        value: customChannel.value
+        alternatives:
+          - key: 0
+            value: First
+          - key: 1
+            value: Second
+          - key: 2
+            value: Third
+  actions:
+    - label: Custom Channel
+      displayType: list
+      list:
+        command: setCustomChannel
+        alternatives:
+          - key: 0
+            value: First
+          - key: 1
+            value: Second
+          - key: 2
+            value: Third
+        supportedValues: supportedCustomChannels.value
+id: imageafter45121.customChannel
+version: 1

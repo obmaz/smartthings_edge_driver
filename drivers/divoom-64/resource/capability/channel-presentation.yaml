@@ -36,7 +36,7 @@ detailView:
             value: Black Screen
 automation:
   conditions:
-    - label: Channel Select
+    - label: Channel
       displayType: list
       list:
         value: channel.value
@@ -52,7 +52,7 @@ automation:
           - key: 4
             value: Black Screen
   actions:
-    - label: Channel Select
+    - label: Channel
       displayType: list
       list:
         command: setChannel
