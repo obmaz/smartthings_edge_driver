@@ -8,19 +8,22 @@ local comms = require "comms"
 local initialized = false
 local base_url
 local capavility_channel = capabilities['imageafter45121.channel']
+local capavility_cloud_channel = capabilities['imageafter45121.cloudChannel']
+local capavility_visualizer_channel = capabilities['imageafter45121.visualizerChannel']
+local capavility_custom_channel= capabilities['imageafter45121.customChannel']
 local capavility_weather = capabilities['imageafter45121.weather']
 local capavility_message = capabilities['imageafter45121.message']
 
 -- Divoom API http://doc.divoom-gz.com/web/#/12?page_id=241
 local function request(body)
-  log.info("<<---- Moon ---->> request : ", body)
+  log.info("<<---- Divoom ---->> request : ", body)
   -- Divoom 64 has only one endpoint and use POST
   local status, response = comms.request('POST', base_url .. '/post', body)
 
-  log.info("<<---- Moon ---->> request, status : ", status)
-  log.info("<<---- Moon ---->> request, response : ", response)
+  log.info("<<---- Divoom ---->> request, status : ", status)
+  log.info("<<---- Divoom ---->> request, response : ", response)
 
-  if status == true then
+  if status then
     responseTable, pos, err = json.decode(response, 1, nil)
     if responseTable.error_code == 0 then
       return true, responseTable;
@@ -36,9 +39,9 @@ local function get_channel(device)
   local payload = string.format('{"Command": "Channel/GetIndex"}')
   local status, response = request(payload);
 
-  if status == true then
+  if status then
     local SelectIndex = response.SelectIndex;
-    log.info("<<---- Moon ---->> Channel/GetIndex: ", SelectIndex)
+    log.info("<<---- Divoom ---->> Channel/GetIndex: ", SelectIndex)
     if SelectIndex == 0 then
       selectIndexValue = "Faces"
     elseif SelectIndex == 1 then
@@ -58,58 +61,58 @@ local function get_all_conf(device)
   --  { "RotationFlag": 1, "ClockTime": 30, "GalleryTime": 50, "SingleGalleyTime": 3, "PowerOnChannelId": 5, "GalleryShowTimeFlag": 0, "CurClockId": 182, "Time24Flag": 1, "TemperatureMode": 0, "GyrateAngle": 0, "MirrorFlag": 0, "LightSwitch": 1 }
   local payload = string.format('{"Command": "Channel/GetAllConf"}')
   local status, response = request(payload);
-  if status == true then
+  if status then
     local LightSwitch = response.LightSwitch;
-    log.info("<<---- Moon ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf LightSwitch : ", LightSwitch)
     local on_off = (LightSwitch == 0) and capabilities.switch.switch.off() or capabilities.switch.switch.on()
     device.profile.components['main']:emit_event(on_off)
 
     local Brightness = response.Brightness;
-    log.info("<<---- Moon ---->> Channel/GetAllConf Brightness : ", Brightness)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf Brightness : ", Brightness)
     device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Brightness }))
 
     local RotationFlag = response.RotationFlag;
-    log.info("<<---- Moon ---->> Channel/GetAllConf RotationFlag : ", RotationFlag)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf RotationFlag : ", RotationFlag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = RotationFlag }))
 
     local ClockTime = response.ClockTime;
-    log.info("<<---- Moon ---->> Channel/GetAllConf ClockTime : ", ClockTime)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf ClockTime : ", ClockTime)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = ClockTime }))
 
     local GalleryTime = response.GalleryTime;
-    log.info("<<---- Moon ---->> Channel/GetAllConf GalleryTime : ", GalleryTime)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf GalleryTime : ", GalleryTime)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GalleryTime }))
 
     local SingleGalleyTime = response.SingleGalleyTime;
-    log.info("<<---- Moon ---->> Channel/GetAllConf SingleGalleyTime : ", SingleGalleyTime)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf SingleGalleyTime : ", SingleGalleyTime)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = SingleGalleyTime }))
 
     local PowerOnChannelId = response.PowerOnChannelId;
-    log.info("<<---- Moon ---->> Channel/GetAllConf PowerOnChannelId : ", PowerOnChannelId)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf PowerOnChannelId : ", PowerOnChannelId)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = PowerOnChannelId }))
 
     local GalleryShowTimeFlag = response.GalleryShowTimeFlag;
-    log.info("<<---- Moon ---->> Channel/GetAllConf GalleryShowTimeFlag : ", GalleryShowTimeFlag)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf GalleryShowTimeFlag : ", GalleryShowTimeFlag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GalleryShowTimeFlag }))
 
     local CurClockId = response.CurClockId;
-    log.info("<<---- Moon ---->> Channel/GetAllConf CurClockId : ", CurClockId)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf CurClockId : ", CurClockId)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = CurClockId }))
 
     local Time24Flag = response.Time24Flag;
-    log.info("<<---- Moon ---->> Channel/GetAllConf Time24Flag : ", Time24Flag)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf Time24Flag : ", Time24Flag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = Time24Flag }))
 
     TemperatureMode = response.TemperatureMode;
-    log.info("<<---- Moon ---->> Channel/GetAllConf TemperatureMode : ", TemperatureMode)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf TemperatureMode : ", TemperatureMode)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = TemperatureMode }))
 
     local GyrateAngle = response.GyrateAngle;
-    log.info("<<---- Moon ---->> Channel/GetAllConf GyrateAngle : ", GyrateAngle)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf GyrateAngle : ", GyrateAngle)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = GyrateAngle }))
 
     local MirrorFlag = response.MirrorFlag;
-    log.info("<<---- Moon ---->> Channel/GetAllConf MirrorFlag : ", MirrorFlag)
+    log.info("<<---- Divoom ---->> Channel/GetAllConf MirrorFlag : ", MirrorFlag)
     --device.profile.components['system']:emit_event(capabilities.switchLevel.level({ value = MirrorFlag }))
   end
 end
@@ -118,32 +121,36 @@ local function get_weather_info(device)
   local payload = string.format('{"Command": "Device/GetWeatherInfo"}')
   local status, response = request(payload);
   --{ "error_code": 0, "Weather":"Sunny", "CurTemp":8.080000, "MinTemp":7.140000, "MaxTemp":11.050000, "Pressure":1015, "Humidity":84, "Visibility":10000, "WindSpeed":5.140000 }
-  if status == true then
+  if status then
     local CurTemp = response.CurTemp;
     local Weather = response.Weather;
     local CelsiusOrFahrenheit = (TemperatureMode == 0) and 'C' or 'F'
-    log.info("<<---- Moon ---->> Device/GetWeatherInfo: ", CurTemp)
+    log.info("<<---- Divoom ---->> Device/GetWeatherInfo: ", CurTemp)
     device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = CelsiusOrFahrenheit }))
     device.profile.components['system']:emit_event(capavility_weather.weather({ value = Weather }))
   end
 end
 
 local function refresh_handler(driver, device, command)
-  log.info("<<---- Moon ---->> refresh_handler")
+  log.info("<<---- Divoom ---->> refresh_handler")
   get_channel(device)
+  -- Divoom API에 특정 Channel의 Index를 가지고 오는 방법이 없음, emit 시 상태를 설정함
+  --get_cloud_channel(device)
+  --get_visualizer_channel(device)
+  --get_custom_channel(device)
   get_all_conf(device)
   get_weather_info(device)
 end
 
 local function device_init(driver, device)
-  log.info("<<---- Moon ---->> device_init")
+  log.info("<<---- Divoom ---->> device_init")
   initialized = true
   base_url = device.preferences.divoomIP
   refresh_handler(driver, device, null)
 end
 
 local function device_added (driver, device)
-  log.info("<<---- Moon ---->> device_added - key")
+  log.info("<<---- Divoom ---->> device_added - key")
 end
 
 local function device_doconfigure (_, device)
@@ -151,20 +158,20 @@ local function device_doconfigure (_, device)
 end
 
 local function device_removed(_, device)
-  log.info("<<---- Moon ---->> device_removed : ", device.id .. ": " .. device.device_network_id)
+  log.info("<<---- Divoom ---->> device_removed : ", device.id .. ": " .. device.device_network_id)
   initialized = false
 end
 
 local function device_driver_switched(driver, device, event, args)
-  log.info("<<---- Moon ---->> device_driver_switched")
+  log.info("<<---- Divoom ---->> device_driver_switched")
 end
 
 local function shutdown_handler(driver, event)
-  log.info("<<---- Moon ---->> shutdown_handler")
+  log.info("<<---- Divoom ---->> shutdown_handler")
 end
 
 local function device_info_changed (driver, device, event, args)
-  log.info("<<---- Moon ---->> device_info_changed")
+  log.info("<<---- Divoom ---->> device_info_changed")
   if args.old_st_store.preferences.divoomIP ~= device.preferences.divoomIP then
     base_url = device.preferences.divoomIP;
   end
@@ -196,8 +203,8 @@ local function discovery_handler(driver, _, should_continue)
 end
 
 local switch_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> on_off_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> on_off_handler - command.command : ", command.command)
+  log.info("<<---- Divoom ---->> on_off_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> on_off_handler - command.command : ", command.command)
   local on_off = (command.command == "off") and 0 or 1
   local payload = string.format('{"Command": "Channel/OnOffScreen", "OnOff": %d}', on_off)
   local status, response = request(payload);
@@ -206,8 +213,8 @@ local switch_handler = function(driver, device, command)
 end
 
 local bright_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> bright_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> bright_handler - command.args.level : ", command.args.level)
+  log.info("<<---- Divoom ---->> bright_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> bright_handler - command.args.level : ", command.args.level)
   local payload = string.format('{"Command": "Channel/SetBrightness", "Brightness": %s}', command.args.level)
   local status, response = request(payload);
 
@@ -215,17 +222,50 @@ local bright_handler = function(driver, device, command)
 end
 
 local channel_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> channel_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> channel_handler - command.args.value : ", command.args.value)
+  log.info("<<---- Divoom ---->> channel_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> channel_handler - command.args.value : ", command.args.value)
   local payload = string.format('{"Command": "Channel/SetIndex", "SelectIndex": %d}', command.args.value)
   local status, response = request(payload);
 
   refresh_handler(driver, device, command)
 end
 
+local cloud_channel_handler = function(driver, device, command)
+  log.info("<<---- Divoom ---->> cloud_channel_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> cloud_channel_handler - command.args.value : ", command.args.value)
+  local payload = string.format('{"Command": "Channel/CloudIndex", "Index": %d}', command.args.value)
+  local status, response = request(payload);
+
+  if status then
+    device.profile.components['main']:emit_event(capavility_cloud_channel.cloudChannel({ value = command.args.value }))
+    end
+end
+
+local visualizer_channel_handler = function(driver, device, command)
+  log.info("<<---- Divoom ---->> visualizer_channel_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> visualizer_channel_handler - command.args.value : ", command.args.value)
+  local payload = string.format('{"Command": "Channel/SetEqPosition", "EqPosition": %d}', command.args.value)
+  local status, response = request(payload);
+
+  if status then
+    device.profile.components['main']:emit_event(capavility_visualizer_channel.visualizerChannel({ value = command.args.value }))
+    end
+end
+
+local custom_channel_handler = function(driver, device, command)
+  log.info("<<---- Divoom ---->> custom_channel_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> custom_channel_handler - command.args.value : ", command.args.value)
+  local payload = string.format('{"Command": "Channel/SetCustomPageIndex", "CustomPageIndex": %d}', command.args.value)
+  local status, response = request(payload);
+
+  if status then
+    device.profile.components['main']:emit_event(capavility_custom_channel.customChannel({ value = command.args.value }))
+  end
+end
+
 local message_handler = function(driver, device, command)
-  log.info("<<---- Moon ---->> message_handler - command.component : ", command.component)
-  log.info("<<---- Moon ---->> message_handler - command.args.value : ", command.args.value)
+  log.info("<<---- Divoom ---->> message_handler - command.component : ", command.component)
+  log.info("<<---- Divoom ---->> message_handler - command.args.value : ", command.args.value)
 
   local payload1 = string.format('{"Command":"Draw/ResetHttpGifId"}')
   local status1, response1 = request(payload1)
@@ -242,8 +282,8 @@ local message_handler = function(driver, device, command)
   local status3, response3 = request(payload3)
   -- Note: Draw/CommandList로 같이 보내면 작동이 잘 안됨
 
-  log.info("<<---- Moon ---->> message_handler - status : ", status3)
-  if status1 == true and status2 == true and status3 == true then
+  log.info("<<---- Divoom ---->> message_handler - status : ", status3)
+  if status1 and status2 and status3 then
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
   else
     device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Fail" }))
@@ -276,14 +316,23 @@ local lanDriver = Driver("lanDriver", {
       [capabilities.switch.commands.on.NAME] = switch_handler,
       [capabilities.switch.commands.off.NAME] = switch_handler,
     },
-    [capabilities.switchLevel.ID] = {
-      [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
-    },
     [capavility_channel.ID] = {
       [capavility_channel.commands.setChannel.NAME] = channel_handler,
     },
+    [capavility_cloud_channel.ID] = {
+      [capavility_cloud_channel.commands.setCloudChannel.NAME] = cloud_channel_handler,
+    },
+    [capavility_visualizer_channel.ID] = {
+      [capavility_visualizer_channel.commands.setVisualizerChannel.NAME] = visualizer_channel_handler,
+    },
+    [capavility_custom_channel.ID] = {
+      [capavility_custom_channel.commands.setCustomChannel.NAME] = custom_channel_handler,
+    },
     [capavility_message.ID] = {
       [capavility_message.commands.setMessage.NAME] = message_handler,
+    },
+    [capabilities.switchLevel.ID] = {
+      [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
     },
   }
 })

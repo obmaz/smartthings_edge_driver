@@ -111,6 +111,24 @@ automation:
       values: [ ]
       patch: [ ]
       exclusion: [ ]
+    - component: main
+      capability: imageafter45121.cloudChannel
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: main
+      capability: imageafter45121.visualizerChannel
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
+    - component: main
+      capability: imageafter45121.customChannel
+      version: 1
+      values: [ ]
+      patch: [ ]
+      exclusion: [ ]
     - component: system
       capability: switchLevel
       version: 1

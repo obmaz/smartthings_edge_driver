@@ -8,6 +8,12 @@ components:
         version: 1
       - id: imageafter45121.channel
         version: 1
+      - id: imageafter45121.cloudChannel
+        version: 1
+      - id: imageafter45121.visualizerChannel
+        version: 1
+      - id: imageafter45121.customChannel
+        version: 1
   - id: system
     capabilities:
       - id: switch
@@ -30,7 +36,7 @@ components:
 metadata:
   mnmn: SmartThingsCommunity
   ocfDeviceType: oic.d.switch
-  vid: 7b09247b-f35e-30e9-956c-3936303b8445
+  vid: 77c65131-0c63-3b31-897e-cde282f35210
 preferences:
   - title: "Divoom IP Address"
     name: divoomIP
