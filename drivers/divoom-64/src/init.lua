@@ -7,12 +7,12 @@ local log = require "log"
 local comms = require "comms"
 local initialized = false
 local base_url
-local capavility_channel = capabilities['imageafter45121.channel']
-local capavility_cloud_channel = capabilities['imageafter45121.cloudChannel']
-local capavility_visualizer_channel = capabilities['imageafter45121.visualizerChannel']
-local capavility_custom_channel= capabilities['imageafter45121.customChannel']
-local capavility_weather = capabilities['imageafter45121.weather']
-local capavility_message = capabilities['imageafter45121.message']
+local capability_channel = capabilities['imageafter45121.channel']
+local capability_cloud_channel = capabilities['imageafter45121.cloudChannel']
+local capability_visualizer_channel = capabilities['imageafter45121.visualizerChannel']
+local capability_custom_channel = capabilities['imageafter45121.customChannel']
+local capability_weather = capabilities['imageafter45121.weather']
+local capability_message = capabilities['imageafter45121.message']
 
 -- Divoom API http://doc.divoom-gz.com/web/#/12?page_id=241
 local function request(body)
@@ -53,7 +53,7 @@ local function get_channel(device)
     elseif SelectIndex == 4 then
       selectIndexValue = "Black Screen"
     end
-    device.profile.components['main']:emit_event(capavility_channel.channel({ value = selectIndexValue }))
+    device.profile.components['main']:emit_event(capability_channel.channel({ value = selectIndexValue }))
   end
 end
 
@@ -127,7 +127,7 @@ local function get_weather_info(device)
     local CelsiusOrFahrenheit = (TemperatureMode == 0) and 'C' or 'F'
     log.info("<<---- Divoom ---->> Device/GetWeatherInfo: ", CurTemp)
     device.profile.components['system']:emit_event(capabilities.temperatureMeasurement.temperature({ value = CurTemp, unit = CelsiusOrFahrenheit }))
-    device.profile.components['system']:emit_event(capavility_weather.weather({ value = Weather }))
+    device.profile.components['system']:emit_event(capability_weather.weather({ value = Weather }))
   end
 end
 
@@ -146,6 +146,11 @@ local function device_init(driver, device)
   log.info("<<---- Divoom ---->> device_init")
   initialized = true
   base_url = device.preferences.divoomIP
+
+  device.profile.components['main']:emit_event(capability_cloud_channel.visualizerChannel({ value = 0 }))
+  device.profile.components['main']:emit_event(capability_visualizer_channel.visualizerChannel({ value = 0 }))
+  device.profile.components['main']:emit_event(capability_custom_channel.visualizerChannel({ value = 0 }))
+
   refresh_handler(driver, device, null)
 end
 
@@ -237,8 +242,9 @@ local cloud_channel_handler = function(driver, device, command)
   local status, response = request(payload);
 
   if status then
-    device.profile.components['main']:emit_event(capavility_cloud_channel.cloudChannel({ value = command.args.value }))
-    end
+    device.profile.components['main']:emit_event(capability_cloud_channel.cloudChannel({ value = command.args.value }))
+    refresh_handler(driver,device,command)
+  end
 end
 
 local visualizer_channel_handler = function(driver, device, command)
@@ -248,8 +254,9 @@ local visualizer_channel_handler = function(driver, device, command)
   local status, response = request(payload);
 
   if status then
-    device.profile.components['main']:emit_event(capavility_visualizer_channel.visualizerChannel({ value = command.args.value }))
-    end
+    device.profile.components['main']:emit_event(capability_visualizer_channel.visualizerChannel({ value = command.args.value }))
+    refresh_handler(driver, device, command)
+  end
 end
 
 local custom_channel_handler = function(driver, device, command)
@@ -259,7 +266,8 @@ local custom_channel_handler = function(driver, device, command)
   local status, response = request(payload);
 
   if status then
-    device.profile.components['main']:emit_event(capavility_custom_channel.customChannel({ value = command.args.value }))
+    device.profile.components['main']:emit_event(capability_custom_channel.customChannel({ value = command.args.value }))
+    refresh_handler(driver, device, command)
   end
 end
 
@@ -284,9 +292,9 @@ local message_handler = function(driver, device, command)
 
   log.info("<<---- Divoom ---->> message_handler - status : ", status3)
   if status1 and status2 and status3 then
-    device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Success" }))
+    device.profile.components['system']:emit_event(capability_message.message({ value = "Sending Success" }))
   else
-    device.profile.components['system']:emit_event(capavility_message.message({ value = "Sending Fail" }))
+    device.profile.components['system']:emit_event(capability_message.message({ value = "Sending Fail" }))
   end
 
   refresh_handler(driver, device, command)
@@ -316,20 +324,20 @@ local lanDriver = Driver("lanDriver", {
       [capabilities.switch.commands.on.NAME] = switch_handler,
       [capabilities.switch.commands.off.NAME] = switch_handler,
     },
-    [capavility_channel.ID] = {
-      [capavility_channel.commands.setChannel.NAME] = channel_handler,
+    [capability_channel.ID] = {
+      [capability_channel.commands.setChannel.NAME] = channel_handler,
     },
-    [capavility_cloud_channel.ID] = {
-      [capavility_cloud_channel.commands.setCloudChannel.NAME] = cloud_channel_handler,
+    [capability_cloud_channel.ID] = {
+      [capability_cloud_channel.commands.setCloudChannel.NAME] = cloud_channel_handler,
     },
-    [capavility_visualizer_channel.ID] = {
-      [capavility_visualizer_channel.commands.setVisualizerChannel.NAME] = visualizer_channel_handler,
+    [capability_visualizer_channel.ID] = {
+      [capability_visualizer_channel.commands.setVisualizerChannel.NAME] = visualizer_channel_handler,
     },
-    [capavility_custom_channel.ID] = {
-      [capavility_custom_channel.commands.setCustomChannel.NAME] = custom_channel_handler,
+    [capability_custom_channel.ID] = {
+      [capability_custom_channel.commands.setCustomChannel.NAME] = custom_channel_handler,
     },
-    [capavility_message.ID] = {
-      [capavility_message.commands.setMessage.NAME] = message_handler,
+    [capability_message.ID] = {
+      [capability_message.commands.setMessage.NAME] = message_handler,
     },
     [capabilities.switchLevel.ID] = {
       [capabilities.switchLevel.commands.setLevel.NAME] = bright_handler,
