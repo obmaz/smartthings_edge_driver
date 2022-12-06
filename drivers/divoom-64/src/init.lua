@@ -53,6 +53,9 @@ local function get_channel(device)
     elseif SelectIndex == 4 then
       selectIndexValue = "Black Screen"
     end
+
+    log.info("<<---- Divoom ---->> selectIndexValue Channel/GetIndex: ", selectIndexValue)
+
     device.profile.components['main']:emit_event(capability_channel.channel({ value = selectIndexValue }))
   end
 end
@@ -147,15 +150,14 @@ local function device_init(driver, device)
   initialized = true
   base_url = device.preferences.divoomIP
 
-  device.profile.components['main']:emit_event(capability_cloud_channel.visualizerChannel({ value = 0 }))
+  device.profile.components['main']:emit_event(capability_cloud_channel.cloudChannel({ value = "Recommend Gallery" }))
   device.profile.components['main']:emit_event(capability_visualizer_channel.visualizerChannel({ value = 0 }))
-  device.profile.components['main']:emit_event(capability_custom_channel.visualizerChannel({ value = 0 }))
-
+  device.profile.components['main']:emit_event(capability_custom_channel.customChannel({ value = "First" }))
   refresh_handler(driver, device, null)
 end
 
 local function device_added (driver, device)
-  log.info("<<---- Divoom ---->> device_added - key")
+  log.info("<<---- Divoom ---->> device_added")
 end
 
 local function device_doconfigure (_, device)
@@ -242,8 +244,18 @@ local cloud_channel_handler = function(driver, device, command)
   local status, response = request(payload);
 
   if status then
-    device.profile.components['main']:emit_event(capability_cloud_channel.cloudChannel({ value = command.args.value }))
-    refresh_handler(driver,device,command)
+    if command.args.value == "0" then
+      cloudChannelValue = "Recommend Gallery"
+    elseif command.args.value == "1" then
+      cloudChannelValue = "Favourite"
+    elseif command.args.value == "2" then
+      cloudChannelValue = "Subscribe Artist"
+    elseif command.args.value == "3" then
+      cloudChannelValue = "Album"
+    end
+
+    device.profile.components['main']:emit_event(capability_cloud_channel.cloudChannel({ value = cloudChannelValue }))
+    refresh_handler(driver, device, command)
   end
 end
 
@@ -266,7 +278,17 @@ local custom_channel_handler = function(driver, device, command)
   local status, response = request(payload);
 
   if status then
-    device.profile.components['main']:emit_event(capability_custom_channel.customChannel({ value = command.args.value }))
+    if status then
+      if command.args.value == "0" then
+        customChannelValue = "First"
+      elseif command.args.value == "1" then
+        customChannelValue = "Second"
+      elseif command.args.value == "2" then
+        customChannelValue = "Third"
+      end
+    end
+
+    device.profile.components['main']:emit_event(capability_custom_channel.customChannel({ value = customChannelValue }))
     refresh_handler(driver, device, command)
   end
 end
@@ -303,8 +325,8 @@ end
 local lanDriver = Driver("lanDriver", {
   discovery = discovery_handler,
   lifecycle_handlers = {
-    init = device_init,
     added = device_added,
+    init = device_init,
     driverSwitched = device_driver_switched,
     infoChanged = device_info_changed,
     doConfigure = device_doconfigure,

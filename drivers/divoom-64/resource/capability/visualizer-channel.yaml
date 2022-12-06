@@ -1,7 +1,7 @@
 id: imageafter45121.visualizerChannel
 version: 1
 status: proposed
-name: visualizerChannel
+name: Visualizer Channel
 ephemeral: false
 attributes:
   visualizerChannel:

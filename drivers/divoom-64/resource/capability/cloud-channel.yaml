@@ -1,7 +1,7 @@
 id: imageafter45121.cloudChannel
 version: 1
 status: proposed
-name: Cloud Channel2
+name: Cloud Channel
 ephemeral: false
 attributes:
   cloudChannel:
