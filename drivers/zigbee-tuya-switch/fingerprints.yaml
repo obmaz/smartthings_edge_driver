@@ -249,3 +249,8 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_ohnmmnne
     model: TS0012
     deviceProfileName: zigbee-tuya-switch-2
+  - id: _TZ3000_ypgri8/TS0013
+    deviceLabel: Tuya Switch 3
+    manufacturer: _TZ3000_ypgri8
+    model: TS0013
+    deviceProfileName: zigbee-tuya-switch-3
