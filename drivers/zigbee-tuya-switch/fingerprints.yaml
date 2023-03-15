@@ -264,3 +264,8 @@ zigbeeManufacturer:
     manufacturer: TUYATEC-p9HCE8pZ
     model: TS0011
     deviceProfileName: zigbee-tuya-switch-1
+  - id: _TZ3000_eabfqnbm/TS0003
+    deviceLabel: Zigbee Tuya 1 switch
+    manufacturer: _TZ3000_eabfqnbm
+    model: TS0003
+    deviceProfileName: zigbee-tuya-switch-3
