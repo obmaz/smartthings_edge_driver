@@ -1,5 +1,8 @@
 # SmartThings Edge Driver
 It is the SmartThings Edge Drivers.  
+See the readme in each directory for detail
+
+See Another Edge Repo: [Samsung Air-condition af-ha153](https://github.com/obmaz/samsung_aircon_connector)
 
 ## Install
 ### End-User
@@ -8,10 +11,12 @@ https://api.smartthings.com/invitation-web/accept?id=2d6da83b-ae22-4fda-8af5-bbb
 
 ### Developer
 The source code required for installation can be found in each directory.  
-If necessary, you can manually install it by adding a fingerprinter.  
+If necessary, you can manually install it by adding a fingerprint.  
 
 ## Note
 ### Child Device(DTH) vs Multi Components(Edge Driver)
+**Update:** The latest edge driver supports child devices, but this driver uses a multi-component method.
+
 Unlike the DTH(Device Type Handler), the Edge Driver uses the "Component", not the "Child Device".  
 A child device is recognized as a independent thing, while a component shows several buttons in one thing.
 
