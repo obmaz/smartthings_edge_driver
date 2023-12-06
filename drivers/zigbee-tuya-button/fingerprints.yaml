@@ -235,7 +235,7 @@ zigbeeManufacturer:
     manufacturer: _TZE200_zqtiam4u
     model: TS0601
     deviceProfileName: zigbee-tuya-button-6
-  - id: _TZ3210_3ulg9kpo/TS0042
+  - id: _TZ3210_3ulg9kpo/TS0021
     deviceLabel: Zigbee Tuya 2 Button
     manufacturer: _TZ3210_3ulg9kpo
     model: TS0021
