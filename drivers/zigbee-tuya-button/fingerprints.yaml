@@ -234,6 +234,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_wbfgbpxq
     model: TS0044
     deviceProfileName: zigbee-tuya-button-4
+  - id: _TZ3000_u3nv1jwk/TS0044
+    deviceLabel: Zigbee Tuya 4 Button
+    manufacturer: _TZ3000_u3nv1jwk
+    model: TS0044
+    deviceProfileName: zigbee-tuya-button-4
   # EF00 Cluster
   - id: TS0601/_TZE200_zqtiam4u
     deviceLabel: Zemismart 6 Button (TS0601)
