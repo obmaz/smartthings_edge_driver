@@ -3,7 +3,7 @@
 driverId=62bd9121-0ed3-4724-838f-cfa8a4d5a9a5
 channel=699fefe6-7b99-40b2-acfd-662ed510a84d
 hub=37d997a3-7579-47f2-8ae9-804fce729f7b
-hub_address=192.168.0.119
+hub_address=192.168.10.205
 
 #smartthings edge:drivers:uninstall $driverId --hub $hub
 smartthings edge:drivers:package ./
