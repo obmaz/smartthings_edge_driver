@@ -10,7 +10,7 @@ zigbeeManufacturer:
   - id: E8334RWMZB/TS0044
     deviceLabel: Schneider-Electric-4
     manufacturer: Schneider Electric
-    model: E8334RWMZB
+    model: E8334RWMZB # FYI: Not Working
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_j61x9rxn/TS0044
     deviceLabel: Zigbee Tuya 4 Button
