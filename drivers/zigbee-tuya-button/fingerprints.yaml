@@ -11,6 +11,10 @@ zigbeeManufacturer:
     deviceLabel: zigbee-tuya-button-4
     manufacturer: _TZ3000_9orwkl3t
     model: TS0044
+  - id: _TZ3000_pd9mpyh4/TS0044
+    deviceLabel: zigbee-tuya-button-4
+    manufacturer: _TZ3000_pd9mpyh4  #Moes 4 gang switch
+    model: TS0044
     deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_j61x9rxn/TS0044
     deviceLabel: Zigbee Tuya 4 Button
