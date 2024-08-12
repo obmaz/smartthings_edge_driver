@@ -27,5 +27,4 @@ Therefore, in the case of Button/Swith, the voice assistant may not be able to c
 ## License
 It is released under the Apache 2.0 License.
 
-
-[!["Buy Me A Coffee"](https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png)](https://www.buymeacoffee.com/zambobmaz)
+<a href="https://www.buymeacoffee.com/zambobmaz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
