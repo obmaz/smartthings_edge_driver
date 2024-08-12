@@ -7,6 +7,11 @@ zigbeeManufacturer:
     model: TS0046 # Working
     deviceProfileName: zigbee-tuya-button-6
   # 4 Button
+  - id: _TZ3000_xwuveizv/TS0044
+    deviceLabel: zigbee-tuya-button-4
+    manufacturer: _TZ3000_xwuveizv
+    model: TS0044
+    deviceProfileName: zigbee-tuya-button-4
   - id: _TZ3000_9orwkl3t/TS0044
     deviceLabel: zigbee-tuya-button-4
     manufacturer: _TZ3000_9orwkl3t
