@@ -28,4 +28,4 @@ Therefore, in the case of Button/Swith, the voice assistant may not be able to c
 It is released under the Apache 2.0 License.
 
 
-[!["Buy Me A Coffee"](https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png)](https:/www.buymeacoffee.com/zambobmaz)
+[!["Buy Me A Coffee"](https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png)](https://www.buymeacoffee.com/zambobmaz)
