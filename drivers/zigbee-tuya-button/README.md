@@ -19,7 +19,8 @@ See [fingerprints.yml](./fingerprints.yaml)
 
 #### TS004F
 
-Only work Button1
+You may need to change the scene mode for it to work.  
+Please refer to your device's manual for instructions on how to change it.  
 
 #### TS0601 (EF00 Cluster)
 
