@@ -343,7 +343,7 @@ zigbeeManufacturer:
   - id: Legrand/TS0042
     deviceLabel: Legrand 2 Button
     manufacturer: Legrand
-    model: TS0042
+    model: Remote switch
     deviceProfileName: zigbee-tuya-button-2
   # EF00 Cluster
   - id: TS0601/_TZE200_zqtiam4u
