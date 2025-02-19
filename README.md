@@ -17,12 +17,12 @@ If necessary, you can manually install it by adding a fingerprint.
 ### Child Device(DTH) vs Multi Components(Edge Driver)
 **Update:** The latest edge driver supports child devices, but this driver uses a multi-component method.
 
-Unlike the DTH(Device Type Handler), the Edge Driver uses the "Component", not the "Child Device".  
-A child device is recognized as a independent thing, while a component shows several buttons in one thing.
+Unlike the DTH (Device Type Handler), the Edge Driver uses “Components” instead of “Child Devices.”
+A Child Device is treated as a separate device, whereas a Component allows multiple buttons to appear within a single device.
 
-The difference is the use of a voice assistant.  
-Most voice assistants will be able to recognize only "Main" in Component.  
-Therefore, in the case of Button/Swith, the voice assistant may not be able to control the second Button/Switch set as Component.
+One key difference is how voice assistants handle them.
+Most voice assistants recognize only the Main component.
+As a result, if a Button or Switch is set as a Component, the voice assistant may not be able to control the second one.
 
 ## License
 It is released under the Apache 2.0 License.
