@@ -29,15 +29,58 @@ local refresh_handler = function(driver, device, command)
   device:refresh()
 end
 
+local button_handler_Knob_Scene_Wheel = function(driver, device, zb_rx)
+  local ep = zb_rx.address_header.src_endpoint.value
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Wheel", ep)
+
+  local number = ep - get_ep_offset(device)
+  local component_id = string.format("button%d", number)
+  local ev
+
+  -- 00: Clockwise, 01: Count Clockwise
+  -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)" -- it will return decimal value
+  local clickType = string.byte(zb_rx.body.zcl_body.step_mode.value)
+  local value = string.byte(zb_rx.body.zcl_body.step_size.value)
+
+  if clickType == 48 then
+    ev = capabilities.button.button.up()
+  elseif clickType == 49 then
+    ev = capabilities.button.button.down()
+  end
+
+  if ev ~= nil then
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
+end
+
+local button_handler_Knob_Scene_Hold_Wheel = function(driver, device, zb_rx)
+  local ep = zb_rx.address_header.src_endpoint.value
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Hold_Wheel", ep)
+
+  local number = ep - get_ep_offset(device)
+  local component_id = string.format("button%d", number)
+  local ev
+
+  -- 00: Clockwise, 01: Count Clockwise
+  -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)" -- it will return decimal value
+  local clickType = string.byte(zb_rx.body.zcl_body.step_mode.value)
+  local value = string.byte(zb_rx.body.zcl_body.step_size.value)
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Hold_Wheel_clickType", clickType)
+
+  if clickType == 51 then
+    ev = capabilities.button.button.down_hold()
+  elseif clickType == 49 then
+    ev = capabilities.button.button.up_hold()
+  end
+
+  if ev ~= nil then
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  end
+end
+
 local button_handler_Knob_Scene_Toggle = function(driver, device, zb_rx)
-  -- Note: Scene mode knob up/down send "Step" command, but it is not a zigbee standard. Toggle is a standard
-  -- st cluster library does not implement it, so I cannot catch the 'Step' in cluster handler
-
-  -- log
-  -- Missing command arg options_mask for deserializing Step
-  -- <ZigbeeDevice: 74ee34cc-5c5d-49d3-b4a8-a39f5fa2a13a [0x6423] (Tuya Knob)> received Zigbee message: < ZigbeeMessageRx || type: 0x01, < AddressHeader || src_addr: 0x4408, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0xFF, profile: 0x0104, cluster: OnOff >, lqi: 0xFF, rssi: -61, body_length: 0x0003, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0x26, ZCLCommandId: 0x02 >, < Toggle ||  > > >
-  -- <ZigbeeDevice: 74ee34cc-5c5d-49d3-b4a8-a39f5fa2a13a [0x6423] (Tuya Knob)> received Zigbee message: < ZigbeeMessageRx || type: 0x01, < AddressHeader || src_addr: 0x6423, src_endpoint: 0x01, dest_addr: 0x0000, dest_endpoint: 0xFF, profile: 0x0104, cluster: Level >, lqi: 0xFF, rssi: -58, body_length: 0x0007, < ZCLMessageBody || < ZCLHeader || frame_ctrl: 0x01, seqno: 0xCE, ZCLCommandId: 0x02 >, < Step || MoveStepMode: UP, step_size: 0x49, transition_time: 0x0002 > > >
-
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Toggle", ep)
 
@@ -48,9 +91,9 @@ local button_handler_Knob_Scene_Toggle = function(driver, device, zb_rx)
   device.profile.components[component_id]:emit_event(ev)
 end
 
-local button_handler_Knob_Remote = function(driver, device, zb_rx)
+local button_handler_Knob_Remote_Wheel = function(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
-  log.info("<<---- Moon ---->> button_handler_Knob_Remote", ep)
+  log.info("<<---- Moon ---->> button_handler_Knob_Remote_wheel", ep)
 
   local number = ep - get_ep_offset(device)
   local component_id = string.format("button%d", number)
@@ -105,7 +148,7 @@ local device_added = function(driver, device)
     -- knob manufacturer check
     if device:get_manufacturer() == "_TZ3000_402vrq2i" then
       log.info("<<---- Moon ---->> is knob : true ")
-      device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held", "up", "down" }))
+      device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held", "up", "down", "up_hold", "down_hold" }))
     else
       log.info("<<---- Moon ---->> is knob : false ")
       device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
@@ -139,9 +182,17 @@ local zigbee_tuya_button_driver_template = {
       [zcl_clusters.OnOff.ID] = {
         -- ZCLCommandId
         [0x02] = button_handler_Knob_Scene_Toggle,
-        [0xFC] = button_handler_Knob_Remote,
+        [0xFC] = button_handler_Knob_Remote_Wheel,
         [0xFD] = button_handler
-      }
+      },
+      [zcl_clusters.Level.ID] = {
+        -- ZCLCommandId
+        [0x02] = button_handler_Knob_Scene_Wheel
+      },
+      [zcl_clusters.ColorControl.ID] = {
+        -- ZCLCommandId
+        [0x4C] = button_handler_Knob_Scene_Hold_Wheel
+      },
     },
   },
   lifecycle_handlers = {
