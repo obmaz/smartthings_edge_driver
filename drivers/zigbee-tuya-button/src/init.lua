@@ -34,23 +34,34 @@ local button_handler_Knob_Scene_Wheel = function(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Wheel", ep)
 
   local number = ep - get_ep_offset(device)
-  local component_id = string.format("button%d", number)
-  local ev
+  local component_button_id = string.format("button%d", number)
+  local component_id = "wheel"
+  local ev1
+  local ev2
 
-  -- 00: Clockwise, 01: Count Clockwise
+  -- {address_header={cluster={byte_length=2, field_name="cluster", value=8}, dest_addr={byte_length=2, field_name="dest_addr", value=0}, dest_endpoint={byte_length=1, field_name="dest_endpoint", value=255}, profile={byte_length=2, field_name="profile", value=260}, src_addr={byte_length=2, field_name="src_addr", value=57037}, src_endpoint={byte_length=1, field_name="src_endpoint", value=1}}, body={zcl_body={step_mode={byte_length=1, field_name="step_mode", value=0}, step_size={byte_length=1, field_name="step_size", value=85}, transition_time={byte_length=2, field_name="transition_time", value=3}}, zcl_header={cmd={byte_length=1, value=2}, frame_ctrl={byte_length=1, field_name="frame_ctrl", value=1}, seqno={byte_length=1, field_name="seqno", value=54}}}, body_length={byte_length=2, field_name="body_length", value=7}, lqi={byte_length=1, field_name="lqi", value=255}, rssi={byte_length=1, field_name="rssi", value=-33}, type={byte_length=1, field_name="type", value=1}}
+  -- 48: Clockwise, 49: Count Clockwise
   -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)" -- it will return decimal value
   local clickType = string.byte(zb_rx.body.zcl_body.step_mode.value)
-  local value = string.byte(zb_rx.body.zcl_body.step_size.value)
+  local stepSizeValue = math.floor((zb_rx.body.zcl_body.step_size.value / 255) * 50 + 50 + 0.5)
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Wheel_clickType", clickType)
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Wheel_value", stepSizeValue)
 
   if clickType == 48 then
-    ev = capabilities.button.button.up()
+    ev1 = capabilities.switchLevel.level({ value = stepSizeValue })
+    ev2 = capabilities.button.button.up()
+
   elseif clickType == 49 then
-    ev = capabilities.button.button.down()
+    stepSizeValue = 100 - stepSizeValue
+    ev1 = capabilities.switchLevel.level({ value = stepSizeValue })
+    ev2 = capabilities.button.button.down()
   end
 
-  if ev ~= nil then
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
+  if ev1 ~= nil then
+    ev1.state_change = true
+    ev2.state_change = true
+    device.profile.components[component_id]:emit_event(ev1)
+    device.profile.components[component_button_id]:emit_event(ev2)
   end
 end
 
@@ -59,24 +70,33 @@ local button_handler_Knob_Scene_Hold_Wheel = function(driver, device, zb_rx)
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Hold_Wheel", ep)
 
   local number = ep - get_ep_offset(device)
-  local component_id = string.format("button%d", number)
-  local ev
+  local component_button_id = string.format("button%d", number)
+  local component_id = "hold_wheel"
+  local ev1
+  local ev2
 
   -- 00: Clockwise, 01: Count Clockwise
   -- The same as "zb_rx.body.zcl_body.body_bytes:byte(1)" -- it will return decimal value
   local clickType = string.byte(zb_rx.body.zcl_body.step_mode.value)
-  local value = string.byte(zb_rx.body.zcl_body.step_size.value)
+  local stepSizeValue = math.floor((zb_rx.body.zcl_body.step_size.value / 255) * 50 + 50 + 0.5)
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Hold_Wheel_clickType", clickType)
+  log.info("<<---- Moon ---->> button_handler_Knob_Scene_Hold_Wheel_value", stepSizeValue)
 
-  if clickType == 51 then
-    ev = capabilities.button.button.down_hold()
-  elseif clickType == 49 then
-    ev = capabilities.button.button.up_hold()
+  if clickType == 49 then
+    ev1 = capabilities.switchLevel.level({ value = stepSizeValue })
+    ev2 = capabilities.button.button.up_hold()
+
+  elseif clickType == 51 then
+    stepSizeValue = 100 - stepSizeValue
+    ev1 = capabilities.switchLevel.level({ value = stepSizeValue })
+    ev2 = capabilities.button.button.down_hold()
   end
 
-  if ev ~= nil then
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
+  if ev1 ~= nil then
+    ev1.state_change = true
+    ev2.state_change = true
+    device.profile.components[component_id]:emit_event(ev1)
+    device.profile.components[component_button_id]:emit_event(ev2)
   end
 end
 
@@ -146,7 +166,7 @@ local device_added = function(driver, device)
     log.info("<<---- Moon ---->> device_added - component : ", key)
 
     -- knob manufacturer check
-    if device:get_manufacturer() == "_TZ3000_402vrq2i" then
+    if device:get_manufacturer() == "_TZ3000_402vrq2i" or device:get_manufacturer() == "_TZ3000_4fjiwweb" then
       log.info("<<---- Moon ---->> is knob : true ")
       device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held", "up", "down", "up_hold", "down_hold" }))
     else

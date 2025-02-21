@@ -1,0 +1,24 @@
+name: zigbee-tuya-button-knob
+components:
+  - id: main
+    capabilities:
+      - id: battery
+        version: 1
+      - id: refresh
+        version: 1
+  - id: button1
+    capabilities:
+      - id: button
+        version: 1
+  - id: wheel
+    capabilities:
+      - id: switchLevel
+        version: 1
+  - id: hold_wheel
+    capabilities:
+      - id: switchLevel
+        version: 1
+metadata:
+  mnmn: SmartThingsCommunity
+  ocfDeviceType: x.com.st.d.remotecontroller
+  vid: 19a933db-4f12-309d-9462-45801419a026
