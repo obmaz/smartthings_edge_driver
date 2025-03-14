@@ -109,6 +109,7 @@ local button_handler_Knob_Scene_Toggle = function(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Toggle", ep)
 
+  -- For the regular TS004F (not the knob version), both remote and scene signals are sent simultaneously, so defensive code needs to be implemented.
   local manufacturer = device:get_manufacturer()
   if knob_models[manufacturer] then
     log.info("<<---- Moon ---->> is knob : true ")
