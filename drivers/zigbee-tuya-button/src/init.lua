@@ -18,6 +18,11 @@ local ZigbeeDriver = require "st.zigbee"
 local defaults = require "st.zigbee.defaults"
 local zcl_clusters = require "st.zigbee.zcl.clusters"
 
+local knob_models = {
+  ["_TZ3000_402vrq2i"] = true,
+  ["_TZ3000_4fjiwweb"] = true
+}
+
 local function get_ep_offset(device)
   return device.fingerprinted_endpoint_id - 1
 end
@@ -104,11 +109,17 @@ local button_handler_Knob_Scene_Toggle = function(driver, device, zb_rx)
   local ep = zb_rx.address_header.src_endpoint.value
   log.info("<<---- Moon ---->> button_handler_Knob_Scene_Toggle", ep)
 
-  local number = ep - get_ep_offset(device)
-  local component_id = string.format("button%d", number)
-  local ev = capabilities.button.button.pushed()
-  ev.state_change = true
-  device.profile.components[component_id]:emit_event(ev)
+  local manufacturer = device:get_manufacturer()
+  if knob_models[manufacturer] then
+    log.info("<<---- Moon ---->> is knob : true ")
+    local number = ep - get_ep_offset(device)
+    local component_id = string.format("button%d", number)
+    local ev = capabilities.button.button.pushed()
+    ev.state_change = true
+    device.profile.components[component_id]:emit_event(ev)
+  else
+    log.info("<<---- Moon ---->> is knob : false ")
+  end
 end
 
 local button_handler_Knob_Remote_Wheel = function(driver, device, zb_rx)
@@ -166,7 +177,8 @@ local device_added = function(driver, device)
     log.info("<<---- Moon ---->> device_added - component : ", key)
 
     -- knob manufacturer check
-    if device:get_manufacturer() == "_TZ3000_402vrq2i" or device:get_manufacturer() == "_TZ3000_4fjiwweb" then
+    local manufacturer = device:get_manufacturer()
+    if knob_models[manufacturer] then
       log.info("<<---- Moon ---->> is knob : true ")
       device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held", "up", "down", "up_hold", "down_hold" }))
     else
