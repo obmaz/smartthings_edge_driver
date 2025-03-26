@@ -173,6 +173,8 @@ end
 
 local device_added = function(driver, device)
   log.info("<<---- Moon ---->> device_added")
+  device:send(zcl_clusters.Groups.server.commands.RemoveAllGroups(device))
+  log.info("<<---- Moon ---->> device_removed_from_all_group")
 
   for key, value in pairs(device.profile.components) do
     log.info("<<---- Moon ---->> device_added - component : ", key)
