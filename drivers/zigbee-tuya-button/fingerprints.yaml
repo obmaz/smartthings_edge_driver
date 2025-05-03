@@ -102,16 +102,6 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_xabckq1v
     model: TS004F
     deviceProfileName: zigbee-tuya-button-4
-  - id: _TZ3000_402vrq2i/TS004F
-    deviceLabel: Tuya Knob
-    manufacturer: _TZ3000_402vrq2i
-    model: TS004F
-    deviceProfileName: zigbee-tuya-button-knob
-  - id: _TZ3000_4fjiwweb/TS004F
-    deviceLabel: Tuya Knob
-    manufacturer: _TZ3000_4fjiwweb
-    model: TS004F
-    deviceProfileName: zigbee-tuya-button-knob
   - id: _TZ3000_0ht8dnxj/TS004F
     deviceLabel: Tuya 4 Button
     manufacturer: _TZ3000_0ht8dnxj
@@ -406,3 +396,20 @@ zigbeeManufacturer:
     manufacturer: _TZE204_mpg22jc1
     model: TS0601
     deviceProfileName: zigbee-tuya-button-6
+  # Note: It should be added fp to code
+  - id: _TZ3000_402vrq2i/TS004F
+    deviceLabel: Tuya Knob
+    manufacturer: _TZ3000_402vrq2i
+    model: TS004F
+    deviceProfileName: zigbee-tuya-button-knob
+  - id: _TZ3000_4fjiwweb/TS004F
+    deviceLabel: Tuya Knob
+    manufacturer: _TZ3000_4fjiwweb
+    model: TS004F
+    deviceProfileName: zigbee-tuya-button-knob
+  - id: _TZ3000_abrsvsou/TS004F
+    deviceLabel: Tuya Knob
+    manufacturer: _TZ3000_abrsvsou
+    model: TS004F
+    deviceProfileName: zigbee-tuya-button-knob
+
