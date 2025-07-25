@@ -279,6 +279,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_v8jvcwsx
     model: TS0042
     deviceProfileName: zigbee-tuya-button-2
+  - id: _TZ3000_xr7itfxq/TS0042
+    deviceLabel: Zigbee Tuya 2 Button
+    manufacturer: _TZ3000_xr7itfxq
+    model: TS0042
+    deviceProfileName: zigbee-tuya-button-2
   # 1 Button
   - id: _TZ3000_rsqqkdxv/TS0041
     deviceLabel: Zigbee Tuya 1 Button
