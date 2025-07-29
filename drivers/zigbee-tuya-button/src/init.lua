@@ -22,7 +22,6 @@ local knob_models = {
   ["_TZ3000_402vrq2i"] = true,
   ["_TZ3000_abrsvsou"] = true,
   ["_TZ3000_4fjiwweb"] = true,
-  ["_TZ3000_xr7itfxq"] = true,
   ["_TZ3000_qja6nq5z"] = true
 }
 
