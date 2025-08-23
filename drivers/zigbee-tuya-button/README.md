@@ -1,5 +1,5 @@
 # Edge Driver: Zigbee Tuya Button
-The SmartThings Edge Driver for Tuya-platform based Zigbee buttons supports devices with 1, 2, 3, 4, or 6 buttons.
+The SmartThings Edge Driver for Tuya-platform based Zigbee buttons supports devices with 1, 2, 3 and 4 buttons.
 
 ## Device
 ![device](resource/readme-images/device1.jpg)
