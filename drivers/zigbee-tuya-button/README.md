@@ -1,32 +1,26 @@
 # Edge Driver: Zigbee Tuya Button
-
-It is the SmartThings Edge Driver for tuya-platform based zigbee button.  
-It supports 1,2,3 and 4 buttons.
+The SmartThings Edge Driver for Tuya-platform based Zigbee buttons supports devices with 1, 2, 3, 4, or 6 buttons.
 
 ## Device
-
 ![device](resource/readme-images/device1.jpg)
 
 ## App UI Screen
-
 ![ui](resource/readme-images/app1.jpg)
 
 ## Support Device
-
 See [fingerprints.yml](./fingerprints.yaml)
 
 ### Known Issue
 
 #### TS004F
-
-You may need to change the scene mode for it to work.  
-Please refer to your device's manual for instructions on how to change it.  
+If the device does not operate properly, change the scene mode.
+For details, see your device manual.
 
 #### TS0601 (EF00 Cluster)
-
-One Click, Hold works, but sometimes the input is ignored.  
-Double Click often doesn't work.
+Single Click + Hold works, but the input may sometimes be ignored.
+Double Click may not function reliably.
 
 ## License
+It is released under the Apache License 2.0.
 
-It is released under the Apache 2.0 License.
+<a href="https://www.buymeacoffee.com/zambobmaz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>

@@ -1,19 +1,16 @@
 # Edge Driver: Zigbee Aqara Mini Button (WXKG12LM New Version, WXKG12LM)
-
-It is the SmartThings Edge Driver for Zigbee Aqara T1 mini Button.
+This is the SmartThings Edge Driver for the Zigbee Aqara T1 Mini Button.
 
 ## Device
-
 ![device](resource/readme-images/device1.jpg)
 
 ## App UI Screen
-
 ![ui](resource/readme-images/app1.jpg)
 
 ## Support Device
-
 See [fingerprints.yml](./fingerprints.yaml)
 
 ## License
+It is released under the Apache License 2.0.
 
-It is released under the Apache 2.0 License.
+<a href="https://www.buymeacoffee.com/zambobmaz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>

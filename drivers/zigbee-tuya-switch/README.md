@@ -1,7 +1,7 @@
 # Edge Driver: Zigbee Tuya Enhanded Switch
 
-It is the SmartThings Edge Driver for tuya-platform based zigbee switch. (Tuya, Zemismart ...)   
-The general zigbee switch might work
+This is the SmartThings Edge Driver for Tuya-platform based Zigbee switches (e.g., Tuya, Zemismart).  
+Other general Zigbee switches may also work.
 
 ## Device
 
@@ -17,5 +17,6 @@ The general zigbee switch might work
 See [fingerprints.yml](./fingerprints.yaml)
 
 ## License
+It is released under the Apache License 2.0.
 
-It is released under the Apache 2.0 License.
+<a href="https://www.buymeacoffee.com/zambobmaz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
