@@ -79,6 +79,7 @@ end
 local ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS = {
   { mfr = "_TZE200_zqtiam4u", model = "TS0601" },
   { mfr = "_TZE204_mpg22jc1", model = "TS0601" },
+  { mfr = "_TZ3210_3ulg9kpo", model = "TS0021" },
 }
 
 local is_tuya_ef00 = function(opts, driver, device)
