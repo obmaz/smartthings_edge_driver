@@ -5,8 +5,13 @@ zigbeeManufacturer:
     manufacturer: eWeLink # Tested
     model: WB01
     deviceProfileName: zigbee-sonoff-button-1
-  - id: EWeLink/WB01 # SNZB-01
+  - id: EWeLink/WB01
     deviceLabel: Sonoff 1 Button
-    manufacturer: EWeLink # Tested
+    manufacturer: EWeLink
     model: WB01
+    deviceProfileName: zigbee-sonoff-button-1
+  - id: HOBEIAN/ZG-101ZL # Not tested,
+    deviceLabel: Sonoff 1 Button
+    manufacturer: HOBEIAN
+    model: ZG-101ZL
     deviceProfileName: zigbee-sonoff-button-1
