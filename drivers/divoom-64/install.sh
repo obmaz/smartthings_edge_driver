@@ -1,8 +1,8 @@
 #!/bin/bash
 driverId=598332a7-775e-45cc-bb9c-246bff3041a1
 channel=699fefe6-7b99-40b2-acfd-662ed510a84d
-hub=37d997a3-7579-47f2-8ae9-804fce729f7b
-hub_address=192.168.10.205
+hub=b5434d2c-cd4e-4bde-a91b-d419ee72c55e
+hub_address=192.168.10.189
 
 vid=$(smartthings presentation:device-config:create --yaml --input ./resource/device-config/lan-divoom-device-config.yaml | grep vid)
 sed -e "s/vid.*/$vid/g" ./profiles/lan-divoom.yaml | sponge ./profiles/lan-divoom.yaml
