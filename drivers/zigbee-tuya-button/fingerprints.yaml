@@ -461,6 +461,12 @@ zigbeeManufacturer:
     manufacturer: _TZE204_mpg22jc1
     model: TS0601
     deviceProfileName: zigbee-tuya-button-6
+ # Cannot confirm working
+  - id: _TZ3000_fsiepnrh/TS0215A
+    deviceLabel: 4 button
+    manufacturer: _TZ3000_fsiepnrh
+    model: TS0215A
+    deviceProfileName: zigbee-tuya-button-4
   # Note: It should be added fp to code too
   - id: _TZ3000_402vrq2i/TS004F
     deviceLabel: Tuya Knob
