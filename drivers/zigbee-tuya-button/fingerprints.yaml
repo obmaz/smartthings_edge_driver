@@ -455,6 +455,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_et7afzxz
     model: TS004F
     deviceProfileName: zigbee-tuya-button-4
+  - id: _TZ3000_dzwgk7e2/TS0042
+    deviceLabel: Zigbee Tuya 2 Button
+    manufacturer: _TZ3000_dzwgk7e2
+    model: TS0042
+    deviceProfileName: zigbee-tuya-button-2
   - id: Legrand/TS0042
     deviceLabel: Legrand 2 Button
     manufacturer: Legrand
