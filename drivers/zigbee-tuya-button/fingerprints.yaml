@@ -481,6 +481,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3210_3ulg9kpo
     model: TS0021
     deviceProfileName: zigbee-tuya-button-2
+  - id: TELINK/TLSR82XX
+    deviceLabel: TELINK 2 Button
+    manufacturer: TELINK
+    model: TLSR82XX
+    deviceProfileName: zigbee-tuya-button-2
   - id: TS0601/_TZE204_mpg22jc1
     deviceLabel: Zemismart 6 Button (TS0601)
     manufacturer: _TZE204_mpg22jc1
