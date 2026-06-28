@@ -12,3 +12,9 @@
 *.out
 /.idea/
 *.iml
+
+# macOS metadata
+.DS_Store
+
+# Local Lua language server config with machine-specific SDK paths
+.luarc.json
