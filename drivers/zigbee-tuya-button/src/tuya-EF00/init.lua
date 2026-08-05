@@ -71,9 +71,11 @@ end
 
 local device_doconfigure = function(self, device)
   log.info("<<---- Moon ---->> multi / configure_device")
-  -- todo: need to bind monitored attribute since this device don't have 0001 cluster
-  -- so there might be no default reporting cluster. It can cause health check fail or button might need to wake up
-  device:configure()
+  -- EF00 remotes do not expose the PowerConfiguration cluster. Avoid the
+  -- default bind/reporting configuration so the sleepy device can remain
+  -- asleep between button events.
+  -- Do not enable this for EF00 remotes.
+  -- device:configure()
 end
 
 local ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS = {

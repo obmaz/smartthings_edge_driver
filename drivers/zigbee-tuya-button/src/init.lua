@@ -198,10 +198,12 @@ end
 
 local configure_device = function(self, device)
   log.info("<<---- Moon ---->> configure_device")
-  device:configure()
+  -- Tuya remotes can drain their batteries after binding and configuring
+  -- reporting on the PowerConfiguration cluster. Keep the device's factory
+  -- reporting configuration and only request the current value once.
+  -- Do not enable this without excluding the default battery configuration.
+  -- device:configure()
   device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:read(device))
-  -- some devices may leak battery drain
-  -- device:send(zcl_clusters.PowerConfiguration.attributes.BatteryPercentageRemaining:configure_reporting(device, 30, 21600, 1))
 end
 
 local zigbee_tuya_button_driver_template = {
@@ -240,7 +242,10 @@ local zigbee_tuya_button_driver_template = {
   },
   sub_drivers = {
     require("tuya-EF00")
-  }
+  },
+  -- Tuya buttons are sleepy battery devices. Do not poll monitored
+  -- attributes when their reports are late or unsupported.
+  health_check = false,
 }
 
 defaults.register_for_default_handlers(zigbee_tuya_button_driver_template, zigbee_tuya_button_driver_template.supported_capabilities)
