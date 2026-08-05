@@ -12,65 +12,48 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
-local log = require "log"
 local capabilities = require "st.capabilities"
-local ZigbeeDriver = require "st.zigbee"
-local defaults = require "st.zigbee.defaults"
-local zcl_clusters = require "st.zigbee.zcl.clusters"
+local log = require "log"
+local button_utils = require "tuya_button_utils"
 
-local function get_ep_offset(device)
-  return device.fingerprinted_endpoint_id - 1
-end
+local SUPPORTED_BUTTON_VALUES = { "pushed", "double", "held" }
+local TUYA_EF00_CLUSTER_ID = 0xEF00
 
-local button_handler_EF00 = function(driver, device, zb_rx)
-  log.info("<<---- Moon ---->> multi / button_handler zb_rx.body.zcl_body.body_bytes", zb_rx.body.zcl_body.body_bytes)
+local button_handler = function(driver, device, zb_rx)
+  local zcl_body = zb_rx and zb_rx.body and zb_rx.body.zcl_body or nil
+  local body_bytes = zcl_body and zcl_body.body_bytes or nil
+  if body_bytes == nil then
+    log.warn("Ignoring malformed Tuya EF00 button message")
+    return
+  end
+
   -- https://drive.google.com/file/d/1WaoM80xPi2TMsf-Z-itKLr2p7VKFZ5xh/view
   -- maybe battery...
   -- to do: battery handling
-  if zb_rx.body.zcl_body.body_bytes:byte(3) == 10 then
+  local button_number = button_utils.byte_at(body_bytes, 3)
+  if button_number == 10 then
+    -- This data point appears to contain battery data, but its format is not
+    -- documented for all supported fingerprints.
     return
   end
+
   -- DTH
   -- buttonNumber = zigbee.convertHexToInt(descMap?.data[2])
   -- buttonState = zigbee.convertHexToInt(descMap?.data[6])
   -- Note: Groovy Array start 0, Lua Index start 1
-
-  local component_id = string.format("button%d", zb_rx.body.zcl_body.body_bytes:byte(3))
-  log.info("<<---- Moon ---->> multi / button_handler component_id", component_id)
-
+  local component_id = button_utils.button_component_id(device, button_number)
   -- 00: click, 01: double click, 02: held
-  local clickType = zb_rx.body.zcl_body.body_bytes:byte(7)
-  local ev
-  log.info("<<---- Moon ---->> multi / button_handler clickType", clickType)
-  if clickType == 0 then
-    log.info("<<---- Moon ---->> multi / button_handler clickType-0")
-    ev = capabilities.button.button.pushed()
-  elseif clickType == 1 then
-    log.info("<<---- Moon ---->> multi / button_handler clickType-1")
-    ev = capabilities.button.button.double()
-  elseif clickType == 2 then
-    log.info("<<---- Moon ---->> multi / button_handler clickType-2")
-    ev = capabilities.button.button.held()
-  end
-
-  if ev ~= nil then
-    ev.state_change = true
-    device.profile.components[component_id]:emit_event(ev)
-  end
+  local click_type = button_utils.byte_at(body_bytes, 7)
+  button_utils.emit_state_change(device, component_id, button_utils.standard_button_event(click_type))
 end
 
 local device_added = function(driver, device)
-  log.info("<<---- Moon ---->> multi / device_added")
-
-  for key, value in pairs(device.profile.components) do
-    log.info("<<---- Moon ---->> multi / device_added - component : ", key)
-    device.profile.components[key]:emit_event(capabilities.button.supportedButtonValues({ "pushed", "double", "held" }))
-    device.profile.components[key]:emit_event(capabilities.button.button.pushed())
-  end
+  log.info("<<---- Moon ---->> EF00 / device_added")
+  button_utils.initialize_button_components(device, SUPPORTED_BUTTON_VALUES)
 end
 
 local device_doconfigure = function(self, device)
-  log.info("<<---- Moon ---->> multi / configure_device")
+  log.info("<<---- Moon ---->> EF00 / configure_device")
   -- EF00 remotes do not expose the PowerConfiguration cluster. Avoid the
   -- default bind/reporting configuration so the sleepy device can remain
   -- asleep between button events.
@@ -78,24 +61,11 @@ local device_doconfigure = function(self, device)
   -- device:configure()
 end
 
-local ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS = {
-  { mfr = "_TZE200_zqtiam4u", model = "TS0601" },
-  { mfr = "_TZE204_mpg22jc1", model = "TS0601" },
-  { mfr = "_TZ3210_3ulg9kpo", model = "TS0021" },
-}
-
 local is_tuya_ef00 = function(opts, driver, device)
-  for _, fingerprint in ipairs(ZIGBEE_TUYA_BUTTON_EF00_FINGERPRINTS) do
-    log.info("<<---- Moon ---->> is_tuya_ef00 :", device:pretty_print())
-
-    if device:get_manufacturer() == fingerprint.mfr and device:get_model() == fingerprint.model then
-      log.info("<<---- Moon ---->> is_tuya_ef00 : true / device.fingerprinted_endpoint_id :", device.fingerprinted_endpoint_id)
-      return true
-    end
-  end
-
-  log.info("<<---- Moon ---->> is_tuya_ef00 : false")
-  return false
+  -- fingerprints.yaml selects this driver and the matching device profile.
+  -- Select the sub-driver from the device's advertised cluster instead of
+  -- duplicating every manufacturer/model fingerprint in Lua.
+  return device:supports_server_cluster(TUYA_EF00_CLUSTER_ID)
 end
 
 local tuya_ef00 = {
@@ -103,9 +73,9 @@ local tuya_ef00 = {
   zigbee_handlers = {
     cluster = {
       -- No Attr Data from zb_rx, so it should use cluster handler
-      [0xEF00] = {
+      [TUYA_EF00_CLUSTER_ID] = {
         -- ZCLCommandId
-        [0x01] = button_handler_EF00
+        [0x01] = button_handler
       },
     },
   },
