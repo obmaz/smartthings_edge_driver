@@ -20,3 +20,8 @@ zigbeeManufacturer:
 #    manufacturer: LUMI
 #    model: lumi.sensor_switch.aq2
 #    deviceProfileName: zigbee-aqara-button-1
+  - id: LUMI/lumi.remote.acn003
+    deviceLabel: Aqara 1 Button
+    manufacturer: LUMI # Not tested
+    model: lumi.remote.acn003
+    deviceProfileName: zigbee-aqara-button-1
