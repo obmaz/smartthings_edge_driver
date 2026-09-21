@@ -11,7 +11,7 @@ driverId=e8f777f7-283f-4fa6-aabc-933d53e54a3b
 hub=b5434d2c-cd4e-4bde-a91b-d419ee72c55e
 hub_address=192.168.10.189
 
-target="${1:-dev}"
+target="${1:-prd}"
 case "$target" in
   dev) channel=715733f3-8cac-451d-8164-a3ae65a4a7cd ;;
   prd) channel=699fefe6-7b99-40b2-acfd-662ed510a84d ;;

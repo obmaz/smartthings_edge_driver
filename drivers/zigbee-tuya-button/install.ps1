@@ -19,7 +19,7 @@
 
 param(
     [ValidateSet('dev', 'prd')]
-    [string] $Target = 'dev'
+    [string] $Target = 'prd'
 )
 
 $ErrorActionPreference = 'Stop'
