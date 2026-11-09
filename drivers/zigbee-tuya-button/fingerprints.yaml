@@ -248,6 +248,11 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_yw5tvzsk
     model: TS0043
     deviceProfileName: zigbee-tuya-button-3
+  - id: _TZ3000_7uglqmvv/TS0043
+    deviceLabel: Zigbee Tuya 3 button
+    manufacturer: _TZ3000_7uglqmvv
+    model: TS0043
+    deviceProfileName: zigbee-tuya-button-3
   # 2 Button
   - id: _TZ3000_5e235jpa/TS0042
     deviceLabel: Zigbee Tuya 2 Button
@@ -475,7 +480,6 @@ zigbeeManufacturer:
     manufacturer: _TZ3000_1yyjhvwd
     model: TS0042
     deviceProfileName: zigbee-tuya-button-2
-  # EF00 Cluster
   - id: TS0601/_TZE200_zqtiam4u
     deviceLabel: Zemismart 6 Button (TS0601)
     manufacturer: _TZE200_zqtiam4u
@@ -496,7 +500,6 @@ zigbeeManufacturer:
     manufacturer: _TZE204_mpg22jc1
     model: TS0601
     deviceProfileName: zigbee-tuya-button-6
- # Cannot confirm working, Not Working
   - id: _TZ3000_fsiepnrh/TS0215A
     deviceLabel: NotWorking
     manufacturer: _TZ3000_fsiepnrh
